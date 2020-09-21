@@ -25,23 +25,17 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-// db.ROLES = ["user", "admin", "moderator", "tutor"];
-// db.users = require("../models/User")(sequelize, Sequelize);
-// db.roles = require("../models/Role")(sequelize, Sequelize, db.ROLES);
+db.ROLES = ["user", "admin"];
+db.users = require("../models/User")(sequelize, Sequelize);
+db.roles = require("../models/Role")(sequelize, Sequelize, db.ROLES);
 // db.courses = require("../models/Course")(sequelize, Sequelize);
 // db.comments = require("../models/Comment")(sequelize, Sequelize);
 
 // defining relationships
-// db.roles.belongsToMany(db.users, {
-//     through: "user_roles",
-//     foreignKey: "roleId",
-//     otherKey: "userId"
-// });
-// db.users.belongsToMany(db.roles, {
-//     through: "user_roles",
-//     foreignKey: "userId",
-//     otherKey: "roleId"
-// });
+db.users.belongsTo(db.roles, {
+    foreignKey: "roleId",
+    as: "role"
+});
 // db.courses.hasMany(db.comments, { as: "comments" });
 // db.comments.belongsTo(db.courses, {
 //   foreignKey: "courseId",
@@ -54,28 +48,22 @@ db.sequelize = sequelize;
 // db.users.hasMany(db.comments, { as: "comments" });
 
 // sync with database
-db.sequelize.sync();
-// db.sequelize.sync({ force: true }).then(() => {
-//     console.log("DB Droped, Resync and roles created.");
-//     initial();
-// });
-// function initial() {
-//     db.roles.create({
-//         id: 1,
-//         name: "user"
-//     });
-//     db.roles.create({
-//         id: 2,
-//         name: "moderator"
-//     });
-//     db.roles.create({
-//         id: 3,
-//         name: "admin"
-//     });
-//     db.roles.create({
-//       id: 4,
-//       name: "tutor"
-//     });
-// }
+// db.sequelize.sync();
+db.sequelize.sync({ force: true }).then(() => {
+    console.log("DB Droped, Resync and roles created.");
+    initial();
+});
+function initial() {
+    db.roles.create({
+        id: 1,
+        name: "admin",
+        description: "Admin of the system"
+    });
+    db.roles.create({
+        id: 2,
+        name: "user",
+        description: "user or customer of website"
+    });
+}
 
 module.exports = db;
