@@ -15,8 +15,9 @@ const sequelize = new Sequelize(
       min: config.pool.min,
       acquire: config.pool.acquire,
       idle: config.pool.idle
-    }
-  }
+    },
+    logging: false
+  },
 );
 
 const db = {};
@@ -28,14 +29,28 @@ db.sequelize = sequelize;
 db.ROLES = ["user", "admin"];
 db.users = require("../models/User")(sequelize, Sequelize);
 db.roles = require("../models/Role")(sequelize, Sequelize, db.ROLES);
-// db.courses = require("../models/Course")(sequelize, Sequelize);
-// db.comments = require("../models/Comment")(sequelize, Sequelize);
+db.orders = require("../models/Order")(sequelize, Sequelize);
+db.orderDetails = require("../models/OrderDetails")(sequelize, Sequelize);
+db.products = require("../models/Product")(sequelize, Sequelize);
+db.productCategories = require("../models/ProductCategory")(sequelize, Sequelize);
 
 // defining relationships
 db.users.belongsTo(db.roles, {
-    foreignKey: "roleId",
-    as: "role"
+  foreignKey: "roleId",
+  as: "role"
 });
+// db.products.belongsTo(db.productCategories, {
+// 	foreignKey: "category_id",
+// 	as: "category"
+// });
+// db.orderDetails.belongsTo(db.orders, {
+//   foreignKey: "order_id",
+//   as: "order"
+// })
+// db.orderDetails.belongsTo(db.products, {
+// 	foreignKey: "product_id",
+// 	as: "product"
+// })
 // db.courses.hasMany(db.comments, { as: "comments" });
 // db.comments.belongsTo(db.courses, {
 //   foreignKey: "courseId",
