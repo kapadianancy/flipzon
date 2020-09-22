@@ -1,10 +1,11 @@
 const express = require("express")
 const app = express();
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 require("./models/main");
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-require("./admin/controllers/Product_CategoriesAdminController")(app);
+require("./admin/controllers/index")(app);
 
 app.use((err, req, res, next) => {
     if(err) {
