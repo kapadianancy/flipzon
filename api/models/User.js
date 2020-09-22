@@ -1,9 +1,12 @@
 const DataTypes = require("sequelize");
-module.exports = (sequelize, Sequelize) => {
-    const User = sequelize.define("users", {
+const db=require("../db/db");
+const roles=require("./Role");
+
+const User =db.sequelize.define("user", {
         id: {
-            type: DataTypes.INTEGER,
-            primaryKey: true
+            type:DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement:true
         },
         username: {
             type: DataTypes.STRING,
@@ -23,6 +26,7 @@ module.exports = (sequelize, Sequelize) => {
         contact: {
             type: DataTypes.STRING,
             allowNull: false,
+            is:/^[6-9][0-9]{9}$/
         },
         address: {
             type: DataTypes.STRING,
@@ -31,6 +35,13 @@ module.exports = (sequelize, Sequelize) => {
         roleId: {
             type: DataTypes.INTEGER
         }
-    });
-    return User;
-};
+});
+
+//relationship
+User.belongsTo(roles,{
+    foreignKey:"roleId",
+    onDelete:"cascade",
+    as:"role"
+});
+
+module.exports = User;
