@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 require("./db/db");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-require("./controllers/ProductController")(app);
+require("./controllers/ProductAdminController")(app);
 
 app.use((err, req, res, next) => {
     if(err) {

@@ -63,11 +63,11 @@ db.users.belongsTo(db.roles, {
 // db.users.hasMany(db.comments, { as: "comments" });
 
 // sync with database
-// db.sequelize.sync();
-db.sequelize.sync({ force: true }).then(() => {
-    console.log("DB Droped, Resync and roles created.");
-    initial();
-});
+db.sequelize.sync();
+// db.sequelize.sync({ force: true }).then(() => {
+//     console.log("DB Droped, Resync and roles created.");
+//     initial();
+// });
 function initial() {
     db.roles.create({
         id: 1,

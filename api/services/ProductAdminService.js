@@ -1,4 +1,5 @@
 const db = require("../db/db");
+const fs = require("fs");
 
 const fetchProducts = async () => {
     return await db.products.findAll()
@@ -14,13 +15,13 @@ const addProduct = async (data) => {
         if(!data.main_image) {
             errorObj.message = "Product image is required";
         }
-        if(!data.stock || typeof data.stock != "number") {
+        if(!data.stock) {
             errorObj.message = "Product stock is required";
         }
-        if(!data.category_id || typeof data.category_id != "number") {
+        if(!data.category_id) {
             errorObj.message = "Product Category is required";
         }
-        if(!data.price || typeof data.price != "number") {
+        if(!data.price) {
             errorObj.message = "Product Price is required";
         }
         if(errorObj.message) throw errorObj;
@@ -62,6 +63,8 @@ const deleteProduct = async (id) => {
             errorObj.message = "Product not found";
         }
         if(errorObj.message) throw errorObj
+        // const exist = fs.existsSync("./.."+product.main_image);
+        // console.log(exist);
         await db.products.destroy({
             where: { id }
         });
