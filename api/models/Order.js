@@ -1,24 +1,38 @@
 const DataTypes = require("sequelize");
+const db=require("../db/db");
+const User=require("./User");
 
-module.exports = (sequelize, Sequelize, roles) => {
-    let Order = sequelize.define('order', {
+const Order =db.sequelize.define("Order", {
         id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true
+            type:DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement:true
         },
-        user_id: {
-            type: DataTypes.INTEGER,
+        userId:{
+            type:DataTypes.INTEGER,
         },
-        order_date: {
-            type: DataTypes.DATE,
+        orderDate:
+        {
+            type:DataTypes.DATE,
+            allowNull:false
         },
-        total_price: {
-            type: DataTypes.INTEGER
+        totalPrice:
+        {
+            type:DataTypes.INTEGER,
+            allowNull:false
         },
-        status: {
-            type: DataTypes.INTEGER
+        status:
+        {
+            type:DataTypes.STRING,
+            allowNull:false
         }
-    });
-    return Order;
-}
+});
+
+//relationship
+Order.belongsTo(User,{
+    foreignKey:"userId",
+    onDelete:"cascade",
+    as:"user"
+});
+
+module.exports = Order;

@@ -1,31 +1,42 @@
 const DataTypes = require("sequelize");
+const db=require("../db/db");
+const Product_category=require("./Product_category");
 
-module.exports = (sequelize, Sequelize, roles) => {
-    let Product = sequelize.define('product', {
+const Product =db.sequelize.define("Product", {
         id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true
+            type:DataTypes.INTEGER,
+            primaryKey: true,
+            autoIncrement:true
         },
         name: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
         },
-        price: {
-            type: DataTypes.INTEGER,
-            allowNull: false
+        price:
+        {
+            type:DataTypes.INTEGER,
+            allowNull:false
         },
-        category_id: {
-            type: DataTypes.INTEGER,
+        main_image:
+        {
+            type:DataTypes.TEXT,
+            allowNull:false
         },
-        main_image: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
-        stock: {
-            type: DataTypes.INTEGER,
-            default: 0
+        stock:
+        {
+            type:DataTypes.INTEGER,
+            allowNull:false
+        },        
+        categoryId: {
+            type: DataTypes.INTEGER
         }
-    });
-    return Product;
-}
+});
+
+//relationship
+Product.belongsTo(Product_category,{
+    foreignKey:"categoryId",
+    onDelete:"cascade",
+    as:"Product_category"
+});
+
+module.exports = Product;

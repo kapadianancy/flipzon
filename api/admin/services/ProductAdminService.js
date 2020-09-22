@@ -1,8 +1,8 @@
-const db = require("../db/db");
 const fs = require("fs");
+const Product = require("../../models/Product");
 
 const fetchProducts = async () => {
-    return await db.products.findAll()
+    return await Product.findAll()
 }
 const addProduct = async (data) => {
     try {
@@ -18,19 +18,19 @@ const addProduct = async (data) => {
         if(!data.stock) {
             errorObj.message = "Product stock is required";
         }
-        if(!data.category_id) {
+        if(!data.categoryId) {
             errorObj.message = "Product Category is required";
         }
         if(!data.price) {
             errorObj.message = "Product Price is required";
         }
         if(errorObj.message) throw errorObj;
-        let product = await db.products.create({
+        let product = await Product.create({
             name: data.name,
             main_image: data.main_image,
             stock: data.stock,
             price: data.price,
-            category_id: data.category_id
+            categoryId: data.categoryId
         });
         return product;
     } catch(error) {
@@ -40,16 +40,16 @@ const addProduct = async (data) => {
 const editProduct = async (id, data) => {
     try {
         let errorObj = { statusCode:400 }
-        var product = await db.products.findByPk(id);
+        var product = await Product.findByPk(id);
         if(!product) {
             errorObj.statusCode = 404
             errorObj.message = "Product not found";
         }
         if(errorObj.message) throw errorObj
-        product = await db.products.update(data, {
+        product = await Product.update(data, {
             where: { id }
         });
-        return await db.products.findByPk(id);
+        return await Product.findByPk(id);
     } catch (error) {
         throw error;
     }
@@ -57,7 +57,7 @@ const editProduct = async (id, data) => {
 const deleteProduct = async (id) => {
     try {
         let errorObj = { statusCode:400 }
-        var product = await db.products.findByPk(id);
+        var product = await Product.findByPk(id);
         if(!product) {
             errorObj.statusCode = 404
             errorObj.message = "Product not found";
@@ -65,7 +65,7 @@ const deleteProduct = async (id) => {
         if(errorObj.message) throw errorObj
         // const exist = fs.existsSync("./.."+product.main_image);
         // console.log(exist);
-        await db.products.destroy({
+        await Product.destroy({
             where: { id }
         });
         return product;

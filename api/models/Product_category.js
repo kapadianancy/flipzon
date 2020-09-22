@@ -1,7 +1,7 @@
 const DataTypes = require("sequelize");
 const db=require("../db/db");
 
-const Role = db.sequelize.define('role', {
+const Product_category = db.sequelize.define('Product_category', {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -16,4 +16,4 @@ const Role = db.sequelize.define('role', {
     });
 
 
-module.exports=Role;
+module.exports=Product_category;
