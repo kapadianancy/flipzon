@@ -11,14 +11,15 @@ var storage = multer.diskStorage({
     }
 });
 var upload = multer({ storage: storage });
+var cpUpload = upload.fields([{ name: 'main_image', maxCount: 1 }, { name: 'images', maxCount: 10 }])
 
 module.exports = (app) => {
     app.get("/admin/products", async (req, res, next) => {
         let products = await productService.fetchProducts();
         res.send(products);
     })
-    app.post("/admin/products", upload.single("image"), async (req, res, next) => {
-        if(!req.file) {
+    app.post("/admin/products", cpUpload, async (req, res, next) => {
+        if(!req.files.main_image) {
             return next({
                 statusCode: 400,
                 message: "Product Image is required"
@@ -26,10 +27,11 @@ module.exports = (app) => {
         }
         req.body = {
             ...req.body,
-            main_image: "/"+req.file.destination+req.file.filename
+            main_image: "/"+req.files.main_image[0].destination+req.files.main_image[0].filename,
         }
         try {
-            let product = await productService.addProduct(req.body);
+            var images = req.files.images && req.files.images.length > 0 ? req.files.images : [];
+            let product = await productService.addProduct(req.body, images);
             res.send(product);
         } catch(error) {
             next(error);

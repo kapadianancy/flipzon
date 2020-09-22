@@ -1,10 +1,11 @@
 const fs = require("fs");
 const Product = require("../../models/Product");
+const ProductImages = require("../../models/Product_image");
 
 const fetchProducts = async () => {
     return await Product.findAll()
 }
-const addProduct = async (data) => {
+const addProduct = async (data, images) => {
     try {
         let errorObj = {
             statusCode: 400
@@ -13,7 +14,7 @@ const addProduct = async (data) => {
             errorObj.message = "Name is required";
         }
         if(!data.main_image) {
-            errorObj.message = "Product image is required";
+            errorObj.message = "Product main image is required";
         }
         if(!data.stock) {
             errorObj.message = "Product stock is required";
@@ -25,13 +26,23 @@ const addProduct = async (data) => {
             errorObj.message = "Product Price is required";
         }
         if(errorObj.message) throw errorObj;
-        let product = await Product.create({
+        var product = await Product.create({
             name: data.name,
             main_image: data.main_image,
             stock: data.stock,
             price: data.price,
             categoryId: data.categoryId
         });
+        product = product.get({ row: true })
+        if(images.length > 0) {
+            let imageData = images.map( image => ({ image: "/"+image.destination+image.filename, productId: product.id }) );
+            images = await ProductImages.bulkCreate(imageData);
+            images = images.map( el => el.get({row: true}));
+            product = {
+                ...product,
+                images
+            }
+        } else product.images = []
         return product;
     } catch(error) {
         throw error;
