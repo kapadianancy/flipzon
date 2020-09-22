@@ -1,3 +1,3 @@
 module.exports = (app) => {
-    require('./Product_Categories')(app);
+    require('./Product_CategoriesAdminController')(app);
 }

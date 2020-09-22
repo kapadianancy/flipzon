@@ -1,4 +1,4 @@
-const { db,Product_category } = require("../models/main");
+const Product_category = require("../../models/Product_category");
 
 const getProduct_Category = async () => {
     return await Product_category.findAll()
