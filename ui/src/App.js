@@ -1,14 +1,9 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Admin from './admin/Admin';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        Flipzon
-      </header>
-    </div>
+    <Admin />
   );
 }
 
