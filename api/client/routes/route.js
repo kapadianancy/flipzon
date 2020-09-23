@@ -5,10 +5,7 @@ var router = express.Router();
 
 const Authenticate=require("../services/Authenticate");
 const Product=require("../services/Product");
-<<<<<<< HEAD
-const Order=require("../services/Order");
-=======
->>>>>>> 6c76f9d58ae7c1c5cd8768e6e8a2982f553b4e13
+const Order = require("../services/Order")
 const auth = require('./auth');
 
 //login
