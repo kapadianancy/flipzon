@@ -2,51 +2,33 @@ var express = require('express');
 const { route } = require('../app');
 var router = express.Router();
 
-//category
-router.get('/category',(req,res)=>
-{
+const Authenticate=require("../services/Authenticate");
 
-});
+//category
+router.get('/category',)
 
 //product
-router.get('/product',(req,res)=>
-{
-
-})
+router.get('/product',)
 
 //login
-router.post('/login',(req,res)=>
-{
+router.post('/login',Authenticate.login);
 
-});
+//signup
+router.post('/signup',Authenticate.signup);
 
 //logout
-router.get('/logout',(req,res)=>
-{
-
-});
+router.get('/logout',);
 
 //editProfile
-router.put('/editProfile/:id',(req,res)=>{
-
-});
+router.put('/editProfile/:id',);
 
 //placeOrder
-router.post("/placeOrder",(req,res)=>
-{
-
-});
+router.post("/placeOrder",);
 
 //addOrderItems
-router.post('/addOrderItems',(req,res)=>
-{
-
-});
+router.post('/addOrderItems',);
 
 //orderStatusUpdate
-router.put("/orderStatus/:id",(req,res)=>
-{
-
-});
+router.put("/orderStatus/:id",);
 
 module.exports = router;

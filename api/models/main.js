@@ -13,3 +13,10 @@ db.sequelize.sync({ alter: true }).then(() => {
     console.log("DB Droped, Resync and roles created.");
 });
 
+module.exports={
+    User:user,
+    product:Product,
+    Product_category:Product_category,
+    Order:Order,
+    Order_details:Order_details
+}

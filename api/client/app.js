@@ -14,7 +14,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', route);
 
+app.listen(8001,()=>
+{
+  console.log("server running at 8001");
+});
 
 
-
-module.exports = app;
+//module.exports = app;
