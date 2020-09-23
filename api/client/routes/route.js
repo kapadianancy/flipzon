@@ -5,6 +5,7 @@ var router = express.Router();
 
 const Authenticate=require("../services/Authenticate");
 const Product=require("../services/Product");
+const auth = require('./auth');
 
 //login
 router.post('/login',Authenticate.login);
@@ -13,7 +14,7 @@ router.post('/login',Authenticate.login);
 router.post('/signup',Authenticate.signup);
 
 //logout
-router.get('/logout',Authenticate.logout);
+router.get('/logout',auth,Authenticate.logout);
 
 //category
 router.get('/category',Product.getAllCategory);
