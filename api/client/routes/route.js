@@ -33,12 +33,19 @@ router.put('/changePassword/:id',auth,Authenticate.changePassword);
 router.post('/fogetPassword',Authenticate.forgetPassword);
 
 //placeOrder
-router.post("/placeOrder",auth,Order.placeOrder);
+//router.post("/placeOrder",auth,Order.placeOrder);
+router.post("/checkOrder",auth,Order.checkOrder);
 
 //addOrderItems
-router.post('/addOrderItems',auth,Order.addOrderItems);
+//router.post('/addOrderItems',auth,Order.addOrderItems);
 
-//orderUpdate
-router.put("/orderUpdate/:id",auth,Order.orderUpdate);
+//confirm order
+router.put("/confirmOrder/:id",auth,Order.confirmOrder);
+
+//cancel order
+router.delete("/cancelOrder/:id",auth,Order.cancelOrder);
+
+//cancel order item
+router.delete("/cancelOrderItem/:id",auth,Order.cancelOrderItem);
 
 module.exports = router;

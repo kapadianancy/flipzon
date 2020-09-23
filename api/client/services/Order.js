@@ -1,4 +1,33 @@
+
 const main=require('../../models/main');
+
+exports.checkOrder=async(req,res)=>
+{
+    let oid;
+    try{
+
+        const order=await main.Order.findOne({
+            where:
+            {
+                userId:req.validUser.id,
+                status:"Pending"
+            }
+        })
+        if(order)
+        {
+            oid=order.id;
+            req.orderId=oid;
+            this.addOrderItems(req,res);
+        }
+        else{
+            this.placeOrder(req,res);
+
+        }
+    }catch(err)
+    {
+        return res.status(400).send("bad request");
+    }
+}
 
 exports.placeOrder = async (req,res) => {
     try {
@@ -9,6 +38,7 @@ exports.placeOrder = async (req,res) => {
             totalPrice:0,
             status : 'Pending'
         });
+        this.addOrderItems(req,res);
         res.status(201).send(order);
     }
     catch(error)
@@ -32,7 +62,7 @@ exports.addOrderItems = async (req,res) => {
 
         //Add Details of OrderItem
         const orderItem=await main.Order_details.create({
-           orderId : data.orderId,
+           orderId : req.orderId,
            productId : data.productId,
            quantity : data.quantity,
            price : price*data.quantity
@@ -55,7 +85,7 @@ exports.addOrderItems = async (req,res) => {
     }
 }
 
-exports.orderUpdate = async(req,res) => {
+exports.confirmOrder = async(req,res) => {
     try{
     const orderid = await main.Order.findByPk(req.params.id);
     if(!orderid)
@@ -80,6 +110,15 @@ exports.orderUpdate = async(req,res) => {
     {
         res.status(400).send(error);
     }
+}
+
+exports.cancelOrder=async(req,res)=>
+{
+
+}
+exports.cancelOrderItem=async(req,res)=>
+{
+    
 }
 
 const getTotalCost = async (orderId) =>
