@@ -18,5 +18,6 @@ module.exports={
     product:Product,
     Product_category:Product_category,
     Order:Order,
-    Order_details:Order_details
+    Order_details:Order_details,
+    Product_image:Product_image
 }
