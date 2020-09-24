@@ -10,7 +10,8 @@ exports.checkOrder=async(req,res)=>
             where:
             {
                 userId:req.validUser.id,
-                status:"Pending"
+                status:"Pending",
+                isDeleted : 0
             }
         })
         if(order)
@@ -38,6 +39,8 @@ exports.placeOrder = async (req,res) => {
             totalPrice:0,
             status : 'Pending'
         });
+        oid=order.id;
+        req.orderId=oid;
         this.addOrderItems(req,res);
         res.status(201).send(order);
     }
@@ -50,7 +53,6 @@ exports.placeOrder = async (req,res) => {
 exports.addOrderItems = async (req,res) => {
     try {
         const data=req.body;
-
 
         //find Product Price
         const p = await main.product.findByPk(data.productId);
@@ -100,7 +102,8 @@ exports.confirmOrder = async(req,res) => {
         "status" : "confirm"
     } , {
         where: {
-          id: orderid.id
+          id: orderid.id,
+          isDeleted : 0
         }
       });
 
@@ -114,11 +117,110 @@ exports.confirmOrder = async(req,res) => {
 
 exports.cancelOrder=async(req,res)=>
 {
+    try{
+        const orderid = await main.Order.findByPk(req.params.id);
+            if(!orderid)
+            {
+                return res.status(400).send("Order is Not Found")
+            }
 
+            //delete orderitem 
+
+            const orderitems = await main.Order_details.findAll({
+                where : {
+                    orderId : orderid.id,
+                    isDeleted : 0
+                }
+            });
+
+            if(orderitems)
+            {
+            orderitems.forEach (async (o) => {
+                //find Product Price
+                const p = await main.product.findByPk(o.productId);
+            
+                //Add Details of OrderItem
+                const orderItem=await main.Order_details.update( {
+                    "isDeleted" : 1
+                } , {
+                where: {
+                    id: o.id,
+                    isDeleted : 0
+                }
+                }); 
+
+                //Increment Product Quantity
+                if(orderItem)
+                {
+                const pro = await main.product.update({ stock: p.stock+o.quantity}, {
+                        where: {
+                        id: o.productId
+                        }
+                    });
+                }
+            })
+        }
+            
+           // Delete Order 
+            const Order = await main.Order.update( {
+                "status" : "cancel",
+                "isDeleted" : 1
+            } , {
+            where: {
+                id: orderid.id,
+                isDeleted : 0
+            }
+            }); 
+
+            res.status(201).send("Successfully Order Deleted");
+        }
+    catch(e)
+    {
+        return res.status(400).send(e);
+    }
 }
 exports.cancelOrderItem=async(req,res)=>
 {
-    
+    try{
+        const item = await main.Order_details.findOne({
+            where:
+            {
+                id : req.params.id
+            }
+        });
+
+        //find Product Price
+        const p = await main.product.findByPk(item.productId);
+        if(!p)
+        {
+            return res.status(401).send("Product Not Found")
+        }
+       
+        //Add Details of OrderItem
+        const orderItem=await main.Order_details.update( {
+            "isDeleted" : 1
+        } , {
+        where: {
+            id: req.params.id,
+            isDeleted : 0
+        }
+        }); 
+
+        //Increment Product Quantity
+        if(orderItem)
+        {
+          const pro = await main.product.update({ stock: p.stock+item.quantity}, {
+                where: {
+                  id: item.productId
+                }
+              });
+        }
+        res.status(201).send("Successfully Deleted");
+    }
+    catch(e)
+    {
+        return res.status(400).send(e);
+    }
 }
 
 const getTotalCost = async (orderId) =>
@@ -126,7 +228,8 @@ const getTotalCost = async (orderId) =>
     const orderDetail=await main.Order_details.findAll({
         where:
         {
-            orderId:orderId
+            orderId:orderId,
+            isDeleted : 0
         }
     });
 
