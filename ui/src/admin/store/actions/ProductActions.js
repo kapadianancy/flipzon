@@ -5,12 +5,10 @@ export const fetchProducts = () => {
     return async(dispatch) => {
         dispatch({ type: types.INIT_FETCH_PRODUCTS });
         try {
-            const products = await axios.get("http://localhost:8080/admin/products");
-            console.log(products);
+            const data = await axios.get("http://localhost:8080/admin/products");
+            dispatch({ type: types.FETCH_PRODUCTS_SUCCESS, products: data.data });
         } catch(error) {
-            console.log(error);
+            dispatch({ type: types.FETCH_PRODUCTS_FAILED, error: error.message });
         }
-        dispatch({ type: types.FETCH_PRODUCTS_SUCCESS, products: [] });
-        dispatch({ type: types.FETCH_PRODUCTS_FAILED });
     }
 }

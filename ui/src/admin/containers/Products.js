@@ -9,9 +9,9 @@ import ProductList from '../components/Product/ProductList/ProductList';
 import { fetchProducts } from '../store/actions/ProductActions'
 
 const Products = (props) => {
-    // useEffect(() => {
-        // props.fetchProducts();
-    // }, [])
+    useEffect(() => {
+        props.fetchProducts();
+    }, [])
     return(
         <>
             <Card>

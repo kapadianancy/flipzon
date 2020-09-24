@@ -1,12 +1,7 @@
 import * as types from '../Types'
 
 const initialStore = {
-    products: [
-        { id: 1, name: "LG Computer", price: 1200, category: "Electronics", stock: 10 },
-        { id: 2, name: "LG Computer", price: 1200, category: "Electronics", stock: 10 },
-        { id: 3, name: "LG Computer", price: 1200, category: "Electronics", stock: 10 },
-        { id: 4, name: "LG Computer", price: 1200, category: "Electronics", stock: 10 }
-    ],
+    products: [],
     loading: false,
     error: ""
 };
@@ -29,7 +24,7 @@ const store = (state = initialStore, action) => {
             return {
                 ...state,
                 loading: false,
-                error: ""
+                error: action.error
             }
         default:
             return state;
