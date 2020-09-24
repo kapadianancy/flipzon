@@ -1,9 +1,39 @@
 const fs = require("fs");
 const Product = require("../../models/Product");
+const Category = require("../../models/Product_category");
 const ProductImages = require("../../models/Product_image");
 
 const fetchProducts = async () => {
-    return await Product.findAll()
+    return await Product.findAll({
+        include: [
+            { model: Category, as: "Product_category", attributes: ["name"] }
+        ]
+    })
+}
+const fetchSingleProduct = async(id) => {
+    try {
+        let product = await Product.findOne({
+            where: {
+                id
+            },
+            attributes: [ "id", "name", "main_image", "stock", "price", "categoryId", "description" ]
+        });
+        if(!product) throw { statusCode: 404, message: "Product not found" }
+        let images = await ProductImages.findAll({
+            where: {
+                productId: id
+            },
+            attributes: [ "id", "image" ],
+            row: true
+        });
+        product = {
+            ...product.get({ row: true }),
+            images
+        }
+        return product;
+    } catch(error) {
+        throw error;
+    }
 }
 const addProduct = async (data, images) => {
     try {
@@ -26,16 +56,19 @@ const addProduct = async (data, images) => {
             errorObj.message = "Product Price is required";
         }
         if(errorObj.message) throw errorObj;
+
         var product = await Product.create({
             name: data.name,
             main_image: data.main_image,
             stock: data.stock,
             price: data.price,
+            description: data.description,
             categoryId: data.categoryId
         });
         product = product.get({ row: true })
+
         if(images.length > 0) {
-            let imageData = images.map( image => ({ image: "/"+image.destination+image.filename, productId: product.id }) );
+            let imageData = images.map( image => ({ image: "/images/"+image.filename, productId: product.id }) );
             images = await ProductImages.bulkCreate(imageData);
             images = images.map( el => el.get({row: true}));
             product = {
@@ -43,6 +76,7 @@ const addProduct = async (data, images) => {
                 images
             }
         } else product.images = []
+
         return product;
     } catch(error) {
         throw error;
@@ -86,6 +120,7 @@ const deleteProduct = async (id) => {
 }
 module.exports = {
     fetchProducts,
+    fetchSingleProduct,
     addProduct,
     editProduct,
     deleteProduct

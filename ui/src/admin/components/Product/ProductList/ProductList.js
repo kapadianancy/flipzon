@@ -2,16 +2,18 @@ import React from 'react';
 import * as classes from './ProductList.module.css';
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
+import { Link } from 'react-router-dom';
+
 
 const renderProducts = (products) => {
     return products.map( (product, index) => 
         <tr key={product.id}>
             <td>{index+1}</td>
             <td>{product.name}</td>
-            <td>{product.category}</td>
+            <td>{product.Product_category.name}</td>
             <td>{product.price}</td>
             <td>{product.stock}</td>
-            <td><Button variant="info">Edit</Button></td>
+            <td><Button as={Link} to={`/admin/products/edit/${product.id}`} variant="info">Edit</Button></td>
             <td><Button variant="danger">Delete</Button></td>
         </tr>
     )
