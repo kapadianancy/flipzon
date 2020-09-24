@@ -9,43 +9,43 @@ const Order = require("../services/Order")
 const auth = require('./auth');
 
 //login
-router.post('/login',Authenticate.login);
+router.post('/client/login',Authenticate.login);
 
 //signup
-router.post('/signup',Authenticate.signup);
+router.post('/client/signup',Authenticate.signup);
 
 //logout
-router.get('/logout',auth,Authenticate.logout);
+router.get('/client/logout',auth,Authenticate.logout);
 
 //category
-router.get('/category',Product.getAllCategory);
+router.get('/client/category',Product.getAllCategory);
 
 //product
-router.get('/product',Product.getAllProduct);
+router.get('/client/product',Product.getAllProduct);
 
 //editProfile
-router.put('/editProfile/:id',auth,Authenticate.editProfile);
+router.put('/client/editProfile/:id',auth,Authenticate.editProfile);
 
 //change Password
-router.put('/changePassword/:id',auth,Authenticate.changePassword);
+router.put('/client/changePassword/:id',auth,Authenticate.changePassword);
 
 //forget Password
-router.post('/fogetPassword',Authenticate.forgetPassword);
+router.post('/client/fogetPassword',Authenticate.forgetPassword);
 
 //placeOrder
 //router.post("/placeOrder",auth,Order.placeOrder);
-router.post("/checkOrder",auth,Order.checkOrder);
+router.post("/client/checkOrder",auth,Order.checkOrder);
 
 //addOrderItems
 //router.post('/addOrderItems',auth,Order.addOrderItems);
 
 //confirm order
-router.put("/confirmOrder/:id",auth,Order.confirmOrder);
+router.put("/client/confirmOrder/:id",auth,Order.confirmOrder);
 
 //cancel order
-router.delete("/cancelOrder/:id",auth,Order.cancelOrder);
+router.delete("/client/cancelOrder/:id",auth,Order.cancelOrder);
 
 //cancel order item
-router.delete("/cancelOrderItem/:id",auth,Order.cancelOrderItem);
+router.delete("/client/cancelOrderItem/:id",auth,Order.cancelOrderItem);
 
 module.exports = router;

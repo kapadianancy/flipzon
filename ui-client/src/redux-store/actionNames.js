@@ -1,0 +1,10 @@
+export const DISPLAY_PRODUCT="DISPLAY_PRODUCT";
+export const DISPLAY_PRODUCT_CATEGORY="DISPLAY_PRODUCT_CATEGORY";
+export const SIGNUP="SIGNUP";
+export const LOGIN="LOGIN";
+export const FORGET_PASSWORD="FORGET_PASSWORD";
+export const LOGOUT="LOGOUT";
+export const EDIT_PROFILE="EDIT_PROFILE";
+export const LOGOUT="LOGOUT";
+
+
