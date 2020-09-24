@@ -38,7 +38,8 @@ exports.login=async(req,res)=>
         const u=await main.User.findAll({
             where:
             {
-                username:user.username
+                username:user.username,
+                isDeleted : 0
             }
         });
         
@@ -77,7 +78,8 @@ exports.editProfile= async(req,res) =>
         // }
         const User = await main.User.update(req.body, {
             where: {
-                id: req.validUser.id
+                id: req.validUser.id,
+                isDeleted : 0
             }
         });
         
@@ -118,7 +120,8 @@ exports.changePassword =async(req,res) =>{
             "password" : password
         } , {
             where: {
-                id: user.id
+                id: req.validUser.id,
+                isDeleted : 0
             }
         });
         
@@ -145,7 +148,8 @@ exports.forgetPassword = async (req,res) => {
             { 
                 where: 
                 { 
-                    "email": email
+                    "email": email,
+                    isDeleted : 0
                 } 
             });
 
