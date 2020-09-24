@@ -25,6 +25,10 @@ const Order_details =db.sequelize.define("Order_detail", {
         {
             type:DataTypes.INTEGER,
             allowNull:false
+        },
+        isDeleted: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
         }
 });
 
