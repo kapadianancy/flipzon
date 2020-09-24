@@ -5,6 +5,7 @@ var router = express.Router();
 
 const Authenticate=require("../services/Authenticate");
 const Product=require("../services/Product");
+const Order = require("../services/Order")
 const auth = require('./auth');
 
 //login
@@ -22,16 +23,29 @@ router.get('/category',Product.getAllCategory);
 //product
 router.get('/product',Product.getAllProduct);
 
-// //editProfile
-// router.put('/editProfile/:id',()=>{});
+//editProfile
+router.put('/editProfile/:id',auth,Authenticate.editProfile);
 
-// //placeOrder
-// router.post("/placeOrder",()=>{});
+//change Password
+router.put('/changePassword/:id',auth,Authenticate.changePassword);
 
-// //addOrderItems
-// router.post('/addOrderItems',()=>{});
+//forget Password
+router.post('/fogetPassword',Authenticate.forgetPassword);
 
-// //orderStatusUpdate
-// router.put("/orderStatus/:id",()=>{});
+//placeOrder
+//router.post("/placeOrder",auth,Order.placeOrder);
+router.post("/checkOrder",auth,Order.checkOrder);
+
+//addOrderItems
+//router.post('/addOrderItems',auth,Order.addOrderItems);
+
+//confirm order
+router.put("/confirmOrder/:id",auth,Order.confirmOrder);
+
+//cancel order
+router.delete("/cancelOrder/:id",auth,Order.cancelOrder);
+
+//cancel order item
+router.delete("/cancelOrderItem/:id",auth,Order.cancelOrderItem);
 
 module.exports = router;

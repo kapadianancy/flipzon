@@ -34,6 +34,10 @@ const User =db.sequelize.define("user", {
         },
         roleId: {
             type: DataTypes.INTEGER
+        },
+        isDeleted: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
         }
 });
 
