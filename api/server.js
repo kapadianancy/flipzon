@@ -3,12 +3,14 @@ const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors")
 const path = require("path");
+const clientRoute = require("./client/routes/route")
 require("./models/main");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use("/", clientRoute);
 require("./admin/controllers/index")(app);
 
 app.use((err, req, res, next) => {
