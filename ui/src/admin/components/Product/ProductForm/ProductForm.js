@@ -4,9 +4,10 @@ import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Image from 'react-bootstrap/Image'
+import * as classes from './ProductForm.module.css'
 
 const ProductForm = (props) => {
-    console.log(props);
+
     const [product, setProduct] = useState({
         name: "",
         price: "",
@@ -35,7 +36,7 @@ const ProductForm = (props) => {
             tempProduct.name = editProduct.name;
             tempProduct.price = editProduct.price;
             tempProduct.stock = editProduct.stock;
-            tempProduct.description = editProduct.description;
+            tempProduct.description = editProduct.description ? editProduct.description : "";
             tempProduct.categoryId = editProduct.categoryId;
             setProduct(tempProduct);
         }
@@ -82,19 +83,33 @@ const ProductForm = (props) => {
         let productData = { ...product };
         delete productData.main_image
         delete productData.ext_images;
-        // console.log(productData);
+        // if(!productData.image) delete productData.image;
+        // if(!productData.images) delete productData.images;
+        console.log(productData);
         let formData = new FormData();
         for(var key in productData) {
             if(key === "images") {
-                if(Array.isArray(productData["images"])) {
+                if(productData["images"].length) {
                     [...productData["images"]].forEach( file => formData.append(key, file) )
                 } else {
-                    formData.append(key, productData["images"]);
+                    formData.append(key, productData["images"])
                 }
-                // [...productData["images"]].forEach( file => formData.append(key, file) )
+                // if(Array.isArray(productData["images"])) {
+                //     [...productData["images"]].forEach( file => {
+                //         formData.append("images[]", file) 
+                //         console.log(file);
+                //     })
+                // } else {
+                //     console.log("222", productData["images"]);
+                //     formData.append(key, productData["images"]);
+                // }
             } else formData.append(key, productData[key]);
         }
-        // await props.addProduct(formData);
+        if(props.edit) {
+            await props.editProduct(formData);
+        } else {
+            await props.addProduct(formData);
+        }
     }
     return (
         <Form>
@@ -168,7 +183,14 @@ const ProductForm = (props) => {
                                 props.edit && props.product.images && props.product.images.length > 0 ?
                                     <Row>
                                         {
-                                            props.product.images.map( image => <Col sm="4"><Image src={`http://localhost:8080/${image.image}`} fluid /></Col>)
+                                            props.product.images.map( image => (
+                                                <Col key={image.id} sm="4">
+                                                    <div className={classes.icontainer} onClick={()=> props.deleteProductImage(image.id)}>
+                                                        <Image src={`http://localhost:8080/${image.image}`} fluid />
+                                                        <div className={classes.after}>Delete</div>
+                                                    </div>
+                                                </Col>
+                                            ))
                                         }
                                     </Row>
                                 : null
@@ -202,7 +224,7 @@ const ProductForm = (props) => {
 
             { props.error ? <p className="text-danger">{props.error}</p> : null }
             <Button onClick={validate} disabled={props.loading} variant="primary" type="submit">
-                { props.loading ? 'Adding...' : 'Submit' }
+                { props.loading ? 'Submitting...' : 'Submit' }
             </Button>
         </Form>
     )

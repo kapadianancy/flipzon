@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import Button from 'react-bootstrap/Button'
 
 import * as classes from './ProductFormController.module.css'
-import { addProduct, fetchOneProduct } from '../store/actions/ProductActions'
+import { addProduct, fetchOneProduct, editProduct, deleteProductImage } from '../store/actions/ProductActions'
 import ProductForm from '../components/Product/ProductForm/ProductForm'
 
 const ProductFormController = (props) => {
@@ -20,6 +20,7 @@ const ProductFormController = (props) => {
         props.history.push("/admin/products");
     }
     const editProduct = async (formData) => {
+        await props.editProduct(props.match.params.id, formData);
         props.history.push("/admin/products");
     }
     return (
@@ -33,6 +34,7 @@ const ProductFormController = (props) => {
                 </Card.Header>
                 <Card.Body>
                     <ProductForm 
+                        deleteProductImage={props.deleteProductImage}
                         addProduct={addProduct} 
                         product={props.product} 
                         edit={props.match.params.id ? true : false} 
@@ -57,7 +59,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         addProduct: (productData) => dispatch(addProduct(productData)),
-        fetchOneProduct: (id) => dispatch(fetchOneProduct(id))
+        fetchOneProduct: (id) => dispatch(fetchOneProduct(id)),
+        editProduct: (id, productData) => dispatch(editProduct(id, productData)),
+        deleteProductImage: (id) => dispatch(deleteProductImage(id))
     }
 }
 

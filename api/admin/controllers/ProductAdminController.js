@@ -15,7 +15,7 @@ var cpUpload = upload.fields([{ name: 'image', maxCount: 1 }, { name: 'images', 
 
 module.exports = (app) => {
     app.get("/admin/products", async (req, res, next) => {
-        let products = await productService.fetchProducts();
+        let products = await productService.fetchProducts(req.query.page, req.query.limit);
         res.send(products);
     })
     app.get("/admin/products/:id", async (req, res, next) => {
@@ -48,16 +48,17 @@ module.exports = (app) => {
         }
     })
     
-    app.put("/admin/products/:id", upload.single("image"), async (req, res, next) => {
-        if(req.file) {
+    app.put("/admin/products/:id", cpUpload, async (req, res, next) => {
+        if(req.files.image) {
             req.body = {
                 ...req.body,
-                main_image: "/"+req.file.destination+req.file.filename
+                main_image: "/images/"+req.files.image[0].filename
             }
         }
         try {
-            let product = await productService.editProduct(req.params.id, req.body);
-            res.send(product);
+            var images = req.files.images && req.files.images.length > 0 ? req.files.images : [];
+            let response = await productService.editProduct(req.params.id, req.body, images);
+            res.send(response);
         } catch (error) {
             next(error);
         }
@@ -67,6 +68,15 @@ module.exports = (app) => {
         try {
             let product = await productService.deleteProduct(req.params.id);
             res.send(product);
+        } catch (error) {
+            next(error);
+        }
+    })
+
+    app.delete("/admin/products/images/:id", async (req, res, next) => {
+        try {
+            let result = await productService.deleteProductImage(req.params.id);
+            res.send(result);
         } catch (error) {
             next(error);
         }

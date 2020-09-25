@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 import * as classes from './Products.module.css'
 import ProductList from '../components/Product/ProductList/ProductList';
-import { fetchProducts } from '../store/actions/ProductActions'
+import { fetchProducts, deleteProduct } from '../store/actions/ProductActions'
 
 const Products = (props) => {
     useEffect(() => {
@@ -22,7 +22,7 @@ const Products = (props) => {
                     <Button as={Link} to={`${props.match.path}/add`} variant="primary">Add New</Button>
                 </Card.Header>
                 <Card.Body>
-                    <ProductList products={props.products} />
+                    <ProductList deleteProduct={props.deleteProduct} products={props.products} />
                 </Card.Body>
             </Card>
         </>
@@ -31,13 +31,16 @@ const Products = (props) => {
 
 const mapStateToProps = state => {
     return {
-        products: state.adminProduct.products
+        products: state.adminProduct.products,
+        loading: state.adminProduct.loading,
+        error: state.adminProduct.error
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchProducts: () => dispatch(fetchProducts())
+        fetchProducts: () => dispatch(fetchProducts()),
+        deleteProduct: (id) => dispatch(deleteProduct(id))
     }
 }
 

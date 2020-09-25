@@ -40,3 +40,43 @@ export const fetchOneProduct = (id) => {
         }
     }
 }
+
+export const editProduct = (id, productData) => {
+    return async(dispatch) => {
+        dispatch({ type: types.INIT_EDIT_PRODUCT });
+        try {
+            const result = await axios.put(`products/${id}`, productData, {
+                headers: {
+                    'Content-Type':'multipart/form-data'
+                }
+            });
+            dispatch({ type: types.EDIT_PRODUCT_SUCCESS, product: result.data });
+        } catch (error) {
+            dispatch({ type: types.EDIT_PRODUCT_FAILED, error: error.message });
+        }
+    }
+}
+
+export const deleteProduct = (id) => {
+    return async(dispatch) => {
+        dispatch({ type: types.INIT_DELETE_PRODUCT });
+        try {
+            const data = await axios.delete(`products/${id}`);
+            dispatch({ type: types.DELETE_PRODUCT_SUCCESS, product_id: id });
+        } catch(error) {
+            dispatch({ type: types.DELETE_PRODUCT_FAILED, error: error.message });
+        }
+    }
+}
+
+export const deleteProductImage = (id) => {
+    return async(dispatch) => {
+        dispatch({ type: types.INIT_DELETE_PRODUCT_IMAGE });
+        try {
+            const data = await axios.delete(`products/images/${id}`);
+            dispatch({ type: types.DELETE_PRODUCT_IMAGE_SUCCESS, image_id: id });
+        } catch(error) {
+            dispatch({ type: types.DELETE_PRODUCT_IMAGE_FAILED, error: error.message });
+        }
+    }
+}
