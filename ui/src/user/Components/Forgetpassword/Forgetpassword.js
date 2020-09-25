@@ -12,8 +12,6 @@ class Forgetpassword extends Component {
             cardBtn: {
                backgroundColor: "#fb641b",
                borderColor: "#fb641b",
-            //    backgroundColor: "#007bff",
-            //    borderColor : "#007bff",
                margin: '10px',
                color: "white",
                width: '170px'
