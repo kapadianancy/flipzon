@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import {Button} from 'reactstrap';
 import { Navbar, Nav,Form,FormControl } from 'react-bootstrap'
 import {  Link, Route, withRouter } from 'react-router-dom';
-import logo from '../../images/logo.png';
-import cart from '../../images/shopping-cart.png';
+import logo from '../../../images/logo-2.jpg';
+import cart from '../../../images/shopping-cart.png';
 
 import './Header.css';
 
