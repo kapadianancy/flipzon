@@ -8,7 +8,7 @@ require("./models/main");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
-app.use(express.static(path.join(__dirname, 'images')));
+app.use(express.static(path.join(__dirname, 'public')));
 require("./admin/controllers/index")(app);
 
 app.use((err, req, res, next) => {

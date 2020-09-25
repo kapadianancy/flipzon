@@ -2,8 +2,9 @@ import * as types from '../Types'
 
 const initialStore = {
     products: [],
+    product: {},
     loading: false,
-    error: ""
+    error: null
 };
 
 const store = (state = initialStore, action) => {
@@ -12,15 +13,52 @@ const store = (state = initialStore, action) => {
             return {
                 ...state,
                 loading: true,
+                error: null
             };
         case types.FETCH_PRODUCTS_SUCCESS:
             return {
                 ...state,
                 loading: false,
                 products: action.products,
-                error: ""
             }
         case types.FETCH_PRODUCTS_FAILED:
+            return {
+                ...state,
+                loading: false,
+                error: action.error
+            }
+        case types.INIT_ADD_PRODUCT:
+            return {
+                ...state,
+                loading: true,
+                error: null
+            }
+        case types.ADD_PRODUCT_SUCCESS:
+            // let products = state.products.concat(action.product);
+            return {
+                ...state,
+                loading: false,
+            }
+        case types.ADD_PRODUCT_FAILED:
+            return {
+                ...state,
+                loading: false,
+                error: action.error
+            }
+        case types.INIT_FETCH_ONE_PRODUCT:
+            return {
+                ...state,
+                loading: true,
+                error: null,
+                product: {}
+            }
+        case types.FETCH_ONE_PRODUCT_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                product: action.product
+            }
+        case types.FETCH_ONE_PRODUCT_FAILED:
             return {
                 ...state,
                 loading: false,
