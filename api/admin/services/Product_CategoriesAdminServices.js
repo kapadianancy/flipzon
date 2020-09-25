@@ -1,7 +1,15 @@
 const Product_category = require("../../models/Product_category");
 
 const getProduct_Category = async () => {
-    return await Product_category.findAll()
+    try{
+        return await Product_category.findAll({
+            where: {
+                IsDeleted:0
+            }
+        })
+    }catch(error) {
+        throw error;
+    }  
 }
 const getSingleProduct_Category = async (id) =>{
     try {
@@ -50,6 +58,25 @@ const editProduct_Category = async (id, data) => {
         throw error;
     }
 }
+const edit_DeleteProduct_Category = async (id) => {
+    try {
+        let errorObj = { 
+            statusCode:200 
+        }
+        let product_category = await Product_category.findByPk(id);
+        if(!product_category) {
+            errorObj.statusCode = 404
+            errorObj.message = "Product_Category not found";
+        }
+        if(errorObj.message) throw errorObj
+        product_category = await Product_category.update({isDeleted:1}, {
+            where: { id : id }
+        });
+        return await Product_category.findByPk(id);
+    } catch (error) {
+        throw error;
+    }
+}
 const deleteProduct_Category = async (id) => {
     try {
         let errorObj = { statusCode:200 }
@@ -72,5 +99,6 @@ module.exports = {
     getSingleProduct_Category,
     addProduct_Category,
     editProduct_Category,
-    deleteProduct_Category
+    deleteProduct_Category,
+    edit_DeleteProduct_Category
 }
