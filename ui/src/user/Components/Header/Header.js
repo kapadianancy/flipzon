@@ -24,8 +24,8 @@ class Header extends Component {
             },
             btn:
             {
-                backgroundColor:"#ffe500",
-                color:"black"
+                backgroundColor:"#fb641b",
+                color:"white"
             },
             img:
             {
