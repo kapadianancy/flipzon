@@ -1,12 +1,14 @@
 const express = require("express")
 const app = express();
 const bodyParser = require("body-parser");
-var cors = require('cors')
+const cors = require("cors")
+const path = require("path");
 require("./models/main");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cors())
+app.use(cors());
+app.use(express.static(path.join(__dirname, 'images')));
 require("./admin/controllers/index")(app);
 
 app.use((err, req, res, next) => {

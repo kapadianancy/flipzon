@@ -2,43 +2,19 @@ import * as types from '../ActionTypes'
 
 const initialStore = {
     product_categories: [],
+    product_categorie:{},
     loading: false,
     error: ""
 };
 
 const store = (state = initialStore, action) => {
     switch (action.type) {
+        //Fetch Data
         case types.INIT_FETCH_PRODUCT_CATEGORIES:
             return {
                 ...state,
                 loading: true,
             };
-        case types.ADD_PRODUCT_CATEGORIES:
-            return {
-                ...state,
-                product_categories: action.product_categories,
-                loading: true
-            };
-        case types.UPDATE_PRODUCT_CATEGORIES:
-            return {
-                ...state,
-                product_categories: action.product_categories,
-                // product_categories: action.product_categories.map(    
-                //     (content, i) => content.id === action.product_categories_id ? {...content, product_categories: action.product_categories} : content),
-                loading: true
-            };    
-        case types.REMOVE_PRODUCT_CATEGORIES:
-            return {
-                ...state,
-                product_categories_id : action.product_categories_id,
-                loading: true
-            };    
-        case types.SINGLE_PRODUCT_CATEGORIES:
-            return {
-                ...state,
-                product_categories: action.product_categories,
-                loading: false
-            }
         case types.FETCH_PRODUCT_CATEGORIES_SUCCESS:
             return {
                 ...state,
@@ -49,8 +25,110 @@ const store = (state = initialStore, action) => {
             return {
                 ...state,
                 loading: false,
+                error:action.error
+            }    
+        // Add Data
+        case types.INIT_ADD_PRODUCT_CATEGORIES:
+            return {
+                ...state,
+                loading: false,
                 error: action.error
             }
+        case types.ADD_PRODUCT_CATEGORIES_SUCCESS:
+            return {
+                ...state,
+                loading: false
+            }
+        case types.ADD_PRODUCT_CATEGORIES_FAILED:
+            return {
+                ...state,
+                loading: false,
+                error: action.error
+            }
+        // Update Data
+        case types.INIT_UPDATE_PRODUCT_CATEGORIES:
+            return {
+                ...state,
+                loading: false,
+                error: action.error
+            }
+        case types.UPDATE_PRODUCT_CATEGORIES_SUCCESS:
+            return {
+                ...state,
+                product_categories: action.product_categories,
+                loading: false
+            }
+        case types.UPDATE_PRODUCT_CATEGORIES_FAILED:
+            return {
+                ...state,
+                loading: false,
+                error: action.error
+            }
+
+        // case types.UPDATE_PRODUCT_CATEGORIES:
+        //     return {
+        //         ...state,
+        //         product_categories: action.product_categories,
+        //         loading: true
+        //     };  
+
+        // REMOVE Data 
+
+        case types.INIT_REMOVE_PRODUCT_CATEGORIES:
+            return {
+                ...state,
+                loading: false,
+                error: action.error
+            }
+        case types.REMOVE_PRODUCT_CATEGORIES_SUCCESS:
+            let categories = state.product_categories.filter(category => category.id !== action.product_categories_id);
+            return {
+                ...state,
+                product_categories:categories,
+                loading: true
+            };
+        case types.REMOVE_PRODUCT_CATEGORIES_FAILED:
+            return {
+                ...state,
+                loading: false,
+                error: action.error
+            }
+
+        // case types.REMOVE_PRODUCT_CATEGORIES:
+        //     let categories = state.product_categories.filter(category => category.id !== action.product_categories_id);
+        //     return {
+        //         ...state,
+        //         product_categories:categories,
+        //         loading: true
+        //     };
+
+        // FETCH SINGLE Data    
+        
+        case types.INIT_SINGLE_PRODUCT_CATEGORIES:
+            return {
+                ...state,
+                loading: false,
+                error: action.error
+            }
+        case types.FETCH_SINGLE_CATEGORIES_SUCCESS:
+            return {
+                ...state,
+                product_categorie: action.product_categorie,
+                loading: false
+            }
+        case types.FETCH_SINGLE_CATEGORIES_FAILED:
+            return {
+                ...state,
+                loading: false,
+                error: action.error
+            }
+
+        // case types.SINGLE_PRODUCT_CATEGORIES:
+        //     return {
+        //         ...state,
+        //         product_categorie: action.product_categorie,
+        //         loading: false
+        //     }
         default:
             return state;
     }

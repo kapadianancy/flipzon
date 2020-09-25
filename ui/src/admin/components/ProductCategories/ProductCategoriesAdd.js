@@ -1,41 +1,88 @@
 import React, { Component } from 'react';
-// import axios from 'axios';
 import { Form} from 'react-bootstrap'
-// import * as classes from './ProductList.module.css';
-// import Table from 'react-bootstrap/Table'
 import { connect } from 'react-redux'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import * as classes from '../../containers/Products.module.css'
-import { AddProductCategories } from '../../store/actions/Product_CategoriesActions'
-
+import { AddProductCategories,fetchProductCategories } from '../../store/actions/Product_CategoriesActions'
+const validateForm = (errors) => {
+    let valid = true;
+    Object.values(errors).forEach(
+      // if we have an error string set valid to false
+      (val) => val.length > 0 && (valid = false)
+    );
+    return valid;
+  }
 class ProductCategoriesAdd extends Component{
     state = {
         name:"",
-        description:""
+        description:"",
+        formErrors: {},
+        errors: {
+            name: '',
+            description: ''
+        }
     }
-    componentDidMount(){
+    handleChange = (event) => {
+        event.preventDefault();
+        let name = event.target.name;
+        let value = event.target.value;
+        let errors = this.state.errors;
+      
+        switch (name) {
+          case 'name': 
+            errors.name = value.length < 1 ? 'name Required' : '';
+            break;
+          case 'description': 
+            errors.description = value.length < 1 ? 'description Required' : '';
+            break;
+          default:
+            break;
+        }
+      
+        this.setState({errors, [name]: value}, ()=> {
+            console.log(errors)
+        })
+      }
+    handleSubmit = async (event) => {
+        event.preventDefault();
+        if(validateForm(this.state.errors)) {
+            const post = {
+                name:this.state.name,
+                description:this.state.description
+            }   
+            await this.props.AddProductCategories(post);
+            this.setState({
+                name: '',
+                description: ''
+            })
+            //await this.props.history.push('/admin/product_categories');
+        console.info('Valid Form')
+        }else{
+        console.error('Invalid Form')
+        }
+    }
+    
+    componentDidMount = () =>{
         console.log(this.props);
     }
-    postDataHandler = (e) =>{
+    postDataHandler = async (e) =>{
         e.preventDefault();
         const post = {
             name:this.state.name,
             description:this.state.description
         }   
-        this.props.AddProductCategories(post);
+        await this.props.AddProductCategories(post);
+        await this.props.fetchProductCategories();
         this.setState({
             name: '',
             description: ''
         })
-        this.props.history.replace('/admin/product_categories');
-        // axios.post("http://localhost:8080/admin/product_categories",post)
-        // .then(response=>{
-        //     this.props.history.replace('/admin/product_categories');
-        //     console.log(response);
-        // });
+        await this.props.history.push('/admin/product_categories'); 
     }
+
     render(){
+        const {errors} = this.state;  
         return(
             <Card>
                 <Card.Header className={classes.Header}>
@@ -44,14 +91,27 @@ class ProductCategoriesAdd extends Component{
                     </div>
                 </Card.Header>
                 <Card.Body>
-                    <Form>
-                    <Form.Label>Category Name</Form.Label>
-                    <Form.Control type="text" value={this.state.name} onChange={(event) => this.setState({name: event.target.value})} placeholder="Enter Category" />
-                    <Form.Label>Description</Form.Label>
-                    <Form.Control rows="4" type="text" value={this.state.description} onChange={(event) => this.setState({description: event.target.value})} placeholder="Enter Description" />
-                    <Button onClick={this.postDataHandler} variant="primary">
+                    <Form onSubmit={this.handleSubmit}>
+                    
+                    <Form.Group controlId="exampleForm.ControlTextarea1">
+                        <Form.Label>Category Name</Form.Label>
+                        <Form.Control type="text" name="name" onChange={this.handleChange} placeholder="Enter Category"/>
+                        {errors.name.length > 0 && 
+                        <span><font color="red">{errors.name}</font></span>}
+                    </Form.Group>
+
+
+                    <Form.Group controlId="exampleForm.ControlTextarea2">
+                        <Form.Label>Description</Form.Label>
+                        <Form.Control type="text" name="description" onChange={this.handleChange} placeholder="Enter Description"/>
+                        {errors.description.length > 0 && 
+                        <span><font color="red">{errors.description}</font></span>}
+                    </Form.Group>
+                    
+                    <Button disabled={(errors.description.length > 0 || errors.name.length > 0)} onClick={this.postDataHandler} variant="primary">
                         Submit
                     </Button>
+                    
                     </Form>
                 </Card.Body>
             </Card>
@@ -66,6 +126,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = dispatch => {
     return{
+        fetchProductCategories: () => dispatch(fetchProductCategories()),
         AddProductCategories: (post) => dispatch(AddProductCategories(post))
     }
 }

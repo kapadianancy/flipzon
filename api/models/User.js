@@ -20,7 +20,7 @@ const User =db.sequelize.define("user", {
             isEmail: true
         },
         password: {
-            type: DataTypes.STRING,
+            type: DataTypes.TEXT,
             allowNull: false,
         },
         contact: {
@@ -34,6 +34,10 @@ const User =db.sequelize.define("user", {
         },
         roleId: {
             type: DataTypes.INTEGER
+        },
+        isDeleted: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: 0
         }
 });
 

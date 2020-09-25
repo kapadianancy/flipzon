@@ -16,6 +16,10 @@ const Product_image = db.sequelize.define('Product_image', {
         productId:
         {
             type:DataTypes.INTEGER
+        },
+        isDeleted: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: 0
         }
     });
     

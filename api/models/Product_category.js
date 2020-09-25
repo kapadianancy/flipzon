@@ -12,6 +12,10 @@ const Product_category = db.sequelize.define('Product_category', {
         },
         description: {
             type: DataTypes.STRING
+        },
+        isDeleted: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: 0
         }
     });
 

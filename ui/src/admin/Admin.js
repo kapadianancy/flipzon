@@ -6,7 +6,7 @@ import ProductCategories from './containers/ProductCategories'
 import ProductCategoriesAdd from './components/ProductCategories/ProductCategoriesAdd'
 import ProductCategoriesEdit from './components/ProductCategories/ProductCategoriesEdit'
 import Dashboard from './containers/Dashboard'
-import Order from "./components/Order/Order";
+import Order from "./containers/Orders";
 
 const Admin = (props) => {
     return <>

@@ -25,7 +25,12 @@ const Order =db.sequelize.define("Order", {
         {
             type:DataTypes.STRING,
             allowNull:false
-        }
+        },
+        isDeleted:
+        {
+            type:DataTypes.BOOLEAN,
+            defaultValue: 0
+        },
 });
 
 //relationship

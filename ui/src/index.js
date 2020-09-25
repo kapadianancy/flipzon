@@ -12,10 +12,12 @@ import thunk from 'redux-thunk';
 // import reducers
 import AdminProductReducer from './admin/store/reducers/ProductReducer';
 import AdminProductCategoriesReducer from './admin/store/reducers/Product_CategoriesReducer';
+import AdminOrdersReducer from './admin/store/reducers/OrdersReducer';
 
 const rootReducer = combineReducers({
   adminProduct: AdminProductReducer,
-  adminProductCategories:AdminProductCategoriesReducer
+  adminProductCategories:AdminProductCategoriesReducer,
+  adminOrdersReducer:AdminOrdersReducer
 });
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(rootReducer, composeEnhancers(
