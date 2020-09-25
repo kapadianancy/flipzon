@@ -3,18 +3,26 @@ import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
 import { RemoveProductCategories,SingleProductCategories } from '../../store/actions/Product_CategoriesActions'
-import { Link } from 'react-router-dom';
+import { useHistory,Link } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css'
 class ProductCategoriesList extends Component{
+    
     removeHandler = (id) =>{
         this.props.RemoveProductCategories(id);
         //this.props.history.push('/admin/ProductCategoriesList');
     }
     updateHandler = async (id) =>{
       await this.props.SingleProductCategories(id);
-        // this.props.history.replace('/admin/ProductCategoriesEdit');
+    //   this.props.history.push('/admin/ProductCategoriesEdit');
     }
+
+    // routeChange = async (id) =>{ 
+    //     let history = useHistory();
+    //     let path = '/admin/ProductCategoriesList'; 
+    //     await this.props.SingleProductCategories(id);
+    //     history.push(path);
+    // }
         submit = (id) => { confirmAlert({
             customUI: ({ onClose }) => {
             return (
@@ -41,19 +49,6 @@ class ProductCategoriesList extends Component{
                         </td>
                     </tr>
                 </table>
-                // <div className='custom-ui'>
-                // <h1>Are you sure?</h1>
-                // <p>You want to delete this file?</p>
-                // <div><Button onClick={onClose}>No</Button>
-                // <Button
-                //     onClick={() => {
-                //     this.props.RemoveProductCategories(id)
-                //     onClose();
-                //     }}>
-                //     Yes, Delete it!
-                // </Button>
-                // </div>
-                // </div>
             );
             }
         });
@@ -65,7 +60,8 @@ class ProductCategoriesList extends Component{
                 <td>{index+1}</td>
                 <td>{product_categories.name}</td>
                 <td>{product_categories.description}</td>
-                <td><Button variant="info" onClick={() => this.updateHandler(product_categories.id)} as={Link} to={`/admin/ProductCategoriesEdit/`}>Edit</Button></td>
+                {/* <td><Button variant="info" onClick={() => this.updateHandler(product_categories.id)}>Edit</Button></td> */}
+                <td><Button variant="info" onClick={() => this.updateHandler(product_categories.id)} as={Link} to={`/admin/ProductCategoriesEdit/${product_categories.id}`}>Edit</Button></td>
                 <td><Button variant="danger" onClick={() => this.submit(product_categories.id)}>Delete</Button></td>
             </tr>
         )

@@ -16,20 +16,22 @@ class ProductCategoriesEdit extends Component{
         description:''
     }
 
-    componentDidMount()
+    async componentDidMount()
     {
-        // if(this.props.match.params.id) {
-            // const category = this.props.SingleProductCategories(this.props.match.params.id);
-        
-        // this.props.SingleProductCategories(this.)
-            const category = this.props.product_categorie
+        if(this.props.match.params.id) {
 
-            this.setState({
+          await this.props.SingleProductCategories(this.props.match.params.id);
+
+            // this.props.SingleProductCategories(this.)
+           const category = await this.props.product_categorie
+           console.log(category.name);
+             
+           this.setState({
                 id:category.id,
                 name:category.name,
                 description:category.description
             })
-        // }   
+        }   
     }
 
     postDataHandler = async (e) =>{
