@@ -1,24 +1,24 @@
 import * as types from '../actionNames'
 
 const initialStore = {
-    products: [],
+    product_categories: [],
     error: ""
 };
 
 const store = (state = initialStore, action) => {
     switch (action.type) {
         
-        case types.CATEGORY_PRODUCT:
+        case types.FETCH_PRODUCT_CATEGORIES_SUCCESS:
             return {
                 ...state,
-                products: action.products
+                product_categories: action.product_categories
              
             }
-       case types.CATEGORY_PRODUCT_FAILED:
-           return{
-               ...state,
-               error:action.error
-           }
+        case types.FETCH_PRODUCT_CATEGORIES_FAILED:
+            return {
+                ...state,
+                error: action.error
+            }
         default:
             return state;
     }
