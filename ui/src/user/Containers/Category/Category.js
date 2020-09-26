@@ -15,13 +15,8 @@ class Category extends Component {
 
 
     componentDidMount() {
-
         this.props.fetchProductCategories();
-
     }
-
-
-
 
     render() {
 
