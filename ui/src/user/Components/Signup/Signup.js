@@ -28,7 +28,7 @@ class Signup extends Component {
         };
         return (
             <>
-                <Row style={{ justifyContent: 'center' }}>
+                <Row style={{ justifyContent: 'center' ,marginTop:"10px"}}>
                     <Col sm="8">
                         <Card className="shadow p-3 mb-5 bg-white rounded">
                             <CardBody >

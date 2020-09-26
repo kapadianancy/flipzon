@@ -20,6 +20,9 @@ router.get('/client/logout',auth,Authenticate.logout);
 //category
 router.get('/client/category',Product.getAllCategory);
 
+//category wise product
+router.get('/client/category-product/:cid',Product.getCategoryProduct);
+
 //product
 router.get('/client/product',Product.getAllProduct);
 

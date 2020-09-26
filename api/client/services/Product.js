@@ -33,3 +33,22 @@ exports.getAllProduct=async(req,res)=>
         res.status(400).send(err);
     }
 }
+
+exports.getCategoryProduct=async(req,res)=>
+{
+    try{
+        let cid=req.params.cid;
+        const p=await main.product.findAll({
+            where:{
+                categoryId:cid
+            }
+        });
+
+        res.status(200).send(p);
+    }catch(err)
+    {
+        res.status(400).send(err);
+    }
+    
+
+}

@@ -8,5 +8,11 @@ export const LOGIN="LOGIN";
 export const FORGET_PASSWORD="FORGET_PASSWORD";
 export const LOGOUT="LOGOUT";
 export const EDIT_PROFILE="EDIT_PROFILE";
+<<<<<<< HEAD
+=======
+
+export const CATEGORY_PRODUCT="CATEGORY_PRODUCT";
+export const CATEGORY_PRODUCT_FAILED="CATEGORY_PRODUCT_FAILED";
+>>>>>>> nancyKapadia
 
 
