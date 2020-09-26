@@ -10,11 +10,13 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 
 // import reducers
+import ProductCategoryReducer from './user/redux-store/Reducers/ProductCategory'
 import AdminProductReducer from './admin/store/reducers/ProductReducer';
 import AdminProductCategoriesReducer from './admin/store/reducers/Product_CategoriesReducer';
 import AdminOrdersReducer from './admin/store/reducers/OrdersReducer';
 
 const rootReducer = combineReducers({
+  ProductCategory : ProductCategoryReducer,
   adminProduct: AdminProductReducer,
   adminProductCategories:AdminProductCategoriesReducer,
   adminOrdersReducer:AdminOrdersReducer

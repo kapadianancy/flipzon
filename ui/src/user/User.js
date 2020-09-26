@@ -5,8 +5,6 @@ import './User.css';
 import Category from './Containers/Category/Category';
 import Login from './Containers/Login/Login';
 import Home from './Containers/Home/Home';
-import Footer from './Components/Footer/Footer';
-import Header from './Components/Header/Header';
 import Forgetpassword from './Containers/Forgetpassword/Forgetpassword';
 import Signup from './Containers/Signup/Signup';
  
