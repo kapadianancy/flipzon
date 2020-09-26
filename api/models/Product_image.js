@@ -19,7 +19,7 @@ const Product_image = db.sequelize.define('Product_image', {
         },
         isDeleted: {
             type: DataTypes.BOOLEAN,
-            defaultValue: false
+            defaultValue: 0
         }
     });
     

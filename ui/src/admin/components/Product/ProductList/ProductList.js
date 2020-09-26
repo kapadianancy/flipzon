@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button'
 import { Link } from 'react-router-dom';
 
 
-const renderProducts = (products) => {
+const renderProducts = (products, deleteProduct) => {
     return products.map( (product, index) => 
         <tr key={product.id}>
             <td>{index+1}</td>
@@ -14,7 +14,7 @@ const renderProducts = (products) => {
             <td>{product.price}</td>
             <td>{product.stock}</td>
             <td><Button as={Link} to={`/admin/products/edit/${product.id}`} variant="info">Edit</Button></td>
-            <td><Button variant="danger">Delete</Button></td>
+            <td><Button onClick={() => deleteProduct(product.id)} variant="danger">Delete</Button></td>
         </tr>
     )
 }
@@ -33,7 +33,7 @@ const ProductList = (props) => {
             </tr>
         </thead>
         <tbody>
-            { renderProducts(props.products) }
+            { renderProducts(props.products, props.deleteProduct) }
         </tbody>
     </Table>
 }

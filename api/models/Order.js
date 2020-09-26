@@ -29,7 +29,7 @@ const Order =db.sequelize.define("Order", {
         isDeleted:
         {
             type:DataTypes.BOOLEAN,
-            defaultValue: false
+            defaultValue: 0
         },
 });
 

@@ -30,6 +30,14 @@ app.put("/admin/product_categories/:id", async (req, res, next) => {
         next(error);
     }
 })
+app.put("/admin/categories/:id", async (req, res, next) => {
+    try {
+        let product_categories = await Product_Categories_Services.edit_DeleteProduct_Category(req.params.id);
+        res.send(product_categories);
+    } catch (error) {
+        next(error);
+    }
+})
 // Delete Product_Category
 app.delete("/admin/product_categories/:id", async (req, res, next) => {
     try {

@@ -35,7 +35,7 @@ const Product =db.sequelize.define("Product", {
         },
         isDeleted: {
             type: DataTypes.BOOLEAN,
-            defaultValue: false
+            defaultValue: 0
         }
 });
 

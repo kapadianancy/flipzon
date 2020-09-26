@@ -28,7 +28,7 @@ const Order_details =db.sequelize.define("Order_detail", {
         },
         isDeleted: {
             type: DataTypes.BOOLEAN,
-            defaultValue: false
+            defaultValue: 0
         }
 });
 
