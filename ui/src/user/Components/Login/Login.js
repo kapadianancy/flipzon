@@ -30,7 +30,7 @@ class Login extends Component {
         };
         return (
             <>
-                <Row style={{ justifyContent: 'center' }}>
+                <Row style={{ justifyContent: 'center',marginTop:"30px" }}>
                     <Col sm="5">
                         <Card className="shadow p-3 mb-5 bg-white rounded">
                             <CardBody >
