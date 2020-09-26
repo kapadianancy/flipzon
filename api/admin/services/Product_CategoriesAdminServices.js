@@ -13,7 +13,12 @@ const getProduct_Category = async () => {
 }
 const getSingleProduct_Category = async (id) =>{
     try {
-        return await Product_category.findByPk(id);
+        return await Product_category.findAll({
+            where: {
+                id:id,
+                IsDeleted:0
+            }
+        })
     } catch (error) {
         throw error;
     }   

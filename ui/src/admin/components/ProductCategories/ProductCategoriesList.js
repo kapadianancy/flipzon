@@ -3,7 +3,7 @@ import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
 import { RemoveProductCategories,SingleProductCategories } from '../../store/actions/Product_CategoriesActions'
-import { useHistory,Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css'
 class ProductCategoriesList extends Component{
@@ -53,9 +53,12 @@ class ProductCategoriesList extends Component{
             }
         });
         }
-    renderProductCategories = (categories) => {
+        renderProductCategories = (categories) => {
         //   debugger;
-        return categories.map((product_categories, index) => 
+        let product = this.props.loading ? <p>loading......</p> : "";
+        if(categories)
+        {
+            product =  categories.map((product_categories, index) => 
             <tr key={"index"+index+1}>
                 <td>{index+1}</td>
                 <td>{product_categories.name}</td>
@@ -65,6 +68,8 @@ class ProductCategoriesList extends Component{
                 <td><Button variant="danger" onClick={() => this.submit(product_categories.id)}>Delete</Button></td>
             </tr>
         )
+        } 
+        return product
     }
    
     render(){
@@ -84,7 +89,9 @@ class ProductCategoriesList extends Component{
     </Table>
     }
 }
-
+const mapStateToProps = (state) => ({
+    loading: state.adminProductCategories.loading
+});
 const mapDispatchToProps = dispatch => {
     return {
         RemoveProductCategories: (id) => dispatch(RemoveProductCategories(id)),
@@ -92,4 +99,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(ProductCategoriesList);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductCategoriesList);

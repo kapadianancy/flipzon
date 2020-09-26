@@ -3,92 +3,84 @@ import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom';
+import 'react-responsive-modal/styles.css';
+// import { Modal } from 'react-responsive-modal';
 import Modal from 'react-bootstrap/Modal'
+import { fetchOrdersDetails } from '../../store/actions/OrderAction'
 
 class Order extends Component{
-    constructor(props, context) {
-		super(props, context);
+	state = {
+		show: false,
+	};
 
-		this.state = {
-			show: false,
-		};
+	handleShow = async (id) => {
+		await this.props.fetchOrdersDetails(id);
+		this.setState({ show: true });
+	};
 
-		this.handleShow = () => {
-			this.setState({ show: true });
-		};
-
-		this.handleHide = () => {
-			this.setState({ show: false });
-		};
-	}
-    renderProductOrder = (orders) => {
-        //   debugger;
-        return orders.map((orders, index) => 
-            <tr key={"index"+index+1}>
+	handleHide = () => {
+		this.setState({ show: false });
+	};
+    renderOrderDetails = (ordersDetails) => { 
+        return ordersDetails.map((ordersDetails, index) => 
+        <Modal.Body scrollable={true}>
+            <tr key={"myindex"+index+1}>
+                <td>
+                    #{index+1}
+                <tr>
+                    <td>
+                        Product Categories
+                    </td>
+                    <td>
+                        {ordersDetails.product.Product_category.name}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Product Name
+                    </td>
+                    <td>
+                        {ordersDetails.product.name}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Quantity
+                    </td>
+                    <td>
+                        {ordersDetails.quantity}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Price 
+                    </td>
+                    <td>
+                        {ordersDetails.price}
+                    </td>
+                </tr>
+                </td>
+            </tr>  
+            </Modal.Body>
+        )
+    }
+    renderProductOrder = (orders) => { 
+        return orders.map((orders, index) => <tr key={"index"+index+1}>
                 <td>{index+1}</td>
                 <td>{orders.user.username}</td>
                 <td>{orders.user.address}</td>
                 <td>{orders.user.email}</td>
                 <td>{orders.user.contact}</td>
                 <td>{orders.totalPrice}</td>
-                <td><Button variant="info" onClick={this.handleShow}>View Order</Button></td>
+                <td><Button variant="info" onClick={() => this.handleShow(orders.id)}>View Order</Button></td>
                 <td><Button variant="info" onClick={() => this.updateHandler(orders.id)} as={Link} to={`/admin/ProductCategoriesEdit/`}>{orders.status}</Button></td>
-                <Modal
-                    show={this.state.show}
-                    onHide={this.handleHide}
-                    dialogClassName="modal-90w"
-                    aria-labelledby="example-custom-modal-styling-title">
-                    <Modal.Header closeButton>
-                        <Modal.Title id="example-custom-modal-styling-title">
-                            Order Details
-                        </Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <p>
-                            <table>
-                                <tr>
-                                    <td>
-                                        Product Name
-                                    </td>
-                                    <td>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Quantity
-                                    </td>
-                                    <td>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Total Price
-                                    </td>
-                                    <td>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Order Date
-                                    </td>
-                                    <td>
-
-                                    </td>
-                                </tr>
-                            </table>
-                        </p>
-                    </Modal.Body>
-                </Modal>
-            </tr>
-            
+            </tr>  
         )
     }
    
     render(){
-        return <Table responsive striped bordered hover size="sm">
+        return <div>
+        <Table responsive striped bordered hover size="sm">
         <thead>
         <tr>
                 <th>#</th>
@@ -102,17 +94,42 @@ class Order extends Component{
             </tr>
         </thead>
         <tbody>
-            { this.renderProductOrder(this.props.orders) }
+            { this.renderProductOrder(this.props.orders)}  
+            
         </tbody>
-    </Table>
+        </Table>
+        <Modal show={this.state.show}
+			onHide={this.handleHide}
+			dialogClassName="modal-90w"
+			aria-labelledby="example-custom-modal-styling-title">
+		
+        <Table>
+            <thead>
+				<Modal.Header closeButton>
+					<Modal.Title id="example-custom-modal-styling-title">
+						Order Details
+					</Modal.Title>
+				</Modal.Header>	
+            </thead>
+        <tbody>
+            {this.renderOrderDetails(this.props.ordersDetails)}
+        </tbody>
+        </Table>
+        </Modal>
+        </div>
     }
 }
 
-// const mapDispatchToProps = dispatch => {
-//     return {
-//         RemoveProductCategories: (id) => dispatch(RemoveProductCategories(id)),
-//         SingleProductCategories: (id) => dispatch(SingleProductCategories(id))
-//     }
-// }
+const mapStateToProps = state => {
+    return {
+        ordersDetails: state.adminOrdersReducer.ordersDetails
+    }
+}
 
-export default connect(null, null)(Order);
+const mapDispatchToProps = dispatch => {
+    return {
+        fetchOrdersDetails: (id) => dispatch(fetchOrdersDetails(id))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Order);

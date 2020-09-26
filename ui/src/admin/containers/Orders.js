@@ -10,7 +10,7 @@ const Orders = (props) => {
         if(props.orders.length === 0)
         {
             props.fetchOrders()
-        }
+        }   
     }, [props])
     return(
         <Card>

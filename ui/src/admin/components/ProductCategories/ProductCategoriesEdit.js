@@ -16,22 +16,16 @@ class ProductCategoriesEdit extends Component{
         description:''
     }
 
-    async componentDidMount()
+    componentDidMount = async () =>
     {
-        if(this.props.match.params.id) {
-
-          await this.props.SingleProductCategories(this.props.match.params.id);
-
-            // this.props.SingleProductCategories(this.)
-           const category = await this.props.product_categorie
-           console.log(category.name);
-             
-           this.setState({
-                id:category.id,
-                name:category.name,
-                description:category.description
-            })
-        }   
+        await this.props.SingleProductCategories(this.props.match.params.id);
+        let category = await this.props.product_categorie
+            
+        this.setState({
+            id:category[0].id,
+            name:category[0].name,
+            description:category[0].description
+        })  
     }
 
     postDataHandler = async (e) =>{
@@ -47,7 +41,6 @@ class ProductCategoriesEdit extends Component{
         await this.props.history.replace('/admin/product_categories');
     }
     render(){
-        console.log(this.props);
         return(
             <Card>
                 <Card.Header className={classes.Header}>

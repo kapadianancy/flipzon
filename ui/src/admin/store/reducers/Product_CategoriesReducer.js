@@ -31,7 +31,7 @@ const store = (state = initialStore, action) => {
         case types.INIT_ADD_PRODUCT_CATEGORIES:
             return {
                 ...state,
-                loading: false,
+                loading: true,
                 error: action.error
             }
         case types.ADD_PRODUCT_CATEGORIES_SUCCESS:
@@ -49,7 +49,7 @@ const store = (state = initialStore, action) => {
         case types.INIT_UPDATE_PRODUCT_CATEGORIES:
             return {
                 ...state,
-                loading: false,
+                loading: true,
                 error: action.error
             }
         case types.UPDATE_PRODUCT_CATEGORIES_SUCCESS:
@@ -77,7 +77,7 @@ const store = (state = initialStore, action) => {
         case types.INIT_REMOVE_PRODUCT_CATEGORIES:
             return {
                 ...state,
-                loading: false,
+                loading: true,
                 error: action.error
             }
         case types.REMOVE_PRODUCT_CATEGORIES_SUCCESS:
@@ -85,7 +85,7 @@ const store = (state = initialStore, action) => {
             return {
                 ...state,
                 product_categories:categories,
-                loading: true
+                loading: false
             };
         case types.REMOVE_PRODUCT_CATEGORIES_FAILED:
             return {
@@ -107,7 +107,7 @@ const store = (state = initialStore, action) => {
         case types.INIT_SINGLE_PRODUCT_CATEGORIES:
             return {
                 ...state,
-                loading: false,
+                loading: true,
                 error: action.error
             }
         case types.FETCH_SINGLE_CATEGORIES_SUCCESS:
