@@ -8,32 +8,29 @@ import { fetchProductCategories } from '../../redux-store/Actions/ProductCategor
 
 class Category extends Component {
 
-    
-    constructor(props)
-    {
+    constructor(props) {
         super(props);
-        this.categories=[];
+        this.categories = [];
     }
-   
+
 
     componentDidMount() {
-      
+
         this.props.fetchProductCategories();
-       
+
     }
 
 
-    
+
 
     render() {
 
-        let displayposts=this.props.categories;
-        
+        let displayposts = this.props.categories;
+
 
         return (
             <div>
                 <Header />
-                
                 <CategoryComponent product_categories={displayposts} />
                 <Footer />
             </div>
