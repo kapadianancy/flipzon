@@ -13,11 +13,9 @@ const fetchProducts = async (page, limit) => {
         ]
     }
     if(page && limit) {
-        console.log(page,limit)
         options.offset = page-1;
         options.limit = +limit;
     }
-    console.log(options);
     return await Product.findAll(options)
 }
 const fetchSingleProduct = async(id) => {

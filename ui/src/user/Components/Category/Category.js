@@ -2,10 +2,16 @@ import React, { Component } from 'react'
 import { Button } from 'reactstrap';
 import { CardText, CardTitle, Row, Col } from 'reactstrap';
 import {Card } from 'react-bootstrap';
+import {withRouter} from 'react-router';
 
 
 class Category extends Component {
 
+    clickHandler=(cid)=>
+    {
+        
+        this.props.history.push("/product/"+cid);
+    }
     render() {
         const style = {
             cardBtn: {
@@ -33,7 +39,7 @@ class Category extends Component {
                 
                     <CardTitle style={style.cardTitle}>{c.name} </CardTitle>
                     <CardText>{c.description}</CardText>
-                    <Button style={style.cardBtn}>View Products</Button>
+                    <Button style={style.cardBtn} onClick={()=>this.clickHandler(c.id)}>View Products</Button>
                 </Card>
             </Col>);
             return data;
@@ -50,4 +56,4 @@ class Category extends Component {
     }
 }
 
-export default Category;
+export default withRouter(Category);
