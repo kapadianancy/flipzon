@@ -1,5 +1,5 @@
 import * as types from '../Types'
-import axios from '../../axios'
+import axios from '../../../axios'
 
 export const login = (email, password) => {
     return async(dispatch) => {

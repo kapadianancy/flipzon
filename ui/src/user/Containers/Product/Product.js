@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 
 import Header from '../../Components/Header/Header';
 import Footer from '../../Components/Footer/Footer';
-import * as actions from '../../redux-store/Actions/ProductCategoryAction';
+import * as actions from '../../redux-store/actions/ProductCategoryAction';
 
 class Product extends Component
 {
