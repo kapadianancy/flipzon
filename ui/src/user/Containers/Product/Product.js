@@ -16,6 +16,11 @@ class Product extends Component
         this.props.getProducts(this.props.match.params.cid);
         
     }
+    componentDidUpdate()
+    {
+        this.props.getProducts(this.props.match.params.cid);
+    }
+    
     render()
     {
         let data=[];

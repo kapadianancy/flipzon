@@ -34,7 +34,8 @@ class Header extends Component {
                 {
                     this.category.push(
                         <NavDropdown.Item id={c.id}>
-                            <Nav.Link as={Link} to={"/product/"+c.id} style={{color:"black"}}>{c.name}</Nav.Link>
+                            <Nav.Link as={Link} to={"/product/"+c.id} style={{color:"black"}} exact>{c.name}</Nav.Link>
+                    
                         </NavDropdown.Item>
                         );
                         i++;
@@ -71,6 +72,7 @@ class Header extends Component {
                 {this.category}
                 <NavDropdown.Item id="0">
                             <Nav.Link as={Link} to="/category" style={{color:"black"}}>View All</Nav.Link>
+                            
                         </NavDropdown.Item>
                 </NavDropdown>
       <Form inline>
