@@ -45,16 +45,16 @@ export const updateOrders = (id,put) => {
    
     return async dispatch => {
         dispatch({
-            type:types.INIT_FETCH_ORDERS
+            type:types.INIT_UPDATE_ORDERS
         }) 
         await axios.put('http://localhost:8080/admin/orders/'+id,put).then(response => {
             dispatch({
-                type:types.UPDATE_ORDERS,
-                orders:response.data
+                type:types.UPDATE_ORDERS_SUCCESS,
+                orders_id:id
             });
         }).catch(error => {
             dispatch({
-                type:types.FETCH_ORDERS_FAILED,
+                type:types.UPDATE_ORDERS_FAILED,
                 error:error.message
             });
         })

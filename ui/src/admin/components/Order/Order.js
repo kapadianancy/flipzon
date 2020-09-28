@@ -2,11 +2,9 @@ import React , {Component} from 'react';
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom';
-import 'react-responsive-modal/styles.css';
-// import { Modal } from 'react-responsive-modal';
 import Modal from 'react-bootstrap/Modal'
-import { fetchOrdersDetails } from '../../store/actions/OrderAction'
+import Alert from 'react-bootstrap/Alert'
+import { fetchOrdersDetails,updateOrders } from '../../store/actions/OrderAction'
 
 class Order extends Component{
 	state = {
@@ -18,7 +16,10 @@ class Order extends Component{
 		this.setState({ show: true });
 	};
 
-	handleHide = () => {
+    updateHandler = async (id) => {
+        await this.props.updateOrders(id);
+	};
+	handleHide = (id) => {
 		this.setState({ show: false });
 	};
     renderOrderDetails = (ordersDetails) => { 
@@ -65,17 +66,23 @@ class Order extends Component{
         )
     }
     renderProductOrder = (orders) => { 
-        return orders.map((orders, index) => <tr key={"index"+index+1}>
-                <td>{index+1}</td>
-                <td>{orders.user.username}</td>
-                <td>{orders.user.address}</td>
-                <td>{orders.user.email}</td>
-                <td>{orders.user.contact}</td>
-                <td>{orders.totalPrice}</td>
-                <td><Button variant="info" onClick={() => this.handleShow(orders.id)}>View Order</Button></td>
-                <td><Button variant="info" onClick={() => this.updateHandler(orders.id)} as={Link} to={`/admin/ProductCategoriesEdit/`}>{orders.status}</Button></td>
+        
+        let orderData = orders.map((orders, index) => <tr key={"index"+index+1}>
+            <td>{index+1}</td>
+            <td>{orders.user.username}</td>
+            <td>{orders.user.address}</td>
+            <td>{orders.user.email}</td>
+            <td>{orders.user.contact}</td>
+            <td>{orders.totalPrice}</td>
+            <td><Button variant="info" onClick={() => this.handleShow(orders.id)}>View Order</Button></td>
+            {orders.status === "Completed Delivery" ? <td><Alert variant="success"> {orders.status} </Alert></td> : 
+
+            <td><Alert variant="warning"> <Alert.Link onClick={() => this.updateHandler(orders.id)}>{orders.status}</Alert.Link></Alert></td>
+            }
+            {/* <Link variant="warning" onClick={() => this.updateHandler(orders.id)}>{orders.status}</Link>             */}
             </tr>  
         )
+        return orderData
     }
    
     render(){
@@ -94,8 +101,7 @@ class Order extends Component{
             </tr>
         </thead>
         <tbody>
-            { this.renderProductOrder(this.props.orders)}  
-            
+        { this.renderProductOrder(this.props.orders) }     
         </tbody>
         </Table>
         <Modal show={this.state.show}
@@ -112,7 +118,7 @@ class Order extends Component{
 				</Modal.Header>	
             </thead>
         <tbody>
-            {this.renderOrderDetails(this.props.ordersDetails)}
+            {this.renderOrderDetails(this.props.ordersDetails) }
         </tbody>
         </Table>
         </Modal>
@@ -122,13 +128,15 @@ class Order extends Component{
 
 const mapStateToProps = state => {
     return {
+        loading: state.adminOrdersReducer.loading,
         ordersDetails: state.adminOrdersReducer.ordersDetails
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchOrdersDetails: (id) => dispatch(fetchOrdersDetails(id))
+        fetchOrdersDetails: (id) => dispatch(fetchOrdersDetails(id)),
+        updateOrders:(id)=>dispatch(updateOrders(id))
     }
 }
 

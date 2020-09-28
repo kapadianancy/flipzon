@@ -16,11 +16,13 @@ const validateForm = (errors) => {
 class ProductCategoriesAdd extends Component{
     state = {
         name:"",
-        description:"",
+        // description:"",
+        image:"",
         formErrors: {},
         errors: {
             name: '',
-            description: ''
+            // description: '',
+            image:''
         }
     }
     handleChange = (event) => {
@@ -28,14 +30,14 @@ class ProductCategoriesAdd extends Component{
         let name = event.target.name;
         let value = event.target.value;
         let errors = this.state.errors;
-      
+        
         switch (name) {
           case 'name': 
             errors.name = value.length < 1 ? 'name Required' : '';
             break;
-          case 'description': 
-            errors.description = value.length < 1 ? 'description Required' : '';
-            break;
+        //   case 'description': 
+        //     errors.description = value.length < 1 ? 'description Required' : '';
+        //     break;
           default:
             break;
         }
@@ -46,37 +48,30 @@ class ProductCategoriesAdd extends Component{
       }
     handleSubmit = async (event) => {
         event.preventDefault();
-        if(validateForm(this.state.errors)) {
-            const post = {
-                name:this.state.name,
-                description:this.state.description
-            }   
-            await this.props.AddProductCategories(post);
-            this.setState({
-                name: '',
-                description: ''
-            })
-            //await this.props.history.push('/admin/product_categories');
+        if(validateForm(this.state.errors)) {            
         console.info('Valid Form')
         }else{
         console.error('Invalid Form')
         }
     }
-    
-    componentDidMount = () =>{
-        console.log(this.props);
+    onFileChange = (e) =>{
+        // this.setState({ profileImg: e.target.files[0] })
+        this.setState(
+            { image: e.target.files[0] }
+            )
     }
     postDataHandler = async (e) =>{
         e.preventDefault();
-        const post = {
-            name:this.state.name,
-            description:this.state.description
-        }   
-        await this.props.AddProductCategories(post);
+        const data = new FormData()
+        data.append('name', this.state.name)
+        // data.append('description', this.state.description)
+        data.append('image', this.state.image)
+        
+        await this.props.AddProductCategories(data);
         await this.props.fetchProductCategories();
         this.setState({
             name: '',
-            description: ''
+            // description: ''
         })
         await this.props.history.push('/admin/product_categories'); 
     }
@@ -101,14 +96,19 @@ class ProductCategoriesAdd extends Component{
                     </Form.Group>
 
 
-                    <Form.Group controlId="exampleForm.ControlTextarea2">
+                    {/* <Form.Group controlId="exampleForm.ControlTextarea2">
                         <Form.Label>Description</Form.Label>
                         <Form.Control type="text" name="description" onChange={this.handleChange} placeholder="Enter Description"/>
                         {errors.description.length > 0 && 
                         <span><font color="red">{errors.description}</font></span>}
+                    </Form.Group> */}
+
+                    <Form.Group controlId="exampleForm.ControlTextarea3">
+                        <Form.Label>Image</Form.Label>
+                        <Form.Control type="file" name="image" onChange={this.onFileChange}/>
                     </Form.Group>
                     
-                    <Button disabled={(errors.description.length > 0 || errors.name.length > 0)} onClick={this.postDataHandler} variant="primary">
+                    <Button disabled={(errors.name.length > 0)} onClick={this.postDataHandler} variant="primary">
                         Submit
                     </Button>
                     
@@ -121,6 +121,7 @@ class ProductCategoriesAdd extends Component{
 
 //export default ProductCategoriesList;
 const mapStateToProps = (state) => ({
+    err:state.adminProductCategories.error,
     product_categories: state.adminProductCategories.product_categories
 });
 

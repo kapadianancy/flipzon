@@ -31,17 +31,21 @@ const addProduct_Category = async (data) => {
         if(!data.name) {
             errorObj.message = "category_name is required";
         }
-        if(!data.description) {
-            errorObj.message = "description is required";
+        // if(!data.description) {
+        //     errorObj.message = "description is required";
+        // }
+        if(!data.image) {
+            errorObj.message = "image is required";
         }
         if(errorObj.message) throw errorObj;
         let product_category = await Product_category.create({
             name: data.name,
-            description: data.description
+            // description: data.description,
+            image:data.image
         });
         return product_category;
     } catch(error) {
-        throw error;
+        throw error.message;
     }
 }
 const editProduct_Category = async (id, data) => {

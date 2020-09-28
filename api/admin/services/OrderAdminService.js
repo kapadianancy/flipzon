@@ -17,44 +17,6 @@ const getAllOrders = async (id) => {
                 orderId:id
             }
         })
-        // return await OrdersDetails.findAll({
-        //     include: [{
-        //         model: Orders ,as:"order",
-        //         include: [
-        //         { 
-        //             model: user,as:"user" 
-        //         }]    
-        //     }]
-        // });
-        // let o = await Orders.findAll({
-        //     include: [{
-        //         model: user ,as:"user"
-        //     }],
-        //     where: {
-        //         IsDeleted:0
-        //     }
-        // })
-        // let p = await product.findAll({
-        //     include: [
-        //         {
-        //             model: productcategory ,as:"Product_category",
-        //         }
-        //     ],
-        //     where: {
-        //         IsDeleted:0
-        //     }
-        // })
-        // let o1 = await OrdersDetails.findAll({
-        //     include: [
-        //         {
-        //             model: Orders ,as:"order",
-        //         }
-        //     ],
-        //     where: {
-        //         IsDeleted:0
-        //     }
-        // })
-        // return await {o,o1,p};
     }catch(error) {
         throw error;
     }  

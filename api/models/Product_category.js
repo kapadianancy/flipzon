@@ -10,8 +10,10 @@ const Product_category = db.sequelize.define('Product_category', {
         name: {
             type: DataTypes.STRING
         },
-        description: {
-            type: DataTypes.STRING
+        image:
+        {
+            type:DataTypes.TEXT,
+            allowNull:false
         },
         isDeleted: {
             type: DataTypes.BOOLEAN,

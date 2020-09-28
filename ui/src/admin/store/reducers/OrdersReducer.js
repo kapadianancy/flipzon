@@ -32,12 +32,6 @@ const store = (state = initialStore, action) => {
                 ...state,
                 loading: true,
             };    
-        case types.UPDATE_ORDERS:
-            return {
-                ...state,
-                orders: action.orders,
-                loading: false
-            };    
         case types.FETCH_ORDERS_SUCCESS:
             return {
                 ...state,
@@ -50,6 +44,24 @@ const store = (state = initialStore, action) => {
                 loading: false,
                 error: action.error
             }
+        case types.INIT_UPDATE_ORDERS:
+            return {
+                ...state,
+                loading: true,
+            };    
+        case types.UPDATE_ORDERS_SUCCESS:
+            let order = state.orders.filter(order => order.id === action.order_id);
+            return {
+                ...state,
+                orders: order,
+                loading: false
+            };
+        case types.UPDATE_ORDERS_FAILED:
+            return {
+                ...state,
+                loading: false,
+                error: action.error
+            }            
         default:
             return state;
     }

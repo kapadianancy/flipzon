@@ -13,7 +13,9 @@ class ProductCategoriesEdit extends Component{
     state = {
         id:'',
         name:'',
-        description:''
+        // description:'',
+        image:'',
+        myimg:''
     }
 
     componentDidMount = async () =>
@@ -24,19 +26,34 @@ class ProductCategoriesEdit extends Component{
         this.setState({
             id:category[0].id,
             name:category[0].name,
-            description:category[0].description
+            // description:category[0].description,
+            image:category[0].image
         })  
-    }
 
+        this.setState({myimg:category[0].image.replace('/images','')})
+    }
+    onFileChange = (e) =>{
+        // this.setState({ profileImg: e.target.files[0] })
+        this.setState(
+            { image: e.target.files[0] }
+            )
+    }
     postDataHandler = async (e) =>{
         e.preventDefault();
         
-        const put = {
-            id:this.state.id,
-            name:this.state.name,
-            description:this.state.description
-        }   
-        await this.props.updateProductCategories(put.id,put);
+        // const put = {
+        //     id:this.state.id,
+        //     name:this.state.name,
+        //     description:this.state.description,
+        //     image:this.state.image
+        // }   
+        const data = new FormData()
+        data.append('id', this.state.id)
+        data.append('name', this.state.name)
+        // data.append('description', this.state.description)
+        data.append('image', this.state.image)
+        
+        await this.props.updateProductCategories(this.state.id,data);
         await this.props.fetchProductCategories();
         await this.props.history.replace('/admin/product_categories');
     }
@@ -49,18 +66,24 @@ class ProductCategoriesEdit extends Component{
                     </div>
                 </Card.Header>
                 <Card.Body>
-                <Form>
+                <Form enctype="multipart/form-data">
                     
                     <Form.Control type="hidden" value={this.state.id || ''} onChange={(event) => this.setState({id: event.target.value})} placeholder="Enter Id" />
                     <Form.Group controlId="exampleForm.ControlTextarea1">
                         <Form.Label>Category Name</Form.Label>
                         <Form.Control type="text" value={this.state.name || ''} onChange={(event) => this.setState({name: event.target.value})} placeholder="Enter Category" />
                     </Form.Group>
-                    <Form.Group controlId="exampleForm.ControlTextarea2">
+                    {/* <Form.Group controlId="exampleForm.ControlTextarea2">
                         <Form.Label>Description</Form.Label>
                         <Form.Control rows="4" type="text" value={this.state.description || ''} onChange={(event) => this.setState({description: event.target.value})} placeholder="Enter Description" />
-                    </Form.Group>
+                    </Form.Group> */}
                     <Form.Group controlId="exampleForm.ControlTextarea3">
+                        <Form.Label>Image</Form.Label>
+                        <Form.Control type="file" name="image" onChange={this.onFileChange}/>
+                        {this.state.image === "" ? "":<img src={"http://localhost:8080"+this.state.myimg} alt="description" width="50px"/>}
+                        
+                    </Form.Group>
+                    <Form.Group controlId="exampleForm.ControlTextarea4">
                         <Button onClick={this.postDataHandler} variant="primary">
                             Submit
                         </Button>
