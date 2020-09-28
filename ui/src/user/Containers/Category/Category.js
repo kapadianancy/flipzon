@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { Component, useEffect } from 'react';
 import { connect } from 'react-redux'
 
@@ -7,12 +6,6 @@ import Header from '../../Components/Header/Header';
 import Footer from '../../Components/Footer/Footer';
 import { fetchProductCategories } from '../../redux-store/Actions/ProductCategoryAction';
 
-=======
-import React, { Component } from 'react';
-import Footer from '../../Components/Footer/Footer';
-import Header from '../../Components/Header/Header';
- 
->>>>>>> nancyKapadia
 class Category extends Component {
 
     constructor(props) {
@@ -32,16 +25,9 @@ class Category extends Component {
 
         return (
             <div>
-<<<<<<< HEAD
                 <Header />
                 <CategoryComponent product_categories={displayposts} />
                 <Footer />
-=======
-                <Header/>
-
-                Category
-                <Footer/>
->>>>>>> nancyKapadia
             </div>
         );
     }

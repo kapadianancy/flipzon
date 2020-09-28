@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 
 import logo from '../../../images/logo-2.jpg';
 import cart from '../../../images/shopping-cart.png';
-import * as actions from '../../redux-store/actions/ProductCategoryAction' ;
+import * as actions from '../../redux-store/Actions/ProductCategoryAction' ;
 import './Header.css';
 
  
