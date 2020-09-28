@@ -6,15 +6,16 @@ import Button from 'react-bootstrap/Button'
 
 import * as classes from './ProductFormController.module.css'
 import { addProduct, fetchOneProduct, editProduct, deleteProductImage } from '../store/actions/ProductActions'
+import { fetchProductCategories } from '../store/actions/Product_CategoriesActions'
 import ProductForm from '../components/Product/ProductForm/ProductForm'
 
 const ProductFormController = (props) => {
     useEffect( () => {
-        console.log("called");
+        props.fetchProductCategories();
         if(props.match.params.id) {
             props.fetchOneProduct(props.match.params.id);
         }
-    }, [props.match.params.id]);
+    }, [props.match.params.id, props.fetchProductCategories, props.fetchOneProduct]);
     const addProduct = async (formData) => {
         await props.addProduct(formData);
         props.history.push("/admin/products");
@@ -34,6 +35,7 @@ const ProductFormController = (props) => {
                 </Card.Header>
                 <Card.Body>
                     <ProductForm 
+                        categories={props.categories}
                         deleteProductImage={props.deleteProductImage}
                         addProduct={addProduct} 
                         product={props.product} 
@@ -52,7 +54,8 @@ const mapStateToProps = state => {
     return {
         loading: state.adminProduct.loading,
         error: state.adminProduct.error,
-        product: state.adminProduct.product
+        product: state.adminProduct.product,
+        categories: state.adminProductCategories.product_categories
     }
 }
 
@@ -61,7 +64,8 @@ const mapDispatchToProps = dispatch => {
         addProduct: (productData) => dispatch(addProduct(productData)),
         fetchOneProduct: (id) => dispatch(fetchOneProduct(id)),
         editProduct: (id, productData) => dispatch(editProduct(id, productData)),
-        deleteProductImage: (id) => dispatch(deleteProductImage(id))
+        deleteProductImage: (id) => dispatch(deleteProductImage(id)),
+        fetchProductCategories: () => dispatch(fetchProductCategories())
     }
 }
 

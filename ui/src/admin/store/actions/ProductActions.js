@@ -2,10 +2,15 @@ import * as types from '../Types'
 import axios from '../../../axios'
 
 export const fetchProducts = () => {
-    return async(dispatch) => {
+    return async(dispatch, getState) => {
         dispatch({ type: types.INIT_FETCH_PRODUCTS });
         try {
-            const data = await axios.get("admin/products");
+            let token = getState().adminAuth.token
+            const data = await axios.get("products", {
+                headers: {
+                    "Authorization": token
+                }
+            });
             dispatch({ type: types.FETCH_PRODUCTS_SUCCESS, products: data.data });
         } catch(error) {
             dispatch({ type: types.FETCH_PRODUCTS_FAILED, error: error.message });
@@ -14,12 +19,14 @@ export const fetchProducts = () => {
 }
 
 export const addProduct = (productData) => {
-    return async(dispatch) => {
+    return async(dispatch, getState) => {
         dispatch({ type: types.INIT_ADD_PRODUCT });
         try {
-            const result = await axios.post("admin/products", productData, {
+            let token = getState().adminAuth.token;
+            const result = await axios.post("products", productData, {
                 headers: {
-                    'Content-Type':'multipart/form-data'
+                    'Content-Type':'multipart/form-data',
+                    'Authorization': token
                 }
             });
             dispatch({ type: types.ADD_PRODUCT_SUCCESS, product: result.data });
@@ -30,10 +37,15 @@ export const addProduct = (productData) => {
 }
 
 export const fetchOneProduct = (id) => {
-    return async(dispatch) => {
+    return async(dispatch, getState) => {
         dispatch({ type: types.INIT_FETCH_ONE_PRODUCT });
         try {
-            const data = await axios.get(`admin/products/${id}`);
+            let token = getState().adminAuth.token;
+            const data = await axios.get(`products/${id}`, {
+                headers: {
+                    'Authorization': token
+                }
+            });
             dispatch({ type: types.FETCH_ONE_PRODUCT_SUCCESS, product: data.data });
         } catch(error) {
             dispatch({ type: types.FETCH_ONE_PRODUCT_FAILED, error: error.message });
@@ -42,12 +54,14 @@ export const fetchOneProduct = (id) => {
 }
 
 export const editProduct = (id, productData) => {
-    return async(dispatch) => {
+    return async(dispatch, getState) => {
         dispatch({ type: types.INIT_EDIT_PRODUCT });
         try {
+            let token = getState().adminAuth.token;
             const result = await axios.put(`products/${id}`, productData, {
                 headers: {
-                    'Content-Type':'multipart/form-data'
+                    'Content-Type':'multipart/form-data',
+                    'Authorization': token
                 }
             });
             dispatch({ type: types.EDIT_PRODUCT_SUCCESS, product: result.data });
@@ -58,10 +72,13 @@ export const editProduct = (id, productData) => {
 }
 
 export const deleteProduct = (id) => {
-    return async(dispatch) => {
+    return async(dispatch, getState) => {
         dispatch({ type: types.INIT_DELETE_PRODUCT });
         try {
-            const data = await axios.delete(`products/${id}`);
+            let token = getState().adminAuth.token;
+            await axios.delete(`products/${id}`, {
+                "Authorization": token
+            });
             dispatch({ type: types.DELETE_PRODUCT_SUCCESS, product_id: id });
         } catch(error) {
             dispatch({ type: types.DELETE_PRODUCT_FAILED, error: error.message });
@@ -70,10 +87,13 @@ export const deleteProduct = (id) => {
 }
 
 export const deleteProductImage = (id) => {
-    return async(dispatch) => {
+    return async(dispatch, getState) => {
         dispatch({ type: types.INIT_DELETE_PRODUCT_IMAGE });
         try {
-            const data = await axios.delete(`products/images/${id}`);
+            let token = getState().adminAuth.token;
+            await axios.delete(`products/images/${id}`, {
+                "Authorization": token
+            });
             dispatch({ type: types.DELETE_PRODUCT_IMAGE_SUCCESS, image_id: id });
         } catch(error) {
             dispatch({ type: types.DELETE_PRODUCT_IMAGE_FAILED, error: error.message });

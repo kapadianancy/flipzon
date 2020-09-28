@@ -88,7 +88,7 @@ const store = (state = initialStore, action) => {
                 error: null
             }
         case types.DELETE_PRODUCT_SUCCESS:
-            let products = state.products.filter( product => product.id != action.product_id )
+            let products = state.products.filter( product => product.id !== action.product_id )
             return {
                 ...state,
                 loading: false,
@@ -107,7 +107,7 @@ const store = (state = initialStore, action) => {
                 error: null
             }
         case types.DELETE_PRODUCT_IMAGE_SUCCESS:
-            let images = state.product.images.filter( image => image.id != action.image_id )
+            let images = state.product.images.filter( image => image.id !== action.image_id )
             return {
                 ...state,
                 loading: false,

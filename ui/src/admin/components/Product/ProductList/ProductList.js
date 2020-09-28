@@ -1,22 +1,28 @@
 import React from 'react';
-import * as classes from './ProductList.module.css';
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import { Link } from 'react-router-dom';
 
 
-const renderProducts = (products, deleteProduct) => {
-    return products.map( (product, index) => 
-        <tr key={product.id}>
-            <td>{index+1}</td>
-            <td>{product.name}</td>
-            <td>{product.Product_category.name}</td>
-            <td>{product.price}</td>
-            <td>{product.stock}</td>
-            <td><Button as={Link} to={`/admin/products/edit/${product.id}`} variant="info">Edit</Button></td>
-            <td><Button onClick={() => deleteProduct(product.id)} variant="danger">Delete</Button></td>
-        </tr>
-    )
+const renderProducts = (products, deleteProduct, activeOld, perPage) => {
+    let productsArr = [];
+    let active = (activeOld-1)*perPage;
+    for(let i=active;i<(activeOld*perPage);i++) {
+        if(products[i]) {
+            productsArr.push(
+                <tr key={products[i].id}>
+                    <td>{i+1}</td>
+                    <td>{products[i].name}</td>
+                    <td>{products[i].Product_category.name}</td>
+                    <td>{products[i].price}</td>
+                    <td>{products[i].stock}</td>
+                    <td><Button as={Link} to={`/admin/products/edit/${products[i].id}`} variant="info">Edit</Button></td>
+                    <td><Button onClick={() => deleteProduct(products[i].id)} variant="danger">Delete</Button></td>
+                </tr>
+            )
+        }
+    }
+    return productsArr;
 }
 
 const ProductList = (props) => {
@@ -33,7 +39,7 @@ const ProductList = (props) => {
             </tr>
         </thead>
         <tbody>
-            { renderProducts(props.products, props.deleteProduct) }
+            { renderProducts(props.products, props.deleteProduct, props.active, props.perPage) }
         </tbody>
     </Table>
 }

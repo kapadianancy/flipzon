@@ -2,10 +2,12 @@ import React, { Component, useEffect } from 'react';
 import { connect } from 'react-redux'
 
 import CategoryComponent from '../../Components/Category/Category';
-import Header from '../../Components/Header/Header';
-import Footer from '../../Components/Footer/Footer';
-import { fetchProductCategories } from '../../redux-store/Actions/ProductCategoryAction';
 
+import { fetchProductCategories } from '../../redux-store/actions/ProductAction';
+
+import Footer from '../../Components/Footer/Footer';
+import Header from '../../Components/Header/Header';
+ 
 class Category extends Component {
 
     constructor(props) {

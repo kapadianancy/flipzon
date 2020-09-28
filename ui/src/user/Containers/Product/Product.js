@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 
 import Header from '../../Components/Header/Header';
 import Footer from '../../Components/Footer/Footer';
-import * as actions from '../../redux-store/Actions/ProductCategoryAction';
+import * as actions from '../../redux-store/actions/ProductAction';
 
 class Product extends Component
 {
@@ -27,7 +27,7 @@ class Product extends Component
         if(this.props.products.length==0)
         {
             data.push(
-                <div style={{margin:"auto"}}>
+                <div style={{margin:"auto",marginBottom : '100px',marginTop:'50px'}}>
                     <h1>No data Found</h1>
                 </div>
             )
