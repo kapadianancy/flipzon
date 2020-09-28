@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from './components/common/Header'
-import { Switch, Route, Redirect } from 'react-router'
+import { Switch, Route, Redirect, withRouter } from 'react-router'
 import Products from './containers/Products'
 import ProductCategories from './containers/ProductCategories'
 import ProductCategoriesAdd from './components/ProductCategories/ProductCategoriesAdd'
@@ -9,11 +9,27 @@ import Dashboard from './containers/Dashboard'
 import * as classes from './Admin.module.css'
 import ProductFormController from './containers/ProductFormController'
 import Order from "./containers/Orders";
+import Auth from './containers/Auth';
+import { connect } from 'react-redux';
+import { tryAutoLogin } from './store/actions/AuthActions'
 
 const Admin = (props) => {
-    return <>
-        <Header />
-        <div className={classes.Container}>
+    useEffect(() => {
+        if(props.location.pathname.startsWith("/admin") && !props.loggedIn) {
+            props.tryAutoLogin();
+        }
+    }, [props.location.pathname, props.loggedIn, props.tryAutoLogin])
+
+    let content = <Redirect to="/" />
+
+    if(props.location.pathname.startsWith("/admin") && !props.loggedIn) {
+        content = <div>
+            <Route path="/admin/auth" exact component={Auth} />
+            <Redirect to="/admin/auth" />
+        </div>
+    } else if(props.location.pathname.startsWith("/admin") && props.loggedIn) {
+        content = <div>
+            <Header />
             <Switch>
                 <Route path="/admin/dashboard" exact component={Dashboard} />
                 <Route path="/admin/products/edit/:id" exact component={ProductFormController} />
@@ -23,10 +39,21 @@ const Admin = (props) => {
                 <Route path="/admin/ProductCategoriesEdit" exact component={ProductCategoriesEdit} />
                 <Route path="/admin/product_categories" exact component={ProductCategories} />
                 <Route path="/admin/order" exact component={Order} />
-                {/* <Redirect to="/admin" component={Dashboard} /> */}
+                <Redirect to="/admin/dashboard" />
             </Switch>
         </div>
-    </>
+    }
+    return content
 }
 
-export default Admin
+const mapStateToProps = state => {
+    return {
+        loggedIn: state.adminAuth.token ? true : false
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return {
+        tryAutoLogin: () => dispatch(tryAutoLogin())
+    }
+}
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Admin));
