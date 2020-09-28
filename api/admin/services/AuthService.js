@@ -59,7 +59,20 @@ const register = async (username, email, password) => {
         throw error
     }
 }
+const update = async (data, id) => {
+    try {
+        if(data.password) {
+            data.password = bcrypt.hashSync(data.password, 10);
+        }
+        await User.update(data, {
+            where: { id }
+        });
+    } catch(error) {
+        throw error
+    }
+}
 module.exports = {
     login,
-    register
+    register,
+    update
 }

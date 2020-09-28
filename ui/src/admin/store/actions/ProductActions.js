@@ -6,7 +6,7 @@ export const fetchProducts = () => {
         dispatch({ type: types.INIT_FETCH_PRODUCTS });
         try {
             let token = getState().adminAuth.token
-            const data = await axios.get("products", {
+            const data = await axios.get("admin/products", {
                 headers: {
                     "Authorization": token
                 }
@@ -23,7 +23,7 @@ export const addProduct = (productData) => {
         dispatch({ type: types.INIT_ADD_PRODUCT });
         try {
             let token = getState().adminAuth.token;
-            const result = await axios.post("products", productData, {
+            const result = await axios.post("admin/products", productData, {
                 headers: {
                     'Content-Type':'multipart/form-data',
                     'Authorization': token
@@ -41,7 +41,7 @@ export const fetchOneProduct = (id) => {
         dispatch({ type: types.INIT_FETCH_ONE_PRODUCT });
         try {
             let token = getState().adminAuth.token;
-            const data = await axios.get(`products/${id}`, {
+            const data = await axios.get(`admin/products/${id}`, {
                 headers: {
                     'Authorization': token
                 }
@@ -58,7 +58,7 @@ export const editProduct = (id, productData) => {
         dispatch({ type: types.INIT_EDIT_PRODUCT });
         try {
             let token = getState().adminAuth.token;
-            const result = await axios.put(`products/${id}`, productData, {
+            const result = await axios.put(`admin/products/${id}`, productData, {
                 headers: {
                     'Content-Type':'multipart/form-data',
                     'Authorization': token
@@ -76,7 +76,7 @@ export const deleteProduct = (id) => {
         dispatch({ type: types.INIT_DELETE_PRODUCT });
         try {
             let token = getState().adminAuth.token;
-            await axios.delete(`products/${id}`, {
+            await axios.delete(`admin/products/${id}`, {
                 "Authorization": token
             });
             dispatch({ type: types.DELETE_PRODUCT_SUCCESS, product_id: id });
@@ -91,7 +91,7 @@ export const deleteProductImage = (id) => {
         dispatch({ type: types.INIT_DELETE_PRODUCT_IMAGE });
         try {
             let token = getState().adminAuth.token;
-            await axios.delete(`products/images/${id}`, {
+            await axios.delete(`admin/products/images/${id}`, {
                 "Authorization": token
             });
             dispatch({ type: types.DELETE_PRODUCT_IMAGE_SUCCESS, image_id: id });

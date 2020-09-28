@@ -6,6 +6,7 @@ const initialStore = {
     loading: false,
     loginError: null,
     registerError: null,
+    updateError: null
 }
 
 const state = (state = initialStore, action) => {
@@ -64,6 +65,28 @@ const state = (state = initialStore, action) => {
                 user: null
             }
         case types.LOGOUT_FAILED:
+            return {
+                ...state,
+                loading: false,
+                error: action.error
+            }
+        case types.INIT_UPDATE_PROFILE:
+            return {
+                ...state,
+                loading: true,
+                updateError: null
+            }
+        case types.UPDATE_PROFILE_SUCCESS:
+            const user = {
+                ...state.user,
+                username: action.username
+            }
+            return {
+                ...state,
+                loading: false,
+                user
+            }
+        case types.UPDATE_PROFILE_FAILED:
             return {
                 ...state,
                 loading: false,

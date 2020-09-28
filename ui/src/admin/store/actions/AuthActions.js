@@ -1,12 +1,12 @@
 import * as types from '../Types'
-import axios from '../../axios'
+import axios from '../../../axios'
 
 export const login = (email, password) => {
     return async(dispatch) => {
         dispatch({ type: types.INIT_LOGIN });
         var result;
         try {
-            result = await axios.post("login", {
+            result = await axios.post("admin/login", {
                 email, password
             });
             localStorage.setItem("fz_token", result.data.token);
@@ -22,7 +22,7 @@ export const register = (user) => {
         dispatch({ type: types.INIT_REGISTER });
         let result;
         try {
-            result = await axios.post("register", user);
+            result = await axios.post("admin/register", user);
             dispatch({ type: types.REGISTER_SUCCESS });
         } catch (error) {
             let message = "Network Error";
@@ -55,7 +55,7 @@ export const tryAutoLogin = () => {
             if(!token) {
                 throw { message: "Token not found!" }
             }
-            let result = await axios.get("me", {
+            let result = await axios.get("admin/me", {
                 headers: {
                     'Authorization': token
                 }
@@ -65,4 +65,21 @@ export const tryAutoLogin = () => {
             dispatch({ type: types.LOGIN_FAILED, error: error.message })
         }
     }
+}
+
+export const updateProfile = (data) => {
+    return async(dispatch) => {
+        dispatch({ type: types.INIT_UPDATE_PROFILE });
+        try {
+            let token = localStorage.getItem("fz_token");
+            let result = await axios.post("admin/updateProfile", data, {
+                headers: {
+                    'Authorization': token
+                }
+            });
+            dispatch({ type: types.UPDATE_PROFILE_SUCCESS, username: data.username });
+        } catch(error) {
+            dispatch({ type: types.UPDATE_PROFILE_FAILED, error: error.message })
+        }
+    }   
 }

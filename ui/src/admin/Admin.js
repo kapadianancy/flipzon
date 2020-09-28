@@ -12,6 +12,7 @@ import Order from "./containers/Orders";
 import Auth from './containers/Auth';
 import { connect } from 'react-redux';
 import { tryAutoLogin } from './store/actions/AuthActions'
+import Profile from './containers/Profile';
 
 const Admin = (props) => {
     useEffect(() => {
@@ -39,6 +40,7 @@ const Admin = (props) => {
                 <Route path="/admin/ProductCategoriesEdit" exact component={ProductCategoriesEdit} />
                 <Route path="/admin/product_categories" exact component={ProductCategories} />
                 <Route path="/admin/order" exact component={Order} />
+                <Route path="/admin/profile" exact component={Profile} />
                 <Redirect to="/admin/dashboard" />
             </Switch>
         </div>
