@@ -10,7 +10,7 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 
 // import reducers
-import UserReducer from './user/redux-store/Reducers/User'
+import UserReducer from './user/redux-store/Reducers/Auth'
 import ProductCategoryReducer from './user/redux-store/Reducers/ProductCategory'
 import AdminProductReducer from './admin/store/reducers/ProductReducer';
 import AdminProductCategoriesReducer from './admin/store/reducers/Product_CategoriesReducer';

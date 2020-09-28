@@ -6,7 +6,7 @@ export const signup = (user) => {
         await axiosInstance.post('/client/signup',user).then(response => {
             dispatch({
                 type: types.SIGNUP,
-                user : response.data.user,
+                user : response.data.user.id,
                 token : response.data.token
             });
         }).catch(error => {

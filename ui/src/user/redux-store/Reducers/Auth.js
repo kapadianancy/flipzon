@@ -1,8 +1,7 @@
 import * as types from '../actionNames';
 
 const initialStore = {
-
-    user: {},
+    userId: "",
     token : "",
     error: ""
 };
@@ -12,7 +11,7 @@ const store = (state = initialStore, action) => {
         case types.SIGNUP:
             return {
                 ...state,
-                user: action.user,
+                userId: action.user,
                 token : action.token
             }
         case types.SIGNUP_FAILED:

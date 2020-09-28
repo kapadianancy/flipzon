@@ -22,7 +22,7 @@ class Product extends Component
         if(this.props.products.length==0)
         {
             data.push(
-                <div style={{margin:"auto"}}>
+                <div style={{margin:"auto",marginBottom : '100px',marginTop:'50px'}}>
                     <h1>No data Found</h1>
                 </div>
             )
