@@ -13,11 +13,13 @@ import thunk from 'redux-thunk';
 import AdminProductReducer from './admin/store/reducers/ProductReducer';
 import AdminProductCategoriesReducer from './admin/store/reducers/Product_CategoriesReducer';
 import AdminOrdersReducer from './admin/store/reducers/OrdersReducer';
+import AdminAuthReducer from './admin/store/reducers/AuthReducer';
 
 const rootReducer = combineReducers({
   adminProduct: AdminProductReducer,
   adminProductCategories:AdminProductCategoriesReducer,
-  adminOrdersReducer:AdminOrdersReducer
+  adminOrdersReducer:AdminOrdersReducer,
+  adminAuth: AdminAuthReducer
 });
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(rootReducer, composeEnhancers(

@@ -7,7 +7,6 @@ import Image from 'react-bootstrap/Image'
 import * as classes from './ProductForm.module.css'
 
 const ProductForm = (props) => {
-
     const [product, setProduct] = useState({
         name: "",
         price: "",
@@ -40,7 +39,7 @@ const ProductForm = (props) => {
             tempProduct.categoryId = editProduct.categoryId;
             setProduct(tempProduct);
         }
-    }, [props.product, setProduct])
+    }, [props.product, setProduct, props.edit])
 
     const productFieldChanged = (e, name, image) => {
         let oldProduct = { ...product }
@@ -83,9 +82,9 @@ const ProductForm = (props) => {
         let productData = { ...product };
         delete productData.main_image
         delete productData.ext_images;
-        // if(!productData.image) delete productData.image;
-        // if(!productData.images) delete productData.images;
-        console.log(productData);
+        if(!productData.image) delete productData.image;
+        if(!productData.images) delete productData.images;
+        // console.log(productData);
         let formData = new FormData();
         for(var key in productData) {
             if(key === "images") {
@@ -118,7 +117,7 @@ const ProductForm = (props) => {
                 <Col sm="11">
                     <Form.Control value={product.name} 
                         isInvalid={ !formErrors.isFormValid && formErrors.nameError !== "" } 
-                    onChange={ (e) => productFieldChanged(e, "name")}  type="text" placeholder="Product Name" />
+                        onChange={ (e) => productFieldChanged(e, "name")}  type="text" placeholder="Product Name" />
                     <Form.Control.Feedback type="invalid">
                         { formErrors.nameError }
                     </Form.Control.Feedback>
@@ -204,8 +203,9 @@ const ProductForm = (props) => {
                 <Form.Label column sm="1">Category</Form.Label>
                 <Col sm="11">
                     <Form.Control as="select" onChange={ (e) => productFieldChanged(e, "categoryId")} value={product.categoryId}>
-                        <option value="1">Electronics</option>
-                        <option value="1">Home Appliences</option>
+                        {
+                            props.categories.map( category => <option key={category.id} value={category.id}>{category.name}</option>)
+                        }
                     </Form.Control>
                 </Col>
             </Form.Group>
