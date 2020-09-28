@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import CategoryComponent from '../../Components/Category/Category';
 
-import { fetchProductCategories } from '../../redux-store/actions/ProductCategoryAction';
+import { fetchProductCategories } from '../../redux-store/actions/ProductAction';
 
 import Footer from '../../Components/Footer/Footer';
 import Header from '../../Components/Header/Header';
