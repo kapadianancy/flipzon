@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import Header from '../../Components/Header/Header';
 import Footer from '../../Components/Footer/Footer';
 import ProductSlider from '../../Components/ProductSlider';
@@ -19,5 +20,6 @@ class Home extends Component {
         );
     }
 }
- 
+
+
 export default Home;

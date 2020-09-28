@@ -35,3 +35,23 @@ export const categoryWiseProduct=(cid)=>
         })
     };
 }
+
+export const orderedProducts=()=>
+{
+    return async dispatch=>
+    {
+        await axiosInstance.get("/client/orderedProducts").then(response=>
+            {
+                dispatch({
+                    type:types.ORDERED_PRODUCT,
+                    products:response.data
+                })
+            }).catch(error=>
+                {
+                    dispatch({
+                        type: types.ORDERED_PRODUCT_FAILED,
+                        error: error.message
+                    });
+                })
+    }
+}

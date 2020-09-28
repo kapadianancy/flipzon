@@ -5,7 +5,7 @@ import { Nav } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import { Link, Redirect, Route, withRouter } from 'react-router-dom';
-import * as actions from '../../redux-store/actions/UserAction';
+import * as actions from '../../redux-store/Actions/UserAction';
 
 
 class Signup extends Component {

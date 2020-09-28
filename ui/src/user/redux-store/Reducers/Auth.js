@@ -12,7 +12,8 @@ const store = (state = initialStore, action) => {
             return {
                 ...state,
                 userId: action.user,
-                token : action.token
+                token : action.token,
+                error:""
             }
         case types.SIGNUP_FAILED:
             return {
