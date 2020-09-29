@@ -23,6 +23,7 @@ class Forgetpassword extends Component {
                 email: this.state.email
             }
             await this.props.forgetpassword(userEmail);
+          
             if (this.props.message !== "") {
                 this.setState({
                     error: "",
@@ -31,6 +32,7 @@ class Forgetpassword extends Component {
                 })
             }
             else if (this.props.error !== "") {
+                //console.log(this.props.error);
                 if (this.props.error === "Request failed with status code 401") {
                     this.setState({
                         error: "User Not Found",

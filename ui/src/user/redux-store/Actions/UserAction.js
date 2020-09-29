@@ -3,13 +3,9 @@ import axiosInstance from '../../../axios';
 
 export const signup = (user) => {
     return async dispatch => {
-<<<<<<< HEAD
         await axiosInstance.post('/client/signup',user).then(response => {
             localStorage.setItem("token",response.data.token);
             localStorage.setItem("userId",response.data.user.id);
-=======
-        await axiosInstance.post('/client/signup', user).then(response => {
->>>>>>> 818c9a25cb4aa39bca99eaa4f8196d0d723b33ab
             dispatch({
                 type: types.SIGNUP,
                 user: response.data.user.id,
@@ -24,7 +20,7 @@ export const signup = (user) => {
     };
 };
 
-<<<<<<< HEAD
+
 export const login = (user) => {
     return async dispatch => {
         await axiosInstance.post('/client/login',user).then(response => {
@@ -38,7 +34,12 @@ export const login = (user) => {
         }).catch(error => {
             dispatch({
                 type: types.LOGIN_FAILED,
-=======
+                error: error.message
+            });
+        })
+    };
+};
+
 export const forgetpassword = (email) => {
     return async dispatch => {
         await axiosInstance.post('/client/forgetPassword',email).then(response => {
@@ -49,12 +50,10 @@ export const forgetpassword = (email) => {
         }).catch(error => {
             dispatch({
                 type: types.FORGET_PASSWORD_FAILED,
->>>>>>> 818c9a25cb4aa39bca99eaa4f8196d0d723b33ab
                 error: error.message
             });
         })
     };
-<<<<<<< HEAD
 };
 
 
@@ -81,6 +80,3 @@ export const logout=()=>
                     })
     }
 }
-=======
-};
->>>>>>> 818c9a25cb4aa39bca99eaa4f8196d0d723b33ab

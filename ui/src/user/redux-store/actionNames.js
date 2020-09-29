@@ -7,11 +7,7 @@ export const SIGNUP="SIGNUP";
 export const SIGNUP_FAILED="SIGNUP_FAILED";
 
 export const LOGIN="LOGIN";
-<<<<<<< HEAD
 export const LOGIN_FAILED="LOGIN_FAILED";
-=======
-
->>>>>>> 818c9a25cb4aa39bca99eaa4f8196d0d723b33ab
 export const FORGET_PASSWORD="FORGET_PASSWORD";
 export const FORGET_PASSWORD_FAILED="FORGET_PASSWORD_FAILED";
 

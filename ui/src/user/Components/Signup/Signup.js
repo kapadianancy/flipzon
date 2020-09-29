@@ -42,10 +42,7 @@ class Signup extends Component {
             else{
                 this.props.history.push('/error/'+this.props.error);
             }
-<<<<<<< HEAD
             
-=======
->>>>>>> 818c9a25cb4aa39bca99eaa4f8196d0d723b33ab
         }
     }
 
