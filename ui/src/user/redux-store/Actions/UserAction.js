@@ -3,15 +3,31 @@ import axiosInstance from '../../../axios';
 
 export const signup = (user) => {
     return async dispatch => {
-        await axiosInstance.post('/client/signup',user).then(response => {
+        await axiosInstance.post('/client/signup', user).then(response => {
             dispatch({
                 type: types.SIGNUP,
-                user : response.data.user.id,
-                token : response.data.token
+                user: response.data.user.id,
+                token: response.data.token
             });
         }).catch(error => {
             dispatch({
                 type: types.SIGNUP_FAILED,
+                error: error.message
+            });
+        })
+    };
+};
+
+export const forgetpassword = (email) => {
+    return async dispatch => {
+        await axiosInstance.post('/client/forgetPassword',email).then(response => {
+            dispatch({
+                type: types.FORGET_PASSWORD,
+                message : response.data
+            });
+        }).catch(error => {
+            dispatch({
+                type: types.FORGET_PASSWORD_FAILED,
                 error: error.message
             });
         })

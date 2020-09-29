@@ -155,15 +155,13 @@ exports.forgetPassword = async (req,res) => {
 
         if(!user)
         {
-            return res.status(401).send("User Not Found");
+            return res.status(400).send("User Not Found");
         }
 
         const result=await sendMail(email);
         if(result)
-        {
-           
-           return res.status(200).send("Check Your Mail For New Password");
-           
+        {          
+           return res.status(200).send("Check Your Mail For New Password");           
         }
         else
         {

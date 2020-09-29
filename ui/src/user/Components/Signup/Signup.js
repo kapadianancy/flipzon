@@ -41,13 +41,7 @@ class Signup extends Component {
             else{
                 this.props.history.push('/error/'+this.props.error);
             }
-            
-          
-
-        
         }
-
-
     }
 
     validate() {

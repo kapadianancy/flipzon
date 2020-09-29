@@ -7,7 +7,10 @@ export const SIGNUP="SIGNUP";
 export const SIGNUP_FAILED="SIGNUP_FAILED";
 
 export const LOGIN="LOGIN";
+
 export const FORGET_PASSWORD="FORGET_PASSWORD";
+export const FORGET_PASSWORD_FAILED="FORGET_PASSWORD_FAILED";
+
 export const LOGOUT="LOGOUT";
 export const EDIT_PROFILE="EDIT_PROFILE";
 
