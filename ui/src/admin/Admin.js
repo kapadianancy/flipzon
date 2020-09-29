@@ -6,12 +6,11 @@ import ProductCategories from './containers/ProductCategories'
 import ProductCategoriesAdd from './components/ProductCategories/ProductCategoriesAdd'
 import ProductCategoriesEdit from './components/ProductCategories/ProductCategoriesEdit'
 import Dashboard from './containers/Dashboard'
-import * as classes from './Admin.module.css'
 import ProductFormController from './containers/ProductFormController'
 import Order from "./containers/Orders";
 import Auth from './containers/Auth';
 import { connect } from 'react-redux';
-import { tryAutoLogin } from './store/actions/AuthActions'
+import { tryAutoLogin, logout } from './store/actions/AuthActions'
 import Profile from './containers/Profile';
 
 const Admin = (props) => {
@@ -30,7 +29,7 @@ const Admin = (props) => {
         </div>
     } else if(props.location.pathname.startsWith("/admin") && props.loggedIn) {
         content = <div>
-            <Header />
+            <Header logout={props.logout} />
             <Switch>
                 <Route path="/admin/dashboard" exact component={Dashboard} />
                 <Route path="/admin/products/edit/:id" exact component={ProductFormController} />
@@ -55,7 +54,8 @@ const mapStateToProps = state => {
 }
 const mapDispatchToProps = dispatch => {
     return {
-        tryAutoLogin: () => dispatch(tryAutoLogin())
+        tryAutoLogin: () => dispatch(tryAutoLogin()),
+        logout: () => dispatch(logout())
     }
 }
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Admin));

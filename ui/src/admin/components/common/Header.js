@@ -15,7 +15,7 @@ const Header = (props) => {
         </Nav>
         <DropdownButton alignRight id="dropdown-basic-button" title="My Admin">
             <Dropdown.Item as={Link} to="/admin/profile">Manage Profile</Dropdown.Item>
-            <Dropdown.Item href="#/Logout">Logout</Dropdown.Item>
+            <Dropdown.Item onClick={() => props.logout()} href="#">Logout</Dropdown.Item>
         </DropdownButton>
     </Navbar.Collapse>
   </Navbar>

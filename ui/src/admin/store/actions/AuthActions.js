@@ -20,9 +20,8 @@ export const login = (email, password) => {
 export const register = (user) => {
     return async (dispatch) => {
         dispatch({ type: types.INIT_REGISTER });
-        let result;
         try {
-            result = await axios.post("admin/register", user);
+            await axios.post("admin/register", user);
             dispatch({ type: types.REGISTER_SUCCESS });
         } catch (error) {
             let message = "Network Error";
@@ -53,7 +52,7 @@ export const tryAutoLogin = () => {
         try {
             let token = localStorage.getItem("fz_token");
             if(!token) {
-                throw { message: "Token not found!" }
+                return;
             }
             let result = await axios.get("admin/me", {
                 headers: {
@@ -62,6 +61,7 @@ export const tryAutoLogin = () => {
             });
             dispatch({ type: types.LOGIN_SUCCESS, token, user: result.data });
         } catch(error) {
+            console.log(error);
             dispatch({ type: types.LOGIN_FAILED, error: error.message })
         }
     }
@@ -72,7 +72,7 @@ export const updateProfile = (data) => {
         dispatch({ type: types.INIT_UPDATE_PROFILE });
         try {
             let token = localStorage.getItem("fz_token");
-            let result = await axios.post("admin/updateProfile", data, {
+            await axios.post("admin/updateProfile", data, {
                 headers: {
                     'Authorization': token
                 }

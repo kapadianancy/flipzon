@@ -1,8 +1,4 @@
 import React, { useState } from 'react';
-import Row from 'react-bootstrap/Row'
-import Tab from 'react-bootstrap/Tab'
-import Nav from 'react-bootstrap/Nav'
-import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
 import { connect } from 'react-redux';
 
@@ -23,7 +19,7 @@ const Auth = (props) => {
     }
 
     let content =  <Login login={login} goToRegister={() => setActiveKey("register")} loading={props.loading} error={props.loginError} />;
-    if(activeKey=="register") {
+    if(activeKey === "register") {
         content = <Register register={register} goToLogin={() => setActiveKey("login")} loading={props.loading} error={props.registerError} />
     }
     return <div className={classes.Container}>
