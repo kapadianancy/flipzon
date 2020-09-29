@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 
 import Header from '../../Components/Header/Header';
 import Footer from '../../Components/Footer/Footer';
-import ProductSlider from '../../Components/ProductSlider';
-import CategorySlider from '../../Components/CategorySlider';
+import ProductSlider from '../../Components/Slider/ProductSlider';
+import CategorySlider from '../../Components/Slider/CategorySlider';
 import Slider from '../../Components/Slider/Slider';
 
  

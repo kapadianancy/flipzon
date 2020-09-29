@@ -246,7 +246,7 @@ exports.orderedProducts=async(req,res)=>
 {
     try{
         
-        const o=await sequelize.query("select p.*,count(o.id) as count from products p , order_details o where p.id=o.productId GROUP BY o.productId having count > 1");
+        const o=await sequelize.query("select p.*,count(o.id) as count from products p , order_details o where p.id=o.productId GROUP BY o.productId having count >= 1");
        // res.status(200).send({"count":o[0]});
        
         res.status(200).send(o[0]);

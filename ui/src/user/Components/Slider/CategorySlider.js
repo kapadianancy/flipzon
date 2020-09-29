@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Card, Button, Carousel, CardDeck, CardGroup } from 'react-bootstrap';
 
-import Product from '../../images/product.png';
-import Product1 from '../../images/product-2.jpg';
+import Product from '../../../images/product.png';
+import Product1 from '../../../images/product-2.jpg';
 
 class CategorySlider extends Component {
 

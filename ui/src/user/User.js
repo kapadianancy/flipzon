@@ -11,6 +11,7 @@ import Forgetpassword from './Containers/Forgetpassword/Forgetpassword';
 import Error from './Components/error';
 import Footer from './Components/Footer/Footer';
 import Header from './Components/Header/Header';
+import Logout from './Components/Logout';
 
  
 class User extends Component {
@@ -23,6 +24,7 @@ class User extends Component {
           <Route path="/category" exact component={Category}/>
           <Route path="/product/:cid" exact component={Product}/>
           <Route path="/login" exact component={Login}/>
+          <Route path="/logout" exact component={Logout}/>
           <Route path="/signup" exact component={Signup}/>
           <Route path="/error/:error" exact component={Error}/>
           <Route path="/forgetpassword" exact component={Forgetpassword}/>

@@ -30,8 +30,31 @@ const rootReducer = combineReducers({
   Product:Product,
   adminAuth: AdminAuthReducer
 });
+
+let init;
+if(localStorage.getItem("token"))
+{
+  init={
+    User:
+    {
+      token:localStorage.getItem("token"),
+      userId:localStorage.getItem("userId")
+    }
+  }
+}
+else
+{
+  init={
+    User:{
+      token:"",
+      userId:""
+    }
+  };
+}
+
+console.log(init);
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const store = createStore(rootReducer, composeEnhancers(
+const store = createStore(rootReducer,init, composeEnhancers(
   applyMiddleware(thunk)
 ));
 

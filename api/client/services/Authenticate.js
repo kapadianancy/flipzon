@@ -51,10 +51,10 @@ exports.login=async(req,res)=>
         let valid=await bcrypt.compare(user.password,u[0].password);
         if(!valid)
         {
-            return res.send(401).send("invalid pasword");
+            return res.status(401).send("invalid password");
         }
         const token=await generateToken(u[0].id);
-        res.status(200).send({"user":u,"token":token});
+        res.status(200).send({"user":u[0],"token":token});
     }
     catch(e){
         res.status(400).send(e);

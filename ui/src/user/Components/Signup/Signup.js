@@ -21,7 +21,7 @@ class Signup extends Component {
     }
 
     async btn_sign_click(e) {
-        e.preventDefault();
+        e.preventDefault();       
 
         if (this.validate()) {
 
@@ -34,6 +34,7 @@ class Signup extends Component {
                 roleId: "2",
             }
             await this.props.signup(CurrentUser);
+            //console.log(this.props.error);
             if(this.props.error == "")
             {
                 this.props.history.push('/');
@@ -42,9 +43,6 @@ class Signup extends Component {
                 this.props.history.push('/error/'+this.props.error);
             }
             
-          
-
-        
         }
 
 
@@ -229,7 +227,8 @@ const mapStateToProp = (state) => {
 
 const mapStateToActions = (dispatch) => {
     return {
-        signup: (CurrentUser) => dispatch(actions.signup(CurrentUser))
+        signup: (CurrentUser) => dispatch(actions.signup(CurrentUser)),
+        login:(user)=>dispatch(actions.login(user))
     }
 }
 
