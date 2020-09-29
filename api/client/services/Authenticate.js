@@ -70,12 +70,7 @@ exports.logout=async(req,res)=>
 exports.editProfile= async(req,res) =>
 {
     try{
-        // const user = await main.User.findByPk(req.validUser.id);
-
-        // if(!user)
-        // {
-        //     return res.status(401).send("User Not Found");
-        // }
+     
         const User = await main.User.update(req.body, {
             where: {
                 id: req.validUser.id,
@@ -101,18 +96,11 @@ exports.editProfile= async(req,res) =>
 
 exports.changePassword =async(req,res) =>{
     try{
-        // const user = await main.User.findByPk(req.validUser.id);
-
-        // if(!user)
-        // {
-        //     return res.status(401).send("User Not Found");
-        // }
-
         let validpass=await bcrypt.compare(req.body.oldpass,req.validUser.password)
 
         if(!validpass)
         {
-            return res.status(400).send("Not Valid Old Password");
+            return res.status(401).send("Not Valid Old Password");
         }
 
         const password=await gethash(req.body.newpass);
@@ -155,7 +143,7 @@ exports.forgetPassword = async (req,res) => {
 
         if(!user)
         {
-            return res.status(400).send("User Not Found");
+            return res.status(401).send("User Not Found");
         }
 
         const result=await sendMail(email);

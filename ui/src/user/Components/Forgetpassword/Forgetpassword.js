@@ -13,33 +13,38 @@ class Forgetpassword extends Component {
     state = {
         email: "",
         error: "",
-        message : ""
+        message: ""
     }
 
     async btn_click(e) {
         e.preventDefault();
-        if(this.validate())
-        {
+        if (this.validate()) {
             const userEmail = {
                 email: this.state.email
             }
             await this.props.forgetpassword(userEmail);
+            if (this.props.message !== "") {
+                this.setState({
+                    error: "",
+                    email: "",
+                    message: this.props.message
+                })
+            }
+            else if (this.props.error !== "") {
+                if (this.props.error === "Request failed with status code 401") {
+                    this.setState({
+                        error: "User Not Found",
+                        message : ""
+                    })
+                }
+                else {
+                    this.props.history.push('/error/' + this.props.error);
+                }
+            }
 
-            if(this.props.message !== "")
-            {
-                this.setState({
-                    error : "",
-                    email : "",
-                    message : this.props.message
-                })
-            }
-            else if(this.props.error !== "")
-            {
-                this.setState({
-                    error : this.props.error,
-                    message: ""
-                })
-            }
+
+
+
         }
     }
 

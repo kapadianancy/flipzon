@@ -8,6 +8,8 @@ import Login from './Containers/Login/Login';
 import Home from './Containers/Home/Home';
 import Signup from './Containers/Signup/Signup';
 import Forgetpassword from './Containers/Forgetpassword/Forgetpassword';
+import EditProfile from './Containers/EditProfile/EditProfile';
+import ChangePassword from './Containers/ChangePassword/ChangePassword';
 import Error from './Components/error';
 import Footer from './Components/Footer/Footer';
 import Header from './Components/Header/Header';
@@ -26,6 +28,8 @@ class User extends Component {
           <Route path="/signup" exact component={Signup}/>
           <Route path="/error/:error" exact component={Error}/>
           <Route path="/forgetpassword" exact component={Forgetpassword}/>
+          <Route path="/editprofile" exact component={EditProfile}/>
+          <Route path="/changepassword" exact component={ChangePassword}/>
       </Switch>
       
       </div>
