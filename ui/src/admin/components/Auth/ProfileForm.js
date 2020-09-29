@@ -1,10 +1,13 @@
 import React, { useState }  from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button'
+import Spinner from 'react-bootstrap/Spinner'
+import Alert from 'react-bootstrap/Alert'
 
 import * as classes from './ProfileForm.module.css';
 
 const ProfileForm = (props) => {
+    const [done, setDone] = useState(false)
     const [user, setUser] = useState({
         username: props.user.username,
         email: props.user.email,
@@ -36,11 +39,11 @@ const ProfileForm = (props) => {
             errorObj.usernameError = "Username is required";
             errorObj.isFormValid = false;
         } else errorObj.usernameError = "";
-        if(userObj.password === "" || userObj.password.length < 8) {
+        if(userObj.password !== "" && userObj.password.length < 8) {
             errorObj.passwordError = "Password should be more than 7 characters";
             errorObj.isFormValid = false;
         } else errorObj.passwordError = "";
-        if(userObj.confirmPassword === "" || userObj.password !== userObj.confirmPassword) {
+        if(userObj.password !== "" && userObj.password !== userObj.confirmPassword) {
             errorObj.confirmPasswordError = "Confirm password should be match with Password";
             errorObj.isFormValid = false;
         } else errorObj.confirmPasswordError = "";
@@ -51,19 +54,33 @@ const ProfileForm = (props) => {
     }
 
     const submit = async () => {
-        await props.submit(user);
-        const userObj = {
+        let userObj = {
+            ...user,
+        }
+        if(userObj.password === "") {
+            delete userObj.password;
+            delete userObj.confirmPassword;
+        }
+        await props.submit(userObj);
+        userObj = {
             ...user,
             password: "",
             confirmPassword: ""
         }
         setUser(userObj);
-
+        setDone(true);
+        setTimeout( () => { setDone(false) }, 5000)
     }
 
+    let alert = null;
+    if(done) {
+        alert = <Alert variant="info" dismissible>
+            Your profile updated!
+        </Alert>
+    }
     return <Form className={classes.Form} onSubmit={validate}>
         <h3 className={classes.h3}>Manage Profile</h3>
-
+        {alert}
         <Form.Group controlId="username">
             <Form.Label>User Name</Form.Label>
             <Form.Control 
@@ -117,9 +134,11 @@ const ProfileForm = (props) => {
         </Form.Group>
 
         { props.error ? <p className="text-danger">{props.error}</p> : null }
-        <Button variant="primary" type="submit">{
-            props.loading ? "Updating..." : "Update"
-        }</Button>
+        {
+            props.loading ?
+            <Spinner animation="border" />:
+            <Button variant="primary" type="submit">Update</Button>
+        }
     </Form>
 }
 

@@ -16,7 +16,7 @@ const login = async (email, password) => {
             },
             attributes: ["id", "password", "username", "email", "contact", "address"]
         });  
-        if(!user) {
+        if(user.length === 0) {
             user.message = "Unable to login!";
             throw errorObj;
         }

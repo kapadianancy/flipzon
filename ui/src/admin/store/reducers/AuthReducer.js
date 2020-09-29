@@ -92,6 +92,14 @@ const state = (state = initialStore, action) => {
                 loading: false,
                 error: action.error
             }
+        case types.AUTO_LOGIN_SUCCESS:
+            return {
+                ...state,
+                ...state,
+                loading: false,
+                token: action.token,
+                user: action.user,
+            }
         default:
             return state;
     }

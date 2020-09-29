@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button'
+import Button from 'react-bootstrap/Button';
+import Spinner from 'react-bootstrap/Spinner';
 
 import * as classes from './Register.module.css';
 
@@ -123,9 +124,11 @@ const Register = (props) => {
         </Form.Group>
         
         { props.error ? <p className="text-danger">{props.error}</p> : null }
-        <Button variant="success" type="submit">
-            Register
-        </Button>
+        {
+            props.loading ?
+            <Spinner animation="border" /> :
+            <Button variant="success" type="submit">Register</Button>
+        }
         <div className="d-flex justify-content-center">
             <a href="#" onClick={() => props.goToLogin()}>Already have an account? Login here.</a>
         </div>

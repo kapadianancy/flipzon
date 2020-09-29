@@ -77,7 +77,9 @@ export const deleteProduct = (id) => {
         try {
             let token = getState().adminAuth.token;
             await axios.delete(`admin/products/${id}`, {
-                "Authorization": token
+                headers: {
+                    "Authorization": token
+                }
             });
             dispatch({ type: types.DELETE_PRODUCT_SUCCESS, product_id: id });
         } catch(error) {
@@ -92,7 +94,9 @@ export const deleteProductImage = (id) => {
         try {
             let token = getState().adminAuth.token;
             await axios.delete(`admin/products/images/${id}`, {
-                "Authorization": token
+                headers: {
+                    "Authorization": token
+                }
             });
             dispatch({ type: types.DELETE_PRODUCT_IMAGE_SUCCESS, image_id: id });
         } catch(error) {

@@ -10,12 +10,21 @@ import { login, register } from '../store/actions/AuthActions'
 const Auth = (props) => {
     const [activeKey, setActiveKey] = useState("login")
     const login = async (email, password) => {
-        await props.login(email, password);
-        props.history.push("/admin/dashboard");
+        try {
+            await props.login(email, password);
+            props.history.push("/admin/dashboard");
+        } catch(error) {
+            console.log(error);
+        }
+        
     }
     const register = async (userObj) => {
-        await props.register(userObj);
-        setActiveKey("login")
+        try{
+            await props.register(userObj);
+            setActiveKey("login")
+        } catch(error) {
+            console.log(error);
+        }
     }
 
     let content =  <Login login={login} goToRegister={() => setActiveKey("register")} loading={props.loading} error={props.loginError} />;

@@ -12,7 +12,8 @@ export const login = (email, password) => {
             localStorage.setItem("fz_token", result.data.token);
             dispatch({ type: types.LOGIN_SUCCESS, token: result.data.token, user: result.data.user });
         } catch (error) {
-            dispatch({ type: types.LOGIN_FAILED, error: "Invalid Username/Password!" });
+            dispatch({ type: types.LOGIN_FAILED, error: "Invalid Email/Password!" });
+            throw error;
         }
     }
 }
@@ -29,6 +30,7 @@ export const register = (user) => {
                 message = error.response.data.message;
             }
             dispatch({ type: types.REGISTER_FAILED, error: message });
+            throw error;
         }
     }
 }
@@ -48,7 +50,7 @@ export const logout = () => {
 
 export const tryAutoLogin = () => {
     return async(dispatch) => {
-        dispatch({ type: types.INIT_LOGIN });
+        // dispatch({ type: types.INIT_LOGIN });
         try {
             let token = localStorage.getItem("fz_token");
             if(!token) {
@@ -59,10 +61,10 @@ export const tryAutoLogin = () => {
                     'Authorization': token
                 }
             });
-            dispatch({ type: types.LOGIN_SUCCESS, token, user: result.data });
+            dispatch({ type: types.AUTO_LOGIN_SUCCESS, token, user: result.data });
         } catch(error) {
             console.log(error);
-            dispatch({ type: types.LOGIN_FAILED, error: error.message })
+            // dispatch({ type: types.LOGIN_FAILED, error: error.message })
         }
     }
 }
