@@ -31,7 +31,7 @@ class Forgetpassword extends Component {
                     message: this.props.message
                 })
             }
-            else if (this.props.error !== "") {
+            if (this.props.error !== "") {
                 //console.log(this.props.error);
                 if (this.props.error === "Request failed with status code 401") {
                     this.setState({
@@ -43,10 +43,6 @@ class Forgetpassword extends Component {
                     this.props.history.push('/error/' + this.props.error);
                 }
             }
-
-
-
-
         }
     }
 
