@@ -33,7 +33,7 @@ router.put('/client/editProfile/:id',auth,Authenticate.editProfile);
 router.put('/client/changePassword/:id',auth,Authenticate.changePassword);
 
 //forget Password
-router.post('/client/fogetPassword',Authenticate.forgetPassword);
+router.post('/client/forgetPassword',Authenticate.forgetPassword);
 
 //placeOrder
 //router.post("/placeOrder",auth,Order.placeOrder);

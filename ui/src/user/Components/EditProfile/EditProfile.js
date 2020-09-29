@@ -1,51 +1,41 @@
 import React, { Component } from 'react'
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { Card, CardBody, CardTitle, Row, Col } from 'reactstrap';
-import { Nav } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
-import { Link, Redirect, Route, withRouter } from 'react-router-dom';
 import * as actions from '../../redux-store/Actions/UserAction';
 
 
-class Signup extends Component {
+class EditProfile extends Component {
 
     state = {
+        userid:"",
         username: "",
         email: "",
-        password: "",
         address: "",
         contact: "",
-        roleId: "2",
         errors: {}
     }
 
-    async btn_sign_click(e) {
-        e.preventDefault();       
+    async btn_edit_click(e) {
+        e.preventDefault();
 
         if (this.validate()) {
 
             const CurrentUser = {
+                userid: this.state.userid,
                 username: this.state.username,
                 email: this.state.email,
-                password: this.state.password,
                 address: this.state.address,
-                contact: this.state.contact,
-                roleId: "2",
+                contact: this.state.contact
             }
             await this.props.signup(CurrentUser);
-            //console.log(this.props.error);
-            if(this.props.error == "")
-            {
+            if (this.props.error == "") {
                 this.props.history.push('/');
             }
-            else{
-                this.props.history.push('/error/'+this.props.error);
+            else {
+                this.props.history.push('/error/' + this.props.error);
             }
-<<<<<<< HEAD
-            
-=======
->>>>>>> 818c9a25cb4aa39bca99eaa4f8196d0d723b33ab
         }
     }
 
@@ -87,11 +77,6 @@ class Signup extends Component {
             }
         }
 
-        if (!input["password"]) {
-            isValid = false;
-            errors["password"] = "Please enter your password.";
-        }
-
         if (!input["address"]) {
             isValid = false;
             errors["address"] = "Please enter your address.";
@@ -116,7 +101,7 @@ class Signup extends Component {
     }
 
     render() {
-       
+
         const style = {
             cardBtn: {
                 backgroundColor: "#fb641b",
@@ -137,19 +122,20 @@ class Signup extends Component {
         };
         return (
 
-            
+
 
             <>
-            {/* {this.props.error!=""?this.props.history.replace('/error/'+this.props.error):null} */}
+
                 <Row style={{ justifyContent: 'center', marginTop: "10px" }}>
                     <Col sm="8">
                         <Card className="shadow p-3 mb-5 bg-white rounded">
                             <CardBody >
-                                <CardTitle style={style.cardTitle}>Sign Up</CardTitle>
+                                <CardTitle style={style.cardTitle}>Edit Profile</CardTitle>
 
                                 <Form>
+                                <Input type="hidden" name="userid" id="userid"
+                                            value={this.state.userid} />
                                     <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-
                                         <Label for="username" className="mr-sm-2">Username</Label>
                                         <div className="text-danger">{this.state.errors.username}</div>
                                         <Input type="text" name="username" id="username"
@@ -171,12 +157,12 @@ class Signup extends Component {
                                         </Col>
                                         <Col md={6}>
                                             <FormGroup>
-                                                <Label for="password">Password</Label>
-                                                <div className="text-danger">{this.state.errors.password}</div>
-                                                <Input type="password" name="password" id="password"
-                                                    value={this.state.password}
+                                                <Label for="contact">Contact</Label>
+                                                <div className="text-danger">{this.state.errors.contact}</div>
+                                                <Input type="number" name="contact" id="contact"
+                                                    value={this.state.contact}
                                                     onChange={this.handleChange.bind(this)}
-                                                    placeholder="Enter Your Password" />
+                                                    placeholder="9999999999" />
                                             </FormGroup>
                                         </Col>
                                     </Row>
@@ -189,21 +175,10 @@ class Signup extends Component {
                                             onChange={this.handleChange.bind(this)}
                                             placeholder="Enter Your Address" />
                                     </FormGroup>
-                                    <FormGroup>
-                                        <Label for="contact">Contact</Label>
-                                        <div className="text-danger">{this.state.errors.contact}</div>
-                                        <Input type="number" name="contact" id="contact"
-                                            value={this.state.contact}
-                                            onChange={this.handleChange.bind(this)}
-                                            placeholder="9999999999" />
-                                    </FormGroup>
 
-                                    <div className="text-right">
-                                        <Nav.Link as={Link} to="/login" className="forgot-link">Back To Login ?</Nav.Link>
-                                    </div>
                                     <Button type="submit" style={style.cardBtn}
-                                        onClick={this.btn_sign_click.bind(this)}
-                                        color="primary">Sign Up</Button>
+                                        onClick={this.btn_edit_click.bind(this)}
+                                        color="primary">Edit</Button>
 
 
                                 </Form>
@@ -222,16 +197,15 @@ const mapStateToProp = (state) => {
     return {
         user: state.User.user,
         token: state.User.token,
-        error : state.User.error
+        error: state.User.error
     }
 }
 
 const mapStateToActions = (dispatch) => {
     return {
-        signup: (CurrentUser) => dispatch(actions.signup(CurrentUser)),
-        login:(user)=>dispatch(actions.login(user))
+        signup: (CurrentUser) => dispatch(actions.signup(CurrentUser))
     }
 }
 
 
-export default withRouter(connect(mapStateToProp, mapStateToActions)(Signup));
+export default connect(mapStateToProp, mapStateToActions)(EditProfile);
