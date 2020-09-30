@@ -123,3 +123,24 @@ export const editprofile =  (user) => {
         })
     };
 };
+
+export const changepassword = (passwords) => {
+    return async dispatch => {
+        const token = localStorage.getItem("token");
+        await axiosInstance.put('/client/changePassword',passwords,{
+            headers: {
+                authorization: 'Bearer ' + token
+            }
+        }).then(response => {
+            dispatch({
+                type: types.CHANGE_PASSWORD,
+                message : response.data
+            });
+        }).catch(error => {
+            dispatch({
+                type: types.CHANGE_PASSWORD_FAILED,
+                error: error.message
+            });
+        })
+    };
+};

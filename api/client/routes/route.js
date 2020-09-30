@@ -33,7 +33,7 @@ router.get('/client/getUserById',auth,Authenticate.getUserById);
 router.put('/client/editProfile',auth,Authenticate.editProfile);
 
 //change Password
-router.put('/client/changePassword/:id',auth,Authenticate.changePassword);
+router.put('/client/changePassword',auth,Authenticate.changePassword);
 
 //forget Password
 router.post('/client/forgetPassword',Authenticate.forgetPassword);

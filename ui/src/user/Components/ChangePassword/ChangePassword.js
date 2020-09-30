@@ -4,24 +4,56 @@ import { Card, CardBody, CardTitle, Row, Col } from 'reactstrap';
 import { Nav } from 'react-bootstrap'
 import { connect } from 'react-redux';
 
-import { Link, Route, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import * as actions from '../../redux-store/Actions/UserAction';
 
 
 class ChangePassword extends Component {
 
     state = {
-        old_password : "",
-        new_password : "",
-        confirm_password : "",
+        old_password: "",
+        new_password: "",
+        confirm_password: "",
+        message: "",
         errors: {}
     }
 
     async btn_click(e) {
         e.preventDefault();
 
+        console.log("abc");
         if (this.validate()) {
-        }
+            
+            const passwords = {
+                oldpass: this.state.old_password,
+                newpass: this.state.new_password
+            }
+            await this.props.changepassword(passwords);
+            if (this.props.error !== "") {
+                if (this.props.error === "Request failed with status code 401") {
+                    this.setState({
+                        message:"",
+                        errors: {
+                            err: "Not Valid Old Password"
+                        }
+                    })
+                }
+                else {
+                    this.props.history.push('/error/Please First Login');
+                }
+            }
+            else {
+                this.setState({
+                    old_password: "",
+                    new_password: "",
+                    confirm_password: "",
+                    message:this.props.message,
+                    errors : {}
+                })
+                //this.props.history.push('/');
+            }
+         }
+        
     }
 
     validate() {
@@ -42,13 +74,13 @@ class ChangePassword extends Component {
             errors["confirm_password"] = "Please enter your confirm password.";
         }
 
-        if(input["new_password"] !== input["confirm_password"])
-        {
+        if (input["new_password"] !== input["confirm_password"]) {
             isValid = false;
             errors["err"] = "New Password and Confirm Password Must be Same";
         }
 
         this.setState({
+            message:"",
             errors: errors
         });
 
@@ -88,6 +120,7 @@ class ChangePassword extends Component {
                         <Card className="shadow p-3 mb-5 bg-white rounded">
                             <CardBody >
                                 <CardTitle style={style.cardTitle}>Change Password</CardTitle>
+                                <div className="text-success">{this.state.message}</div>
                                 <div className="text-danger">{this.state.errors.err}</div>
                                 <Form>
                                     <FormGroup>
@@ -133,6 +166,17 @@ class ChangePassword extends Component {
     }
 }
 
+const mapStateToProp = (state) => {
+    return {
+        error: state.User.error,
+        message: state.User.message
+    }
+}
 
+const mapStateToActions = (dispatch) => {
+    return {
+        changepassword: (passwords) => dispatch(actions.changepassword(passwords))
+    }
+}
 
-export default ChangePassword;
+export default connect(mapStateToProp, mapStateToActions)(withRouter(ChangePassword));

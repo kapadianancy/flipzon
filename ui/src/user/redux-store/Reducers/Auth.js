@@ -65,14 +65,28 @@ const store = (state = initialStore, action) => {
       return {
         ...state,
         message: action.message,
-        error:""
+        error: ""
       }
     case types.EDIT_PROFILE:
       return {
         ...state,
-        error:action.error,
+        error: action.error,
         message: ""
       }
+    case types.CHANGE_PASSWORD: {
+      return {
+        ...state,
+        message: action.message,
+        error: ""
+      }
+    }
+    case types.CHANGE_PASSWORD_FAILED: {
+      return {
+        ...state,
+        error: action.error,
+        message: ""
+      }
+    }
     default:
       return state;
   }
