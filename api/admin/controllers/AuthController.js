@@ -20,5 +20,13 @@ module.exports = (app) => {
         } catch (error) {
             next(error);
         }
+    });
+    app.post("/admin/updateProfile", auth, async (req,res,next) => {
+        try {
+            await AuthService.update(req.body, req.user.id);
+            res.send({ message: "Profile updated successfully!" });
+        } catch (error) {
+            next(error);
+        }
     })
 }

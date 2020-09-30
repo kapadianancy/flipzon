@@ -1,6 +1,7 @@
 import React, { useState }  from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button'
+import Spinner from 'react-bootstrap/Spinner'
 
 import * as classes from './Login.module.css';
 
@@ -82,7 +83,11 @@ const Login = (props) => {
         </Form.Group> */}
 
         { props.error ? <p className="text-danger">{props.error}</p> : null }
-        <Button variant="primary" type="submit">Login</Button>
+        {
+            props.loading ?
+            <Spinner animation="border" /> :
+            <Button variant="primary" type="submit">Login</Button>
+        }
         <div className="d-flex justify-content-center">
             <a href="#" onClick={() => props.goToRegister()}>Don't have an account? Register here.</a>
         </div>

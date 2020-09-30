@@ -6,13 +6,14 @@ export const login = (email, password) => {
         dispatch({ type: types.INIT_LOGIN });
         var result;
         try {
-            result = await axios.post("login", {
+            result = await axios.post("admin/login", {
                 email, password
             });
             localStorage.setItem("fz_token", result.data.token);
             dispatch({ type: types.LOGIN_SUCCESS, token: result.data.token, user: result.data.user });
         } catch (error) {
-            dispatch({ type: types.LOGIN_FAILED, error: "Invalid Username/Password!" });
+            dispatch({ type: types.LOGIN_FAILED, error: "Invalid Email/Password!" });
+            throw error;
         }
     }
 }
@@ -20,9 +21,8 @@ export const login = (email, password) => {
 export const register = (user) => {
     return async (dispatch) => {
         dispatch({ type: types.INIT_REGISTER });
-        let result;
         try {
-            result = await axios.post("register", user);
+            await axios.post("admin/register", user);
             dispatch({ type: types.REGISTER_SUCCESS });
         } catch (error) {
             let message = "Network Error";
@@ -30,6 +30,7 @@ export const register = (user) => {
                 message = error.response.data.message;
             }
             dispatch({ type: types.REGISTER_FAILED, error: message });
+            throw error;
         }
     }
 }
@@ -49,20 +50,38 @@ export const logout = () => {
 
 export const tryAutoLogin = () => {
     return async(dispatch) => {
-        dispatch({ type: types.INIT_LOGIN });
+        // dispatch({ type: types.INIT_LOGIN });
         try {
             let token = localStorage.getItem("fz_token");
             if(!token) {
-                throw { message: "Token not found!" }
+                return;
             }
-            let result = await axios.get("me", {
+            let result = await axios.get("admin/me", {
                 headers: {
                     'Authorization': token
                 }
             });
-            dispatch({ type: types.LOGIN_SUCCESS, token, user: result.data });
+            dispatch({ type: types.AUTO_LOGIN_SUCCESS, token, user: result.data });
         } catch(error) {
-            dispatch({ type: types.LOGIN_FAILED, error: error.message })
+            console.log(error);
+            // dispatch({ type: types.LOGIN_FAILED, error: error.message })
         }
     }
+}
+
+export const updateProfile = (data) => {
+    return async(dispatch) => {
+        dispatch({ type: types.INIT_UPDATE_PROFILE });
+        try {
+            let token = localStorage.getItem("fz_token");
+            await axios.post("admin/updateProfile", data, {
+                headers: {
+                    'Authorization': token
+                }
+            });
+            dispatch({ type: types.UPDATE_PROFILE_SUCCESS, username: data.username });
+        } catch(error) {
+            dispatch({ type: types.UPDATE_PROFILE_FAILED, error: error.message })
+        }
+    }   
 }
