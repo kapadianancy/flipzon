@@ -19,63 +19,42 @@ class ProductSlider extends Component {
     let products = [];
     let p = this.props.products;
     let n = this.props.products.length;
-    let i=0;
+    let i = 0;
+    let flag = "break;";
 
-    
-    for (let j = 0; j < n-1;j++) {
+    let card = (j) => {
+      return (
+        <Card
+          key={p[j].id}
+          style={{ width: "18rem", padding: "10px", display: "inline-block" }}
+        >
+          <Card.Img variant="top" src={Product} />
+          <Card.Body>
+            <Card.Title>{p[j].name}</Card.Title>
+            <Card.Text>{p[j].description}</Card.Text>
+            <Button style={style} variant="primary">
+              Add to Cart
+            </Button>
+          </Card.Body>
+        </Card>
+      );
+    };
+
+    for (let j = 0; j < n;) {
+     
         products.push(
-                <Carousel.Item>
-                  <Card
-                    key={p[j].id}
-                    style={{ width: "18rem", padding: "10px", display: "inline-block" }}
-                  >
-                    <Card.Img variant="top" src={Product} />
-                    <Card.Body>
-                      <Card.Title>{p[j].name}</Card.Title>
-                      <Card.Text>{p[j].description}</Card.Text>
-                      <Button style={style} variant="primary">
-                        Add to Cart
-                      </Button>
-                    </Card.Body>
-                  </Card>
+          <Carousel.Item>
+           {card(j++)}
+           
+           {(j>=n)?null:card(j++)}
+           
+           {(j>=n)?null:card(j++)}
 
-                 <Card
-                    key={p[j++].id}
-                    style={{ width: "18rem", padding: "10px", display: "inline-block" }}
-                  >
-                    <Card.Img variant="top" src={Product} />
-                    <Card.Body>
-                      <Card.Title>{p[j].name}</Card.Title>
-                      <Card.Text>{p[j].description}</Card.Text>
-                      <Button style={style} variant="primary">
-                        Add to Cart
-                      </Button>
-                    </Card.Body>
-                  </Card>
-
-                  {/* <Card
-                    key={p[j++].id}
-                    style={{ width: "18rem", padding: "10px", display: "inline-block" }}
-                  >
-                    <Card.Img variant="top" src={Product} />
-                    <Card.Body>
-                      <Card.Title>{p[j].name}</Card.Title>
-                      <Card.Text>{p[j].description}</Card.Text>
-                      <Button style={style} variant="primary">
-                        Add to Cart
-                      </Button>
-                    </Card.Body>
-                  </Card> */}
-
-                 
-
-                </Carousel.Item>
-              );
-              
-       
-      
-      
-
+           {(j>=n)?null:card(j++)}
+          
+          </Carousel.Item>
+        );
+    
       //return products;
     }
 

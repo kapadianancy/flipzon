@@ -14,6 +14,7 @@ import Error from './Components/error';
 import Footer from './Components/Footer/Footer';
 import Header from './Components/Header/Header';
 import Logout from './Components/Logout';
+import ProductDetails from './Containers/Product/ProductDetails';
 
  
 class User extends Component {
@@ -32,6 +33,7 @@ class User extends Component {
           <Route path="/forgetpassword" exact component={Forgetpassword}/>
           <Route path="/editprofile" exact component={EditProfile}/>
           <Route path="/changepassword" exact component={ChangePassword}/>
+          <Route path="/productDetails/:pid" exact component={ProductDetails}/>
       </Switch>
       
       </div>
