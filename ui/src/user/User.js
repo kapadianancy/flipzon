@@ -34,12 +34,9 @@ class User extends Component {
           <Route path="/forgetpassword" exact component={Forgetpassword}/>
           <Route path="/editprofile" exact component={EditProfile}/>
           <Route path="/changepassword" exact component={ChangePassword}/>
-<<<<<<< HEAD
           <Route path="/vieworder" exact component={ViewOrder}/>
-=======
           <Route path="/productDetails/:pid" exact component={ProductDetails}/>
->>>>>>> 3dca02332d414be81558d2f55195c3a9ea8818f9
-      </Switch>
+   </Switch>
       
       </div>
     );
