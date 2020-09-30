@@ -96,17 +96,17 @@ class Header extends Component {
           </DropdownToggle>
           <DropdownMenu style={{ minWidth: "148px", right: "10px" }}>
             <DropdownItem style={{ padding: "0px" }}>
-              <Nav.Link as={Link} to="/">
+              <Nav.Link as={Link} to="/vieworder">
                 Order History
               </Nav.Link>
             </DropdownItem>
             <DropdownItem style={{ padding: "0px" }}>
-              <Nav.Link as={Link} to="/">
+              <Nav.Link as={Link} to="/editprofile">
                 Edit Profile
               </Nav.Link>
             </DropdownItem>
             <DropdownItem style={{ padding: "0px" }}>
-              <Nav.Link as={Link} to="/">
+              <Nav.Link as={Link} to="/changepassword">
                 Change Password
               </Nav.Link>
             </DropdownItem>
