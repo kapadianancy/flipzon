@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import { Card, CardBody, CardTitle, Row, Col } from 'reactstrap';
 import { connect } from 'react-redux';
+import { withRouter } from "react-router-dom";
 
 import * as actions from '../../redux-store/Actions/UserAction';
 
@@ -9,12 +10,29 @@ import * as actions from '../../redux-store/Actions/UserAction';
 class EditProfile extends Component {
 
     state = {
-        userid:"",
+        userid: "",
         username: "",
         email: "",
         address: "",
         contact: "",
-        errors: {}
+        errors: {},
+        message:""
+    }
+
+    async componentDidMount() {
+        await this.props.getSingleUser();
+        if (this.props.error !== "") {
+            this.props.history.push('/error/Please First Login');
+        }
+        else {
+            this.setState({
+                userid: this.props.user.id,
+                username: this.props.user.username,
+                email: this.props.user.email,
+                address: this.props.user.address,
+                contact: this.props.user.contact
+            })
+        }
     }
 
     async btn_edit_click(e) {
@@ -23,15 +41,17 @@ class EditProfile extends Component {
         if (this.validate()) {
 
             const CurrentUser = {
-                userid: this.state.userid,
                 username: this.state.username,
                 email: this.state.email,
                 address: this.state.address,
                 contact: this.state.contact
             }
-            await this.props.signup(CurrentUser);
+            await this.props.editprofile(CurrentUser);
             if (this.props.error == "") {
-                this.props.history.push('/');
+               this.setState({
+                   message:this.props.message
+               })
+               //this.props.history.push('/');
             }
             else {
                 this.props.history.push('/error/' + this.props.error);
@@ -43,6 +63,9 @@ class EditProfile extends Component {
         let input = this.state;
         let errors = {};
         let isValid = true;
+        this.setState({
+            message : ""
+        })
 
         if (!input["username"]) {
             isValid = false;
@@ -106,8 +129,6 @@ class EditProfile extends Component {
             cardBtn: {
                 backgroundColor: "#fb641b",
                 borderColor: "#fb641b",
-                //    backgroundColor: "#007bff",
-                //    borderColor : "#007bff",
                 margin: '10px',
                 color: "white",
                 width: '170px'
@@ -131,10 +152,10 @@ class EditProfile extends Component {
                         <Card className="shadow p-3 mb-5 bg-white rounded">
                             <CardBody >
                                 <CardTitle style={style.cardTitle}>Edit Profile</CardTitle>
-
+                                <div className="text-success">{this.state.message}</div>
                                 <Form>
-                                <Input type="hidden" name="userid" id="userid"
-                                            value={this.state.userid} />
+                                    <Input type="hidden" name="userid" id="userid"
+                                        value={this.state.userid} />
                                     <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
                                         <Label for="username" className="mr-sm-2">Username</Label>
                                         <div className="text-danger">{this.state.errors.username}</div>
@@ -197,15 +218,17 @@ const mapStateToProp = (state) => {
     return {
         user: state.User.user,
         token: state.User.token,
-        error: state.User.error
+        error: state.User.error,
+        message: state.User.message
     }
 }
 
 const mapStateToActions = (dispatch) => {
     return {
-        signup: (CurrentUser) => dispatch(actions.signup(CurrentUser))
+        getSingleUser: () => dispatch(actions.getSingleUser()),
+        editprofile:(CurrentUser) => dispatch(actions.editprofile(CurrentUser))
     }
 }
 
 
-export default connect(mapStateToProp, mapStateToActions)(EditProfile);
+export default connect(mapStateToProp, mapStateToActions)(withRouter(EditProfile));

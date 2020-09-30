@@ -6,12 +6,11 @@ const auth=async(req,res,next)=>
 {
     try{
         console.log("auth running");
-        const token=req.header("Authorization").replace("Bearer ","");
-        console.log(token);
+        const token=req.header("authorization").replace("Bearer ","");
         const valid=await jwt.verify(token,secret);
         //console.log("-----------"+valid._id);
         const u=await main.User.findByPk(valid._id);
-        console.log(u);
+        //console.log(u);
         if(!u)
         {
             throw new Error();
