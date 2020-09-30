@@ -12,6 +12,8 @@ class ViewOrder extends Component {
             table: {
                 marginLeft: 'auto',
                 marginRight: 'auto',
+                marginTop : '20px',
+                marginBottom : '40px',
                 width: '80%'
             },
         };
