@@ -36,7 +36,7 @@ class ProductCategoriesEdit extends Component{
             image:category[0].image
         })  
 
-        this.setState({myimg:category[0].image.replace('/images','')})
+        this.setState({myimg:category[0]})
     }
     onFileChange = (e) =>{
         const imageFile = e.target.files[0];

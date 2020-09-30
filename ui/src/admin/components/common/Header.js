@@ -4,7 +4,7 @@ import {  Link } from 'react-router-dom';
 
 const Header = (props) => {
     return <Navbar bg="dark" expand="lg" variant="dark">
-    <Navbar.Brand href="#home"><img src={"http://localhost:8080/Free_Sample_By_Wix.jpg"} alt="description" width="60px" height="40px"/></Navbar.Brand>
+    <Navbar.Brand href="#home"><img src={"http://localhost:8080/images/Free_Sample_By_Wix.jpg"} alt="description" width="60px" height="40px"/></Navbar.Brand>
     <Navbar.Toggle aria-controls="basic-navbar-nav" />
     <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
@@ -14,9 +14,8 @@ const Header = (props) => {
             <Nav.Link as={Link} to="/admin/order">Order</Nav.Link>
         </Nav>
         <DropdownButton alignRight id="dropdown-basic-button" title="My Admin">
-            <Dropdown.Item href="#/EditProfile">Edit Profile</Dropdown.Item>
-            <Dropdown.Item href="#/ChangePassword">ChangePassword</Dropdown.Item>
-            <Dropdown.Item href="#/Logout">Logout</Dropdown.Item>
+            <Dropdown.Item as={Link} to="/admin/profile">Manage Profile</Dropdown.Item>
+            <Dropdown.Item onClick={() => props.logout()} href="#">Logout</Dropdown.Item>
         </DropdownButton>
     </Navbar.Collapse>
   </Navbar>

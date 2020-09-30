@@ -33,7 +33,7 @@ router.put('/client/editProfile/:id',auth,Authenticate.editProfile);
 router.put('/client/changePassword/:id',auth,Authenticate.changePassword);
 
 //forget Password
-router.post('/client/fogetPassword',Authenticate.forgetPassword);
+router.post('/client/forgetPassword',Authenticate.forgetPassword);
 
 //placeOrder
 //router.post("/placeOrder",auth,Order.placeOrder);
@@ -50,5 +50,8 @@ router.delete("/client/cancelOrder/:id",auth,Order.cancelOrder);
 
 //cancel order item
 router.delete("/client/cancelOrderItem/:id",auth,Order.cancelOrderItem);
+
+//most ordered products
+router.get("/client/orderedProducts/",Order.orderedProducts);
 
 module.exports = router;
