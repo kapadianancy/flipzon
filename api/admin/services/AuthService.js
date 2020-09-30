@@ -12,11 +12,12 @@ const login = async (email, password) => {
         let user = await User.findAll({
             where: {
                 email,
+                roleId: 1,
                 isDeleted: false
             },
             attributes: ["id", "password", "username", "email", "contact", "address"]
         });  
-        if(!user) {
+        if(user.length === 0) {
             user.message = "Unable to login!";
             throw errorObj;
         }
@@ -59,7 +60,20 @@ const register = async (username, email, password) => {
         throw error
     }
 }
+const update = async (data, id) => {
+    try {
+        if(data.password) {
+            data.password = bcrypt.hashSync(data.password, 10);
+        }
+        await User.update(data, {
+            where: { id }
+        });
+    } catch(error) {
+        throw error
+    }
+}
 module.exports = {
     login,
-    register
+    register,
+    update
 }

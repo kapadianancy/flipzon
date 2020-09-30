@@ -1,0 +1,12 @@
+.NavbarBrand {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+.Logo {
+    width: 75px;
+    height: 70px;
+}
+.Active {
+    border-bottom: 3px solid goldenrod;
+    color: white !important;
+}

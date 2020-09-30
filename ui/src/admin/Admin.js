@@ -6,12 +6,14 @@ import ProductCategories from './containers/ProductCategories'
 import ProductCategoriesAdd from './components/ProductCategories/ProductCategoriesAdd'
 import ProductCategoriesEdit from './components/ProductCategories/ProductCategoriesEdit'
 import Dashboard from './containers/Dashboard'
-import * as classes from './Admin.module.css'
 import ProductFormController from './containers/ProductFormController'
 import Order from "./containers/Orders";
 import Auth from './containers/Auth';
+import Users from './containers/Users';
 import { connect } from 'react-redux';
-import { tryAutoLogin } from './store/actions/AuthActions'
+import { tryAutoLogin, logout } from './store/actions/AuthActions'
+import Profile from './containers/Profile';
+import * as classes from './Admin.module.css'
 
 const Admin = (props) => {
     useEffect(() => {
@@ -28,32 +30,38 @@ const Admin = (props) => {
             <Redirect to="/admin/auth" />
         </div>
     } else if(props.location.pathname.startsWith("/admin") && props.loggedIn) {
-        content = <div>
-            <Header />
-            <Switch>
-                <Route path="/admin/dashboard" exact component={Dashboard} />
-                <Route path="/admin/products/edit/:id" exact component={ProductFormController} />
-                <Route path="/admin/products/add" exact component={ProductFormController} />
-                <Route path="/admin/products" exact component={Products} />
-                <Route path="/admin/ProductCategoriesAdd" exact component={ProductCategoriesAdd} />
-                <Route path="/admin/ProductCategoriesEdit" exact component={ProductCategoriesEdit} />
-                <Route path="/admin/product_categories" exact component={ProductCategories} />
-                <Route path="/admin/order" exact component={Order} />
-                <Redirect to="/admin/dashboard" />
-            </Switch>
-        </div>
+        content = <>
+            <Header logout={props.logout} user={props.user} />
+            <div className={classes.Container}>
+                <Switch>
+                    <Route path="/admin/dashboard" exact component={Dashboard} />
+                    <Route path="/admin/products/edit/:id" exact component={ProductFormController} />
+                    <Route path="/admin/products/add" exact component={ProductFormController} />
+                    <Route path="/admin/products" exact component={Products} />
+                    <Route path="/admin/ProductCategoriesAdd" exact component={ProductCategoriesAdd} />
+                    <Route path="/admin/ProductCategoriesEdit" exact component={ProductCategoriesEdit} />
+                    <Route path="/admin/product_categories" exact component={ProductCategories} />
+                    <Route path="/admin/order" exact component={Order} />
+                    <Route path="/admin/profile" exact component={Profile} />
+                    <Route path="/admin/users" exact component={Users} />
+                    <Redirect to="/admin/dashboard" />
+                </Switch>
+            </div>
+        </>
     }
     return content
 }
 
 const mapStateToProps = state => {
     return {
-        loggedIn: state.adminAuth.token ? true : false
+        loggedIn: state.adminAuth.token ? true : false,
+        user: state.adminAuth.user
     }
 }
 const mapDispatchToProps = dispatch => {
     return {
-        tryAutoLogin: () => dispatch(tryAutoLogin())
+        tryAutoLogin: () => dispatch(tryAutoLogin()),
+        logout: () => dispatch(logout())
     }
 }
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Admin));

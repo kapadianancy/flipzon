@@ -17,9 +17,10 @@ const auth = async (req,res,next) => {
         const user = await User.findAll({
             where: {
                 id: decode.id,
-                isDeleted: false
+                isDeleted: false,
+                roleId: 1
             },
-            attributes: ["id", "password", "username", "email", "contact", "address"]
+            attributes: ["id", "username", "email",]
         });
         if(!user) {
             errorObj.message = "Authorization required!";

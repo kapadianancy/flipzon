@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Image from 'react-bootstrap/Image'
+import Spinner from 'react-bootstrap/Spinner'
 import * as classes from './ProductForm.module.css'
 
 const ProductForm = (props) => {
@@ -223,9 +224,11 @@ const ProductForm = (props) => {
             </Form.Group>
 
             { props.error ? <p className="text-danger">{props.error}</p> : null }
-            <Button onClick={validate} disabled={props.loading} variant="primary" type="submit">
-                { props.loading ? 'Submitting...' : 'Submit' }
-            </Button>
+            {
+                props.loading ?
+                <Spinner animation="border" /> :
+                <Button onClick={validate} disabled={props.loading} variant="primary" type="submit">Submit</Button>
+            }
         </Form>
     )
 }
