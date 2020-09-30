@@ -1,0 +1,205 @@
+import React , {Component} from 'react';
+import { connect } from 'react-redux'
+import Card from 'react-bootstrap/Card'
+import CardDeck from 'react-bootstrap/CardDeck'
+// import ProgressBar from 'react-bootstrap/ProgressBar'
+import { fetchTotal,fetchProductTotal } from '../../store/actions/DashboardAction'
+import { Pie } from "react-chartjs-2";
+import Spinner from 'react-bootstrap/Spinner'
+import './Dashboard.css';
+
+class Dashboard extends Component{
+    state = {
+        totalOrder:"",
+        totalPendingOrder:"",
+        totalCompletedOrder:"",
+        totalProduct:"",
+        totalCategoies:"",
+        totalUser:"",
+        totalRevenue:"",
+        tots:"",
+        dataPie: {
+          labels: ["Total Orders", "Completed Orders", "Pending Orders"],
+          datasets: 
+          [
+            {
+              data: [],
+              backgroundColor: [
+                "#F7464A",
+                "#46BFBD",
+                "#FDB45C",
+                "#949FB1",
+              ],
+              hoverBackgroundColor: [
+                "#FF5A5E",
+                "#5AD3D1",
+                "#FFC870",
+                "#A8B3C5"
+              ]
+            }
+          ]
+        }
+      }
+    componentDidMount = async () =>{
+
+        await this.props.fetchTotal();
+        await this.props.fetchProductTotal();
+        let tot = await this.props.total;
+        let tots = await this.props.totals;
+
+        this.setState({
+            totalOrder:tot.totalOrder,
+            totalPendingOrder:tot.totalPendingOrder,
+            totalCompletedOrder:tot.totalCompletedOrder,
+            totalProduct:tot.totalProduct,
+            totalCategoies:tot.totalCategoies,
+            totalUser:tot.totalUser,
+            totalRevenue:tot.totalRevenue[0].totalPrice,
+            tots:tots.cp.rows
+        })
+        
+        let d = this.state.dataPie.datasets[0].data;
+        
+        d.push(this.state.totalOrder)
+        d.push(this.state.totalCompletedOrder)
+        d.push(this.state.totalPendingOrder)
+
+    } 
+    renderCategoryProduct = () =>{
+        let dataArr = [];
+        if(this.state.tots)
+        {
+            let tots = this.state.tots;
+            for (let i = 0; i < (tots.length); i++) {
+                dataArr.push(
+                <li key={"li"+i} className="list-group-item d-flex justify-content-between align-items-center">
+                    {tots[i].Product_category.name}
+                 <span className="badge badge-primary badge-pill">{tots[i].count}</span>
+                </li>)
+            }
+        }
+        return(dataArr);
+        
+    }
+    renderTotal = (orders) => { 
+        let orderData = <div key="div1">
+        <Card key={"index"} style={{borderWidth:0}}>
+            <Card.Body>
+            <CardDeck>
+                    <Card text={"white"} className={"cards mb-2"}>
+                        <Card.Body className={"text"}>
+                        <Card.Title> Total Product </Card.Title>
+                            <Card.Text>
+                                {this.state.totalProduct}
+                            </Card.Text>
+                        </Card.Body>
+                        
+                    </Card>
+                    <Card text={"white"} className={"cards1 mb-2"}>
+                        <Card.Body className={"text"}> 
+                        <Card.Title>Total Categories</Card.Title>
+                            <Card.Text>
+                            {this.state.totalCategoies}
+                            </Card.Text>
+                        </Card.Body>
+                        
+                    </Card>
+                    <Card text={"white"} className={"cards2 mb-2"}>
+                        <Card.Body className={"text"}>
+                        <Card.Title>Total User </Card.Title>
+                            <Card.Text>
+                                {this.state.totalUser}
+                            </Card.Text>
+                            <Card.Text>
+                            
+                            </Card.Text>
+                        </Card.Body>
+                    </Card>
+                    <Card text={"white"} className={"cards3 mb-2"}>
+                        <Card.Body className={"text"}>
+                        <Card.Title>Total Order</Card.Title>
+                            <Card.Text>
+                                {this.state.totalOrder}
+                            </Card.Text>
+                        </Card.Body>
+                    </Card>
+                    <Card text={"white"} className={"cards4 mb-2"}>
+                        <Card.Body className={"text"}>
+                        <Card.Title>Total Revenue</Card.Title>
+                            <Card.Text>
+                                {this.state.totalRevenue}
+                            </Card.Text>
+                        </Card.Body>
+                    </Card>
+                </CardDeck>
+            </Card.Body>
+        </Card>
+        <Card key={"index2"} style={{ width: '42rem',float:'left' }}>
+            <Card.Body>
+                <Card.Title>Order Statistics</Card.Title>
+                <CardDeck>
+                    <Card bg={'Light'.toLowerCase()} key={"5"} text={'Light'.toLowerCase() === 'light' ? 'dark' : 'white'} className="mb-2" style={{ width: '18rem' }}>
+                        <Card.Body>
+                        <Card.Title>Completed Orders</Card.Title>
+                            <Card.Text>
+                                {this.state.totalCompletedOrder}
+                            </Card.Text>
+                        </Card.Body>
+                        
+                    </Card>
+                    <Card bg={'Light'.toLowerCase()} key={"6"} text={'Light'.toLowerCase() === 'light' ? 'dark' : 'white'} className="mb-2" style={{ width: '18rem' }}>
+                        <Card.Body>
+                        <Card.Title>Pending Orders</Card.Title>
+                            <Card.Text>
+                                {this.state.totalPendingOrder}
+                            </Card.Text>
+                        </Card.Body>
+                    </Card>
+                </CardDeck>
+            </Card.Body>
+        
+            <Card style={{ width: '42rem', borderWidth:0,marginTop:'-23px'}} key={"index3"}>
+                <Card.Body>
+                <Card.Title>Categories wise Products</Card.Title>
+                <ul key={"u1"} className="list-group">
+                    {this.renderCategoryProduct()}    
+                </ul>
+                </Card.Body>
+            </Card>
+        </Card>
+        <Card key={"index5"} >
+            <Card.Body>
+                <Card.Title>Order Analysis</Card.Title>
+                <CardDeck>
+                    <Card style={{borderWidth:0 }}>
+                        <Card.Body>
+                            <Pie data={this.state.dataPie} options={{ responsive: true }} />
+                        </Card.Body>    
+                    </Card>
+                </CardDeck>
+            </Card.Body>
+        </Card>
+
+        </div>
+        // )
+        return orderData
+    }
+    render(){
+        let load = this.props.loading ? <Spinner animation="border" className={"spinner"} /> : this.renderTotal(this.props.total);
+        return ( load )
+    }
+}
+
+const mapStateToProps = (state) => ({
+    total: state.adminTotalReducer.total,
+    totals: state.adminTotalReducer.totals,
+    loading :state.adminTotalReducer.loading
+});
+
+const mapDispatchToProps = dispatch => {
+    return{
+        fetchTotal: () => dispatch(fetchTotal()),
+        fetchProductTotal: () => dispatch(fetchProductTotal())
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

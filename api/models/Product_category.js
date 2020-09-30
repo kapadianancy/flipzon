@@ -8,12 +8,24 @@ const Product_category = db.sequelize.define('Product_category', {
             autoIncrement:true
         },
         name: {
-            type: DataTypes.STRING
+            type: DataTypes.STRING,
+            allowNull: false,
+            unique: true,
+            validate: {
+                notNull: {
+                    msg: 'required name'
+                }
+            }
         },
         image:
         {
             type:DataTypes.TEXT,
-            allowNull:false
+            allowNull:false,
+            validate: {
+                notNull: {
+                    msg: 'required image'
+                }
+            }
         },
         isDeleted: {
             type: DataTypes.BOOLEAN,

@@ -65,15 +65,7 @@ const store = (state = initialStore, action) => {
                 error: action.error
             }
 
-        // case types.UPDATE_PRODUCT_CATEGORIES:
-        //     return {
-        //         ...state,
-        //         product_categories: action.product_categories,
-        //         loading: true
-        //     };  
-
         // REMOVE Data 
-
         case types.INIT_REMOVE_PRODUCT_CATEGORIES:
             return {
                 ...state,
@@ -94,16 +86,7 @@ const store = (state = initialStore, action) => {
                 error: action.error
             }
 
-        // case types.REMOVE_PRODUCT_CATEGORIES:
-        //     let categories = state.product_categories.filter(category => category.id !== action.product_categories_id);
-        //     return {
-        //         ...state,
-        //         product_categories:categories,
-        //         loading: true
-        //     };
-
         // FETCH SINGLE Data    
-        
         case types.INIT_SINGLE_PRODUCT_CATEGORIES:
             return {
                 ...state,
@@ -122,13 +105,6 @@ const store = (state = initialStore, action) => {
                 loading: false,
                 error: action.error
             }
-
-        // case types.SINGLE_PRODUCT_CATEGORIES:
-        //     return {
-        //         ...state,
-        //         product_categorie: action.product_categorie,
-        //         loading: false
-        //     }
         default:
             return state;
     }

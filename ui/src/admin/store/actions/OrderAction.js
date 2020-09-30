@@ -7,7 +7,6 @@ export const fetchOrders = () => {
             type:types.INIT_FETCH_ORDERS
         }) 
         await axios.get('http://localhost:8080/admin/orders').then(response => {
-            // console.log(response.data);
             dispatch({
                 type:types.FETCH_ORDERS_SUCCESS,
                 orders:response.data
@@ -27,7 +26,6 @@ export const fetchOrdersDetails = (id) => {
             type:types.INIT_FETCH_ORDERS_DETAILS
         }) 
         await axios.get('http://localhost:8080/admin/allorders/'+id).then(response => {
-            // console.log(response.data);
             dispatch({
                 type:types.FETCH_ORDERS_DETAILS_SUCCESS,
                 ordersDetails:response.data

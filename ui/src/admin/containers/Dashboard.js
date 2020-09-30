@@ -1,74 +1,32 @@
 import React, { useEffect } from 'react';
 
-import Card from 'react-bootstrap/Card'
-import CardDeck from 'react-bootstrap/CardDeck'
-import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
-import * as classes from './Products.module.css'
-import { Link } from 'react-router-dom';
-
-// import ProductCategoriesList from '../components/ProductCategories/ProductCategoriesList';
+import { fetchTotal,fetchProductTotal } from '../store/actions/DashboardAction'
+import Dashboards from '../components/Dashboard/Dashboard';
+// import { PieChart } from 'react-minimal-pie-chart';
 
 const Dashboard = (props) => {
-    // useEffect( () => {
-    //     if(props.product_categories.length === 0)
-    //     {
-    //         props.fetchProductCategories()
-    //     }
-    // }, [props])
+    useEffect( () => {
+        if(props.total.length === 0)
+        {
+           props.fetchTotal();
+        }
+    }, [props])
     return(
-        
-        <Card>
-            <Card.Header className={classes.Header}>
-                <div className={classes.Title}>
-                    Dashboard
-                </div>
-            </Card.Header>
-            <Card.Body>
-            <CardDeck>
-                    <Card bg={'Primary'.toLowerCase()} key={"index"} text={'Primary'.toLowerCase() === 'light' ? 'dark' : 'white'} className="mb-2" style={{ width: '18rem' }}>
-                        <Card.Body>
-                        <Card.Title> Total Product </Card.Title>
-                            <Card.Text>
-                                50
-                            </Card.Text>
-                        </Card.Body>
-                        
-                    </Card>
-                    <Card bg={'Success'.toLowerCase()} key={"index"} text={'Success'.toLowerCase() === 'light' ? 'dark' : 'white'} className="mb-2" style={{ width: '18rem' }}>
-                        <Card.Body>
-                        <Card.Title>Total User </Card.Title>
-                            <Card.Text>
-                                200
-                            </Card.Text>
-                        </Card.Body>
-                        
-                    </Card>
-                    <Card bg={'Dark'.toLowerCase()} key={"index"} text={'Dark'.toLowerCase() === 'light' ? 'dark' : 'white'} className="mb-2" style={{ width: '18rem' }}>
-                        <Card.Body>
-                        <Card.Title>Pending Order </Card.Title>
-                            <Card.Text>
-                                25
-                            </Card.Text>
-                            <Card.Text>
-                            
-                            </Card.Text>
-                        </Card.Body>
-                    </Card>
-                    <Card bg={'Warning'.toLowerCase()} key={"index"} text={'Warning'.toLowerCase() === 'light' ? 'dark' : 'white'} className="mb-2" style={{ width: '18rem' }}>
-                        <Card.Body>
-                        <Card.Title>Complete Order </Card.Title>
-                            <Card.Text>
-                                175
-                            </Card.Text>
-                        </Card.Body>
-                        
-                    </Card>
-                </CardDeck>
-            </Card.Body>
-        </Card>
-       
+        <div>
+            <Dashboards total={props.total}/>
+        </div>
     )
 }
+const mapStateToProps = (state) => ({
+    total: state.adminTotalReducer.total,
+    totals: state.adminTotalReducer.totals
+});
 
-export default connect(null, null)(Dashboard);
+const mapDispatchToProps = dispatch => {
+    return{
+        fetchTotal: () => dispatch(fetchTotal()),
+        fetchProductTotal:()=>dispatch(fetchProductTotal())  
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

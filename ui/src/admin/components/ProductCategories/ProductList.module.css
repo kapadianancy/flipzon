@@ -6,3 +6,27 @@
     font-size: 25px;
     font-weight: bold;
 }
+.large {
+    position: absolute;
+    left: -9999px;
+  }
+
+  .tr {
+    display: flex;
+  }
+
+  .td {
+    list-style-type: none;
+    padding: 10px;
+    position: relative;
+  }
+
+  td:hover .large {
+    left: 20px;
+    top: -150px;
+  }
+
+  .large-image {
+    border-radius: 4px;
+     box-shadow: 1px 1px 3px 3px rgba(127, 127, 127, 0.15);;
+  }

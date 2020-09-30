@@ -15,7 +15,13 @@ class ProductCategoriesEdit extends Component{
         name:'',
         // description:'',
         image:'',
-        myimg:''
+        myimg:'',
+        valid:false,
+        valid1:false,
+        errors: {
+            name: '',
+            image:''
+        }
     }
 
     componentDidMount = async () =>
@@ -33,10 +39,38 @@ class ProductCategoriesEdit extends Component{
         this.setState({myimg:category[0].image.replace('/images','')})
     }
     onFileChange = (e) =>{
-        // this.setState({ profileImg: e.target.files[0] })
+        const imageFile = e.target.files[0];
+        let errors = this.state.errors;
+
+        if (!imageFile.name.match(/\.(jpg|jpeg|png)$/)) {
+            errors.image = 'image Should be jpg,jpeg or png';
+            this.setState({valid1:true});
+        }
+        else
+        {
+            errors.image = '';
+            this.setState({valid1:false});
+        }
         this.setState(
-            { image: e.target.files[0] }
-            )
+        { image: e.target.files[0] }
+        )
+    }
+    
+    onTodoChange(value){
+        let errors = this.state.errors;
+        if(value.length > 1)
+        {
+            errors.name ="";
+            this.setState({valid:false});
+        }
+        else
+        {
+            errors.name = "Name is Required";
+            this.setState({valid:true});
+        }
+        this.setState({
+            name: value
+        });
     }
     postDataHandler = async (e) =>{
         e.preventDefault();
@@ -58,6 +92,20 @@ class ProductCategoriesEdit extends Component{
         await this.props.history.replace('/admin/product_categories');
     }
     render(){
+        const {errors} = this.state;
+        let proderr = "";
+        if(this.state.valid === true && this.state.valid1 === true)
+        {   
+            proderr = "true";
+        }  
+        else if(this.state.valid === false && this.state.valid1 === false)
+        {
+            proderr = "false";
+        }
+        else
+        {
+            proderr = "true";
+        }
         return(
             <Card>
                 <Card.Header className={classes.Header}>
@@ -66,29 +114,28 @@ class ProductCategoriesEdit extends Component{
                     </div>
                 </Card.Header>
                 <Card.Body>
-                <Form enctype="multipart/form-data">
+                <Form>
                     
                     <Form.Control type="hidden" value={this.state.id || ''} onChange={(event) => this.setState({id: event.target.value})} placeholder="Enter Id" />
                     <Form.Group controlId="exampleForm.ControlTextarea1">
                         <Form.Label>Category Name</Form.Label>
-                        <Form.Control type="text" value={this.state.name || ''} onChange={(event) => this.setState({name: event.target.value})} placeholder="Enter Category" />
+                        <Form.Control type="text" value={this.state.name || ''} onChange={e => this.onTodoChange(e.target.value)} placeholder="Enter Category" />
+                        <span><font color="red">{errors.name}</font></span>
                     </Form.Group>
-                    {/* <Form.Group controlId="exampleForm.ControlTextarea2">
-                        <Form.Label>Description</Form.Label>
-                        <Form.Control rows="4" type="text" value={this.state.description || ''} onChange={(event) => this.setState({description: event.target.value})} placeholder="Enter Description" />
-                    </Form.Group> */}
+
                     <Form.Group controlId="exampleForm.ControlTextarea3">
                         <Form.Label>Image</Form.Label>
                         <Form.Control type="file" name="image" onChange={this.onFileChange}/>
-                        {this.state.image === "" ? "":<img src={"http://localhost:8080"+this.state.myimg} alt="description" width="50px"/>}
-                        
+                        <span><font color="red">{errors.image}</font></span>
+                        {this.state.image === "" ? "":<img src={"http://localhost:8080"+this.state.myimg} alt="description" width="50px"/>}    
                     </Form.Group>
+
                     <Form.Group controlId="exampleForm.ControlTextarea4">
-                        <Button onClick={this.postDataHandler} variant="primary">
-                            Submit
-                        </Button>
+                    <Button disabled={proderr === "true" ? true : false} onClick={this.postDataHandler} type="button" variant="primary">
+                        Submit
+                    </Button>
                         </Form.Group>
-                    </Form>
+                </Form>
                 </Card.Body>
             </Card>
         ) 

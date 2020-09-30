@@ -16,12 +16,11 @@ const validateForm = (errors) => {
 class ProductCategoriesAdd extends Component{
     state = {
         name:"",
-        // description:"",
         image:"",
-        formErrors: {},
+        valid:true,
+        valid1:true,
         errors: {
             name: '',
-            // description: '',
             image:''
         }
     }
@@ -33,51 +32,88 @@ class ProductCategoriesAdd extends Component{
         
         switch (name) {
           case 'name': 
-            errors.name = value.length < 1 ? 'name Required' : '';
+            errors.name = value.length < 1 ? 'Name is Required' : '';
             break;
-        //   case 'description': 
-        //     errors.description = value.length < 1 ? 'description Required' : '';
-        //     break;
           default:
             break;
         }
-      
+        if(errors.name.length > 1)
+        {
+            this.setState({valid:true});
+        }
+        else
+        {
+            this.setState({valid:false});
+        }
         this.setState({errors, [name]: value}, ()=> {
             console.log(errors)
         })
       }
     handleSubmit = async (event) => {
         event.preventDefault();
-        if(validateForm(this.state.errors)) {            
+        if(validateForm(this.state.errors)) {   
+            
         console.info('Valid Form')
         }else{
         console.error('Invalid Form')
         }
     }
     onFileChange = (e) =>{
-        // this.setState({ profileImg: e.target.files[0] })
+        const imageFile = e.target.files[0];
+        let errors = this.state.errors;
+
+        if (!imageFile) {
+            errors.image = 'image Required';
+            this.setState({valid1:true});
+        }
+        else
+        {
+            errors.image = '';
+            this.setState({valid1:false});
+        }
+    
+        if (!imageFile.name.match(/\.(jpg|jpeg|png)$/)) {
+            errors.image = 'image Should be jpg,jpeg or png';
+            this.setState({valid1:true});
+        }
+        else
+        {
+            errors.image = '';
+            this.setState({valid1:false});
+        }
         this.setState(
-            { image: e.target.files[0] }
-            )
+        { image: e.target.files[0] }
+        )
     }
     postDataHandler = async (e) =>{
         e.preventDefault();
         const data = new FormData()
         data.append('name', this.state.name)
-        // data.append('description', this.state.description)
         data.append('image', this.state.image)
         
         await this.props.AddProductCategories(data);
         await this.props.fetchProductCategories();
-        this.setState({
-            name: '',
-            // description: ''
-        })
+        // this.setState({
+        //     name: '',
+        // })
         await this.props.history.push('/admin/product_categories'); 
     }
 
     render(){
-        const {errors} = this.state;  
+        const {errors} = this.state;
+        let proderr = "";
+        if(this.state.valid === true && this.state.valid1 === true)
+        {   
+            proderr = "true";
+        }  
+        else if(this.state.valid === false && this.state.valid1 === false)
+        {
+            proderr = "false";
+        }
+        else
+        {
+            proderr = "true";
+        }
         return(
             <Card>
                 <Card.Header className={classes.Header}>
@@ -86,29 +122,22 @@ class ProductCategoriesAdd extends Component{
                     </div>
                 </Card.Header>
                 <Card.Body>
-                    <Form onSubmit={this.handleSubmit}>
-                    
+                    <Form onSubmit={() => this.handleSubmit}>
+
                     <Form.Group controlId="exampleForm.ControlTextarea1">
                         <Form.Label>Category Name</Form.Label>
-                        <Form.Control type="text" name="name" onChange={this.handleChange} placeholder="Enter Category"/>
-                        {errors.name.length > 0 && 
-                        <span><font color="red">{errors.name}</font></span>}
+                        <Form.Control type="text" name="name" onChange={this.handleChange} placeholder="Enter Category" autoComplete="new-password"/>
+                        
+                        <span><font color="red">{errors.name}</font></span>
                     </Form.Group>
-
-
-                    {/* <Form.Group controlId="exampleForm.ControlTextarea2">
-                        <Form.Label>Description</Form.Label>
-                        <Form.Control type="text" name="description" onChange={this.handleChange} placeholder="Enter Description"/>
-                        {errors.description.length > 0 && 
-                        <span><font color="red">{errors.description}</font></span>}
-                    </Form.Group> */}
 
                     <Form.Group controlId="exampleForm.ControlTextarea3">
                         <Form.Label>Image</Form.Label>
                         <Form.Control type="file" name="image" onChange={this.onFileChange}/>
+                        <span><font color="red">{errors.image}</font></span>
                     </Form.Group>
                     
-                    <Button disabled={(errors.name.length > 0)} onClick={this.postDataHandler} variant="primary">
+                    <Button disabled={proderr === "true" ? true : false} onClick={this.postDataHandler} type="button" variant="primary">
                         Submit
                     </Button>
                     

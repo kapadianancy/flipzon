@@ -23,68 +23,73 @@ class Order extends Component{
 		this.setState({ show: false });
 	};
     renderOrderDetails = (ordersDetails) => { 
-        return ordersDetails.map((ordersDetails, index) => 
-        <Modal.Body scrollable={true}>
-            <tr key={"myindex"+index+1}>
-                <td>
+        return ordersDetails.map((ordersDetails, index) => <tbody key={"index0"+index}>
+            <tr>
+                <th>
                     #{index+1}
-                <tr>
-                    <td>
-                        Product Categories
-                    </td>
-                    <td>
-                        {ordersDetails.product.Product_category.name}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Product Name
-                    </td>
-                    <td>
-                        {ordersDetails.product.name}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Quantity
-                    </td>
-                    <td>
-                        {ordersDetails.quantity}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        Price 
-                    </td>
-                    <td>
-                        {ordersDetails.price}
-                    </td>
-                </tr>
+                </th>
+            </tr>        
+            <tr>
+                <th>
+                    Product Categories :- 
+                </th>
+                <td>
+                    {ordersDetails.product.Product_category.name}
                 </td>
-            </tr>  
-            </Modal.Body>
+            </tr>
+            <tr>
+                <th>
+                    Product Name :- 
+                </th>
+                <td>
+                    {ordersDetails.product.name}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Quantity :- 
+                </th>
+                <td>
+                    {ordersDetails.quantity}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Price :- 
+                </th>
+                <td>
+                    {ordersDetails.price}
+                </td>
+            </tr>
+            <hr></hr>
+            </tbody>
         )
     }
-    renderProductOrder = (orders) => { 
-        
-        let orderData = orders.map((orders, index) => <tr key={"index"+index+1}>
-            <td>{index+1}</td>
-            <td>{orders.user.username}</td>
-            <td>{orders.user.address}</td>
-            <td>{orders.user.email}</td>
-            <td>{orders.user.contact}</td>
-            <td>{orders.totalPrice}</td>
-            <td><Button variant="info" onClick={() => this.handleShow(orders.id)}>View Order</Button></td>
-            {orders.status === "Completed Delivery" ? <td><Alert variant="success"> {orders.status} </Alert></td> : 
+    renderProductOrder = (orders, activeOld, perPage) => {
+            let ordersArr = [];
+            let active = (activeOld-1)*perPage;
+            for(let i=active;i<(activeOld*perPage);i++) {
+                if(orders[i]) {
+                    ordersArr.push(
+                        <tr key={orders[i].id}>
+                            <td>{i+1}</td>
+                            <td>{orders[i].user.username}</td>
+                            <td>{orders[i].user.address}</td>
+                            <td>{orders[i].user.email}</td>
+                            <td>{orders[i].user.contact}</td>
+                            <td>{orders[i].totalPrice}</td>
+                            <td><Button variant="info" onClick={() => this.handleShow(orders[i].id)}>View Order</Button></td>
+                            {orders[i].status === "Completed Delivery" ? <td><Alert variant="success"> {orders[i].status} </Alert></td> : 
 
-            <td><Alert variant="warning"> <Alert.Link onClick={() => this.updateHandler(orders.id)}>{orders.status}</Alert.Link></Alert></td>
+                            <td><Alert variant="warning"> <Alert.Link onClick={() => this.updateHandler(orders[i].id)}>{orders[i].status}</Alert.Link></Alert></td>
+                            }
+                        </tr>
+                    )
+                }
             }
-            {/* <Link variant="warning" onClick={() => this.updateHandler(orders.id)}>{orders.status}</Link>             */}
-            </tr>  
-        )
-        return orderData
-    }
-   
+            return ordersArr;
+        }
+    
     render(){
         return <div>
         <Table responsive striped bordered hover size="sm">
@@ -101,27 +106,27 @@ class Order extends Component{
             </tr>
         </thead>
         <tbody>
-        { this.renderProductOrder(this.props.orders) }     
+        { this.renderProductOrder(this.props.orders, this.props.active, this.props.perPage) }     
         </tbody>
         </Table>
-        <Modal show={this.state.show}
+       
+        <Table>
+            <thead>
+            <Modal show={this.state.show}
 			onHide={this.handleHide}
 			dialogClassName="modal-90w"
 			aria-labelledby="example-custom-modal-styling-title">
-		
-        <Table>
-            <thead>
-				<Modal.Header closeButton>
-					<Modal.Title id="example-custom-modal-styling-title">
-						Order Details
-					</Modal.Title>
-				</Modal.Header>	
+                <Modal.Header closeButton>
+                    <Modal.Title id="example-custom-modal-styling-title">
+                        Order Details
+                    </Modal.Title>
+                </Modal.Header>	
+                <Modal.Body key={"mindex"} scrollable={"true"}>
+                    {this.renderOrderDetails(this.props.ordersDetails) }
+                </Modal.Body>
+            </Modal>
             </thead>
-        <tbody>
-            {this.renderOrderDetails(this.props.ordersDetails) }
-        </tbody>
         </Table>
-        </Modal>
         </div>
     }
 }
