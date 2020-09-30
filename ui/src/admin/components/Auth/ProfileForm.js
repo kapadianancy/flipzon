@@ -74,7 +74,7 @@ const ProfileForm = (props) => {
 
     let alert = null;
     if(done) {
-        alert = <Alert variant="info" dismissible>
+        alert = <Alert variant="info">
             Your profile updated!
         </Alert>
     }

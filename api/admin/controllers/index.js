@@ -3,4 +3,5 @@ module.exports = (app) => {
     require('./OrderAdminController')(app);
     require('./ProductAdminController')(app);
     require('./AuthController')(app);
+    require('./UserController')(app);
 }

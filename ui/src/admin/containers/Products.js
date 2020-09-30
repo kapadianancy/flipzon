@@ -4,6 +4,8 @@ import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom';
 import Pagination from 'react-bootstrap/Pagination'
+import Spinner from 'react-bootstrap/Spinner'
+import Form from 'react-bootstrap/Form'
 
 import * as classes from './Products.module.css'
 import ProductList from '../components/Product/ProductList/ProductList';
@@ -20,22 +22,19 @@ const renderPaginationItems = (total, active, limit, changeActive) => {
 }
 
 const Products = (props) => {
-    const perPage = 2;
+    const [perPage, setPerPage] = useState(5)
     const [active, setActive] = useState(1)
+
     useEffect(() => {
         props.fetchProducts();
     }, [props.fetchProducts]);
+
     const changeActive = (index) => {
         setActive(index);
     }
-    let productData = "Loading";
+    let productData = <Spinner animation="border" />;
     if(props.products.length > 0) {
-        productData = [
-            <ProductList key={1} deleteProduct={props.deleteProduct} active={active} perPage={perPage} products={props.products} />,
-            <Pagination key={2} >
-                { renderPaginationItems(props.products.length, active, perPage, changeActive) }
-            </Pagination>
-        ]
+        productData = <ProductList key={1} deleteProduct={props.deleteProduct} active={active} perPage={perPage} products={props.products} />
     }
     return(
         <>
@@ -49,6 +48,21 @@ const Products = (props) => {
                 <Card.Body>
                     {  productData }
                 </Card.Body>
+                <Card.Footer className={classes.Footer}>
+                    {
+                        props.products ?
+                        <Pagination className={classes.Pagination} >
+                            { renderPaginationItems(props.products.length, active, perPage, changeActive) }
+                        </Pagination> : null
+                    }
+                    <Form.Control as="select" value={perPage} custom className={classes.Select} onChange={ (e) => { setPerPage(e.target.value) } }>
+                        <option>2</option>
+                        <option>5</option>
+                        <option>10</option>
+                        <option>20</option>
+                        <option>30</option>
+                    </Form.Control>
+                </Card.Footer>
             </Card>
         </>
     )
