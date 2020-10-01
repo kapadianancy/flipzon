@@ -31,17 +31,18 @@ class CategorySlider extends Component {
         let category = [];
         let c = this.props.Categories;
         let n = this.props.Categories.length;
-       
+
         let card = (j) => {
             return (
                 <Card
                     key={c[j].id}
                     style={{ width: "18rem", padding: "10px", display: "inline-block" }}
                 >
-                    <Card.Img variant="top" height="177px" width="266px" src={Product} />
+                    <Card.Img variant="top" height="177px" width="266px" src={`http://localhost:8080${c[j].image}`} />
+                 
                     <Card.Body>
                         <Card.Title>{c[j].name}</Card.Title>
-                        <Card.Text>{c[j].description}</Card.Text>
+                        {/* <Card.Text>{c[j].description}</Card.Text> */}
                         <Button style={style.cardBtn} onClick={() => this.clickHandler(c[j].id)}>View Product</Button>
 
                     </Card.Body>
@@ -64,7 +65,7 @@ class CategorySlider extends Component {
                 </Carousel.Item>
             );
 
-           // return category;
+            // return category;
         }
 
         return (

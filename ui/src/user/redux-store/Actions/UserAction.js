@@ -144,7 +144,6 @@ export const changepassword = (passwords) => {
         })
     };
 };
-<<<<<<< HEAD
 
 export const viewOrder = () => {
     return async dispatch => {
@@ -166,5 +165,3 @@ export const viewOrder = () => {
         })
     };
 };
-=======
->>>>>>> 11260f45fafadf4c52ef5a33f019edab92d88b68
