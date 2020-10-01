@@ -47,6 +47,21 @@ export const logout = () => {
     }
 }
 
+export const forgotPassword = (email) => {
+    return async(dispatch) => {
+        dispatch({ type: types.INIT_FORGOT_PASSWORD });
+        try {
+            const { data } = await axios.post("admin/forgotPassword", { email });
+            dispatch({ type: types.FORGOT_PASSWORD_SUCCESS, message: data.message });
+        } catch (error) {
+            let message = "Network Error";
+            if(error.response.status === 422) {
+                message = error.response.data.message;
+            }
+            dispatch({ type: types.FORGOT_PASSWORD_FAILED, error: message });
+        }
+    }
+}
 
 export const tryAutoLogin = () => {
     return async(dispatch) => {

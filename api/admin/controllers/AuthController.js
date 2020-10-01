@@ -13,6 +13,21 @@ module.exports = (app) => {
     app.get("/admin/me", auth, (req,res,next) => {
         res.send(req.user);
     });
+    app.post("/admin/forgotPassword", async (req,res,next) => {
+        try {
+            if(!req.body.email) {
+                let error = {
+                    statusCode: 400,
+                    message: "Email is required"
+                }
+                throw error;
+            }
+            const message = await AuthService.forgotPassword(req.body.email);
+            res.send({ message })
+        } catch(error) {
+            next(error);
+        }
+    })
     app.post("/admin/register", async (req,res,next) => {
         try {
             let user = await AuthService.register(req.body.username, req.body.email, req.body.password );

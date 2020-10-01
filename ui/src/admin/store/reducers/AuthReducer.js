@@ -6,7 +6,9 @@ const initialStore = {
     loading: false,
     loginError: null,
     registerError: null,
-    updateError: null
+    updateError: null,
+    forgotPasswordError: null,
+    message: null
 }
 
 const state = (state = initialStore, action) => {
@@ -90,15 +92,32 @@ const state = (state = initialStore, action) => {
             return {
                 ...state,
                 loading: false,
-                error: action.error
+                updateError: action.error
             }
         case types.AUTO_LOGIN_SUCCESS:
             return {
                 ...state,
-                ...state,
                 loading: false,
                 token: action.token,
                 user: action.user,
+            }
+        case types.INIT_FORGOT_PASSWORD:
+            return {
+                ...state,
+                loading: true,
+                forgotPasswordError: null
+            }
+        case types.FORGOT_PASSWORD_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                message: action.message
+            }
+        case types.FORGOT_PASSWORD_FAILED:
+            return {
+                ...state,
+                loading: false,
+                forgotPasswordError: action.error
             }
         default:
             return state;
