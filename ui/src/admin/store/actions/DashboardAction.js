@@ -1,12 +1,17 @@
 import * as types from '../ActionTypes'
-import axios from 'axios'
+import axios from '../../../axios'
 
 export const fetchTotal = () => {
-    return async dispatch => {
+    return async (dispatch,getState) => {
         dispatch({
             type:types.INIT_TOTAL
         }) 
-        await axios.get('http://localhost:8080/admin/dashboard').then(response => {
+        let token = getState().adminAuth.token
+        await axios.get('admin/dashboard',{
+            headers: {
+                "Authorization": token
+            }
+        }).then(response => {
             dispatch({
                 type:types.FETCH_TOTAL_SUCCESS,
                 total:response.data
@@ -21,11 +26,16 @@ export const fetchTotal = () => {
 };
 
 export const fetchProductTotal = () => {
-    return async dispatch => {
+    return async (dispatch,getState) => {
         dispatch({
             type:types.INIT_PRODUCT_TOTAL
         }) 
-        await axios.get('http://localhost:8080/admin/dashboardProduct').then(response => {
+        let token = getState().adminAuth.token
+        await axios.get('admin/dashboardProduct',{
+            headers: {
+                "Authorization": token
+            }
+        }).then(response => {
             dispatch({
                 type:types.FETCH_PRODUCT_TOTAL_SUCCESS,
                 totals:response.data

@@ -1,6 +1,6 @@
 const Product_Categories_Services = require('../services/Product_CategoriesAdminServices');
 var multer  = require('multer');
-
+const auth = require("../middlewares/auth");
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'images/')
@@ -16,17 +16,17 @@ const upload = multer({ storage: storage });
 module.exports = (app) => {
 
   // return list of Product_Category
-app.get("/admin/product_categories", async (req, res, next) => {
+app.get("/admin/product_categories", auth, async (req, res, next) => {
     let product_categories = await Product_Categories_Services.getProduct_Category();
     res.send(product_categories);
     })
   // return single Product_Category
-app.get("/admin/product_categories/:id", async (req, res, next) => {
+app.get("/admin/product_categories/:id", auth, async (req, res, next) => {
     let product_categories = await Product_Categories_Services.getSingleProduct_Category(req.params.id);
     res.send(product_categories);
     })
 // add  Product_Category
-app.post("/admin/product_categories", upload.single('image'),async (req, res, next) => {
+app.post("/admin/product_categories", auth, upload.single('image'),async (req, res, next) => {
     if(req.file) {
         req.body = {
             ...req.body,
@@ -42,7 +42,7 @@ app.post("/admin/product_categories", upload.single('image'),async (req, res, ne
     }
 })
 //Edit Product_Category
-app.put("/admin/product_categories/:id", upload.single('image'),async (req, res, next) => {
+app.put("/admin/product_categories/:id", auth, upload.single('image'),async (req, res, next) => {
     if(req.file) {
         req.body = {
             ...req.body,
@@ -56,7 +56,7 @@ app.put("/admin/product_categories/:id", upload.single('image'),async (req, res,
         next(error);
     }
 })
-app.put("/admin/categories/:id", async (req, res, next) => {
+app.put("/admin/categories/:id", auth, async (req, res, next) => {
     try {
         let product_categories = await Product_Categories_Services.edit_DeleteProduct_Category(req.params.id);
         res.send(product_categories);
@@ -65,7 +65,7 @@ app.put("/admin/categories/:id", async (req, res, next) => {
     }
 })
 // Delete Product_Category
-app.delete("/admin/product_categories/:id", async (req, res, next) => {
+app.delete("/admin/product_categories/:id", auth, async (req, res, next) => {
     try {
         let product_categories = await Product_Categories_Services.deleteProduct_Category(req.params.id);
         res.send(product_categories);

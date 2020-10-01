@@ -1,12 +1,17 @@
 import * as types from '../ActionTypes'
-import axios from 'axios'
+import axios from '../../../axios'
 
 export const fetchOrders = () => {
-    return async dispatch => {
+    return async (dispatch,getState) => {
         dispatch({
             type:types.INIT_FETCH_ORDERS
         }) 
-        await axios.get('http://localhost:8080/admin/orders').then(response => {
+        let token = getState().adminAuth.token
+        await axios.get('admin/orders',{
+            headers: {
+                "Authorization": token
+            }
+        }).then(response => {
             dispatch({
                 type:types.FETCH_ORDERS_SUCCESS,
                 orders:response.data
@@ -21,11 +26,16 @@ export const fetchOrders = () => {
 };
 
 export const fetchOrdersDetails = (id) => {
-    return async dispatch => {
+    return async (dispatch,getState) => {
         dispatch({
             type:types.INIT_FETCH_ORDERS_DETAILS
-        }) 
-        await axios.get('http://localhost:8080/admin/allorders/'+id).then(response => {
+        })
+        let token = getState().adminAuth.token 
+        await axios.get('admin/allorders/'+id,{
+            headers: {
+                "Authorization": token
+            }
+        }).then(response => {
             dispatch({
                 type:types.FETCH_ORDERS_DETAILS_SUCCESS,
                 ordersDetails:response.data
@@ -41,11 +51,16 @@ export const fetchOrdersDetails = (id) => {
 
 export const updateOrders = (id,put) => {
    
-    return async dispatch => {
+    return async (dispatch,getState) => {
         dispatch({
             type:types.INIT_UPDATE_ORDERS
         }) 
-        await axios.put('http://localhost:8080/admin/orders/'+id,put).then(response => {
+        let token = getState().adminAuth.token
+        await axios.put('admin/orders/'+id,put,{
+            headers: {
+                "Authorization": token
+            }
+        }).then(response => {
             dispatch({
                 type:types.UPDATE_ORDERS_SUCCESS,
                 orders_id:id

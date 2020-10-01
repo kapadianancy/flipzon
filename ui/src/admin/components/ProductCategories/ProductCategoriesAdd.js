@@ -126,15 +126,18 @@ class ProductCategoriesAdd extends Component{
 
                     <Form.Group controlId="exampleForm.ControlTextarea1">
                         <Form.Label>Category Name</Form.Label>
-                        <Form.Control type="text" name="name" onChange={this.handleChange} placeholder="Enter Category" autoComplete="new-password"/>
-                        
-                        <span><font color="red">{errors.name}</font></span>
+                        <Form.Control isInvalid={errors.name} type="text" name="name" onChange={this.handleChange} placeholder="Enter Category"/>
+                        <Form.Control.Feedback type="invalid">
+                            {errors.name}
+                        </Form.Control.Feedback>
                     </Form.Group>
 
-                    <Form.Group controlId="exampleForm.ControlTextarea3">
+                    <Form.Group controlId="exampleForm.ControlTextarea2">
                         <Form.Label>Image</Form.Label>
-                        <Form.Control type="file" name="image" onChange={this.onFileChange}/>
-                        <span><font color="red">{errors.image}</font></span>
+                        <Form.Control isInvalid={errors.image} type="file" name="image" onChange={this.onFileChange}/>
+                        <Form.Control.Feedback type="invalid">
+                            {errors.image}
+                        </Form.Control.Feedback>
                     </Form.Group>
                     
                     <Button disabled={proderr === "true" ? true : false} onClick={this.postDataHandler} type="button" variant="primary">

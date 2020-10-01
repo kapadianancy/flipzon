@@ -36,7 +36,7 @@ class ProductCategoriesEdit extends Component{
             image:category[0].image
         })  
 
-        this.setState({myimg:category[0]})
+        this.setState({myimg:category[0].image})
     }
     onFileChange = (e) =>{
         const imageFile = e.target.files[0];
@@ -119,14 +119,18 @@ class ProductCategoriesEdit extends Component{
                     <Form.Control type="hidden" value={this.state.id || ''} onChange={(event) => this.setState({id: event.target.value})} placeholder="Enter Id" />
                     <Form.Group controlId="exampleForm.ControlTextarea1">
                         <Form.Label>Category Name</Form.Label>
-                        <Form.Control type="text" value={this.state.name || ''} onChange={e => this.onTodoChange(e.target.value)} placeholder="Enter Category" />
-                        <span><font color="red">{errors.name}</font></span>
+                        <Form.Control isInvalid={errors.name}  type="text" value={this.state.name || ''} onChange={e => this.onTodoChange(e.target.value)} placeholder="Enter Category" />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.name}
+                        </Form.Control.Feedback>
                     </Form.Group>
 
                     <Form.Group controlId="exampleForm.ControlTextarea3">
                         <Form.Label>Image</Form.Label>
-                        <Form.Control type="file" name="image" onChange={this.onFileChange}/>
-                        <span><font color="red">{errors.image}</font></span>
+                        <Form.Control isInvalid={errors.name}  type="file" name="image" onChange={this.onFileChange}/>
+                        <Form.Control.Feedback type="invalid">
+                            {errors.image}
+                        </Form.Control.Feedback>
                         {this.state.image === "" ? "":<img src={"http://localhost:8080"+this.state.myimg} alt="description" width="50px"/>}    
                     </Form.Group>
 

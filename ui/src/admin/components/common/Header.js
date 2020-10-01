@@ -9,7 +9,7 @@ const Header = (props) => {
     <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
             <Nav.Link as={Link} to="/admin/dashboard">Dashboard</Nav.Link>
-            <Nav.Link as={Link} to="/admin/product_categories">ProductCategories</Nav.Link>
+            <Nav.Link as={Link} to="/admin/productcategories">ProductCategories</Nav.Link>
             <Nav.Link as={Link} to="/admin/products">Product</Nav.Link>
             <Nav.Link as={Link} to="/admin/order">Order</Nav.Link>
         </Nav>

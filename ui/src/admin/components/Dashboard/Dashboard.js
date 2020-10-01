@@ -60,9 +60,9 @@ class Dashboard extends Component{
         
         let d = this.state.dataPie.datasets[0].data;
         
-        d.push(this.state.totalOrder)
-        d.push(this.state.totalCompletedOrder)
-        d.push(this.state.totalPendingOrder)
+        d.push(this.props.total.totalOrder)
+        d.push(this.props.total.totalCompletedOrder)
+        d.push(this.props.total.totalPendingOrder)
 
     } 
     renderCategoryProduct = () =>{
@@ -93,7 +93,6 @@ class Dashboard extends Component{
                                 {this.state.totalProduct}
                             </Card.Text>
                         </Card.Body>
-                        
                     </Card>
                     <Card text={"white"} className={"cards1 mb-2"}>
                         <Card.Body className={"text"}> 
@@ -134,7 +133,7 @@ class Dashboard extends Component{
                 </CardDeck>
             </Card.Body>
         </Card>
-        <Card key={"index2"} style={{ width: '42rem',float:'left' }}>
+        <Card key={"index2"} style={{ width: '42rem',float:'left',height:'415px' }}>
             <Card.Body>
                 <Card.Title>Order Statistics</Card.Title>
                 <CardDeck>
@@ -145,7 +144,6 @@ class Dashboard extends Component{
                                 {this.state.totalCompletedOrder}
                             </Card.Text>
                         </Card.Body>
-                        
                     </Card>
                     <Card bg={'Light'.toLowerCase()} key={"6"} text={'Light'.toLowerCase() === 'light' ? 'dark' : 'white'} className="mb-2" style={{ width: '18rem' }}>
                         <Card.Body>
@@ -158,7 +156,7 @@ class Dashboard extends Component{
                 </CardDeck>
             </Card.Body>
         
-            <Card style={{ width: '42rem', borderWidth:0,marginTop:'-23px'}} key={"index3"}>
+            <Card style={{ width: '42rem', borderWidth:0}} key={"index3"}>
                 <Card.Body>
                 <Card.Title>Categories wise Products</Card.Title>
                 <ul key={"u1"} className="list-group">
