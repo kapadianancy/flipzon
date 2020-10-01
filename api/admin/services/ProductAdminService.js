@@ -1,4 +1,7 @@
 const fs = require("fs");
+const Sequelize = require("sequelize");
+const Op = Sequelize.Op;
+const $or = Op.or;
 const Product = require("../../models/Product");
 const Category = require("../../models/Product_category");
 const ProductImages = require("../../models/Product_image");
@@ -43,6 +46,26 @@ const fetchSingleProduct = async(id) => {
         return product;
     } catch(error) {
         throw error;
+    }
+}
+const searchProducts = async(wordsArr, strong) => {
+    try {
+        let qry = wordsArr.map( word => ({ [Op.like]: `%${word}%` }))
+        let products = await Product.findAll({
+            where: {
+                name: {
+                    [strong ? Op.and : Op.or]: qry
+                },
+                isDeleted: false
+            },
+            include: [
+                { model: Category, as: "Product_category", attributes: ["name"] }
+            ]
+        });
+        return products;
+    } catch(error) {
+        console.log(error);
+        throw error
     }
 }
 const addProduct = async (data, images) => {
@@ -170,6 +193,7 @@ const deleteProductImage = async (id) => {
 }
 module.exports = {
     fetchProducts,
+    searchProducts,
     fetchSingleProduct,
     addProduct,
     editProduct,

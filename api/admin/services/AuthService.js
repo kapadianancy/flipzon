@@ -69,6 +69,12 @@ const update = async (data, id) => {
             where: { id }
         });
     } catch(error) {
+        if(error instanceof ValidationError) {
+            error = {
+                statusCode: 422,
+                message: error.errors[0].message
+            }
+        }
         throw error
     }
 }

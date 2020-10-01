@@ -63,7 +63,7 @@ export const tryAutoLogin = () => {
             });
             dispatch({ type: types.AUTO_LOGIN_SUCCESS, token, user: result.data });
         } catch(error) {
-            console.log(error);
+            // console.log(error);
             // dispatch({ type: types.LOGIN_FAILED, error: error.message })
         }
     }
@@ -81,7 +81,12 @@ export const updateProfile = (data) => {
             });
             dispatch({ type: types.UPDATE_PROFILE_SUCCESS, username: data.username });
         } catch(error) {
-            dispatch({ type: types.UPDATE_PROFILE_FAILED, error: error.message })
+            let message = "Network Error";
+            if(error.response.status === 422) {
+                message = error.response.data.message;
+            }
+            dispatch({ type: types.UPDATE_PROFILE_FAILED, error: message })
+            throw error
         }
     }   
 }
