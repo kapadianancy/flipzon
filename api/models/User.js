@@ -11,12 +11,18 @@ const User =db.sequelize.define("user", {
         username: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true
+            unique: {
+                args:true,
+                msg: "Username is already taken!"
+            }
         },
         email: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true,
+            unique: {
+                args: true,
+                msg: "Email is already taken!"
+            },
             isEmail: true
         },
         password: {

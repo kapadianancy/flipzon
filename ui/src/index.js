@@ -15,6 +15,7 @@ import ProductCategoryReducer from './user/redux-store/Reducers/ProductCategory'
 import AdminProductReducer from './admin/store/reducers/ProductReducer';
 import AdminProductCategoriesReducer from './admin/store/reducers/Product_CategoriesReducer';
 import AdminOrdersReducer from './admin/store/reducers/OrdersReducer';
+import AdminTotalReducer from './admin/store/reducers/DashboardReducer';
 import ProductCategory from './user/redux-store/Reducers/ProductCategory';
 import Product from './user/redux-store/Reducers/Product';
 import AdminUserReducer from './admin/store/reducers/UserReducer'
@@ -26,7 +27,10 @@ const rootReducer = combineReducers({
   adminProduct: AdminProductReducer,
   adminProductCategories:AdminProductCategoriesReducer,
   adminOrdersReducer:AdminOrdersReducer,
+  adminTotalReducer:AdminTotalReducer,
   ProductCategory:ProductCategory,
+  Product:Product,
+  adminAuth: AdminAuthReducer,
   Product:Product,
   adminAuth: AdminAuthReducer,
   adminUser: AdminUserReducer

@@ -2,93 +2,97 @@ import React , {Component} from 'react';
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
-import { Link } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal'
+import Alert from 'react-bootstrap/Alert'
+import { fetchOrdersDetails,updateOrders } from '../../store/actions/OrderAction'
 
 class Order extends Component{
-    constructor(props, context) {
-		super(props, context);
+	state = {
+		show: false,
+	};
 
-		this.state = {
-			show: false,
-		};
+	handleShow = async (id) => {
+		await this.props.fetchOrdersDetails(id);
+		this.setState({ show: true });
+	};
 
-		this.handleShow = () => {
-			this.setState({ show: true });
-		};
-
-		this.handleHide = () => {
-			this.setState({ show: false });
-		};
-	}
-    renderProductOrder = (orders) => {
-        //   debugger;
-        return orders.map((orders, index) => 
-            <tr key={"index"+index+1}>
-                <td>{index+1}</td>
-                <td>{orders.user.username}</td>
-                <td>{orders.user.address}</td>
-                <td>{orders.user.email}</td>
-                <td>{orders.user.contact}</td>
-                <td>{orders.totalPrice}</td>
-                <td><Button variant="info" onClick={this.handleShow}>View Order</Button></td>
-                <td><Button variant="info" onClick={() => this.updateHandler(orders.id)} as={Link} to={`/admin/ProductCategoriesEdit/`}>{orders.status}</Button></td>
-                <Modal
-                    show={this.state.show}
-                    onHide={this.handleHide}
-                    dialogClassName="modal-90w"
-                    aria-labelledby="example-custom-modal-styling-title">
-                    <Modal.Header closeButton>
-                        <Modal.Title id="example-custom-modal-styling-title">
-                            Order Details
-                        </Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <p>
-                            <table>
-                                <tr>
-                                    <td>
-                                        Product Name
-                                    </td>
-                                    <td>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Quantity
-                                    </td>
-                                    <td>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Total Price
-                                    </td>
-                                    <td>
-
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Order Date
-                                    </td>
-                                    <td>
-
-                                    </td>
-                                </tr>
-                            </table>
-                        </p>
-                    </Modal.Body>
-                </Modal>
+    updateHandler = async (id) => {
+        await this.props.updateOrders(id);
+	};
+	handleHide = (id) => {
+		this.setState({ show: false });
+	};
+    renderOrderDetails = (ordersDetails) => { 
+        return ordersDetails.map((ordersDetails, index) => <tbody key={"index0"+index}>
+            <tr>
+                <th>
+                    #{index+1}
+                </th>
+            </tr>        
+            <tr>
+                <th>
+                    Product Categories :- 
+                </th>
+                <td>
+                    {ordersDetails.product.Product_category.name}
+                </td>
             </tr>
-            
+            <tr>
+                <th>
+                    Product Name :- 
+                </th>
+                <td>
+                    {ordersDetails.product.name}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Quantity :- 
+                </th>
+                <td>
+                    {ordersDetails.quantity}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Price :- 
+                </th>
+                <td>
+                    {ordersDetails.price}
+                </td>
+            </tr>
+            </tbody>
         )
     }
-   
+    renderProductOrder = (orders, activeOld, perPage) => {
+            let ordersArr = [];
+            let active = (activeOld-1)*perPage;
+            for(let i=active;i<(activeOld*perPage);i++) {
+                if(orders[i]) {
+                    ordersArr.push(
+                        <tr key={orders[i].id}>
+                            <td>{i+1}</td>
+                            <td>{orders[i].user.username}</td>
+                            <td>{orders[i].user.address}</td>
+                            <td>{orders[i].user.email}</td>
+                            <td>{orders[i].user.contact}</td>
+                            <td>{orders[i].totalPrice}</td>
+                            <td>{orders[i].orderDate}</td>
+                            <td><Button variant="info" onClick={() => this.handleShow(orders[i].id)}>View Order</Button></td>
+                            {orders[i].status === "Completed Delivery" ? <td><Alert variant="success"> {orders[i].status} </Alert></td> : 
+
+                            <td><Alert variant="warning"> <Alert.Link onClick={() => this.updateHandler(orders[i].id)}>{orders[i].status}</Alert.Link></Alert></td>
+                            }
+                        </tr>
+                    )
+                }
+            }
+            return ordersArr;
+        }
+    
     render(){
-        return <Table responsive striped bordered hover size="sm">
+        return <>
+        <Table responsive striped bordered hover size="sm">
         <thead>
         <tr>
                 <th>#</th>
@@ -97,22 +101,49 @@ class Order extends Component{
                 <th>Email ID</th>
                 <th>Contact No</th>
                 <th>Total Price</th>
+                <th>Order Date</th>
                 <th>Order</th>
                 <th>Status</th>
             </tr>
         </thead>
         <tbody>
-            { this.renderProductOrder(this.props.orders) }
+        { this.renderProductOrder(this.props.orders, this.props.active, this.props.perPage) }     
         </tbody>
-    </Table>
+        </Table>
+       
+        <Table responsive striped bordered hover size="sm">
+            <Modal show={this.state.show}
+                onHide={this.handleHide}
+                dialogClassName="modal-90w"
+                aria-labelledby="example-custom-modal-styling-title">
+            <thead>
+                    <Modal.Header closeButton>
+                        <Modal.Title id="example-custom-modal-styling-title">
+                            Order Details
+                        </Modal.Title>
+                    </Modal.Header>	
+            </thead>
+                <Modal.Body key={"mindex"} scrollable={"true"}>
+                    {this.renderOrderDetails(this.props.ordersDetails) }
+                </Modal.Body>
+            </Modal>
+        </Table>
+        </>
     }
 }
 
-// const mapDispatchToProps = dispatch => {
-//     return {
-//         RemoveProductCategories: (id) => dispatch(RemoveProductCategories(id)),
-//         SingleProductCategories: (id) => dispatch(SingleProductCategories(id))
-//     }
-// }
+const mapStateToProps = state => {
+    return {
+        loading: state.adminOrdersReducer.loading,
+        ordersDetails: state.adminOrdersReducer.ordersDetails
+    }
+}
 
-export default connect(null, null)(Order);
+const mapDispatchToProps = dispatch => {
+    return {
+        fetchOrdersDetails: (id) => dispatch(fetchOrdersDetails(id)),
+        updateOrders:(id)=>dispatch(updateOrders(id))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Order);

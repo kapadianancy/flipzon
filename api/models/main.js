@@ -9,7 +9,7 @@ const Order=require("../models/Order");
 const Order_details=require("../models/Order_details");
 
 
-db.sequelize.sync({ alter: true }).then(() => {
+db.sequelize.sync({ alter: false }).then(() => {
     console.log("DB Droped, Resync and roles created.");
 });
 

@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import Card from 'react-bootstrap/Card'
 import { connect } from 'react-redux';
-import Image from 'react-bootstrap/Image'
-
-import Logo from '../../images/logo-2.jpg'
 import * as classes from './Auth.module.css'
 import Login from '../components/Auth/Login'
 import Register from '../components/Auth/Register'
@@ -35,7 +32,7 @@ const Auth = (props) => {
     }
     return <div className={classes.Container}>
         <Card className={classes.Card}>
-            <Card.Header className={classes.CardHeader}><Image  className={classes.Logo} src={Logo} /></Card.Header>
+            <Card.Header>Flipzon</Card.Header>
             <Card.Body className={classes.CardBody}>
                 { content }
             </Card.Body>

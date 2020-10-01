@@ -9,10 +9,10 @@ import Dashboard from './containers/Dashboard'
 import ProductFormController from './containers/ProductFormController'
 import Order from "./containers/Orders";
 import Auth from './containers/Auth';
-import Users from './containers/Users';
 import { connect } from 'react-redux';
 import { tryAutoLogin, logout } from './store/actions/AuthActions'
 import Profile from './containers/Profile';
+import Users from './containers/Users';
 import * as classes from './Admin.module.css'
 
 const Admin = (props) => {
@@ -39,8 +39,8 @@ const Admin = (props) => {
                     <Route path="/admin/products/add" exact component={ProductFormController} />
                     <Route path="/admin/products" exact component={Products} />
                     <Route path="/admin/ProductCategoriesAdd" exact component={ProductCategoriesAdd} />
-                    <Route path="/admin/ProductCategoriesEdit" exact component={ProductCategoriesEdit} />
-                    <Route path="/admin/product_categories" exact component={ProductCategories} />
+                    <Route path="/admin/ProductCategoriesEdit/:id" exact component={ProductCategoriesEdit} />
+                    <Route path="/admin/productcategories" exact component={ProductCategories} />
                     <Route path="/admin/order" exact component={Order} />
                     <Route path="/admin/profile" exact component={Profile} />
                     <Route path="/admin/users" exact component={Users} />

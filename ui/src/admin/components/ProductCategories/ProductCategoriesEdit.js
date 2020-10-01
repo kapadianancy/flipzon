@@ -13,39 +13,99 @@ class ProductCategoriesEdit extends Component{
     state = {
         id:'',
         name:'',
-        description:''
+        // description:'',
+        image:'',
+        myimg:'',
+        valid:false,
+        valid1:false,
+        errors: {
+            name: '',
+            image:''
+        }
     }
 
-    componentDidMount()
+    componentDidMount = async () =>
     {
-        // if(this.props.match.params.id) {
-            // const category = this.props.SingleProductCategories(this.props.match.params.id);
-        
-        // this.props.SingleProductCategories(this.)
-            const category = this.props.product_categorie
+        await this.props.SingleProductCategories(this.props.match.params.id);
+        let category = await this.props.product_categorie
+            
+        this.setState({
+            id:category[0].id,
+            name:category[0].name,
+            // description:category[0].description,
+            image:category[0].image
+        })  
 
-            this.setState({
-                id:category.id,
-                name:category.name,
-                description:category.description
-            })
-        // }   
+        this.setState({myimg:(category[0].image).replace('/public','')})
     }
+    onFileChange = (e) =>{
+        const imageFile = e.target.files[0];
+        let errors = this.state.errors;
 
+        if (!imageFile.name.match(/\.(jpg|jpeg|png)$/)) {
+            errors.image = 'image Should be jpg,jpeg or png';
+            this.setState({valid1:true});
+        }
+        else
+        {
+            errors.image = '';
+            this.setState({valid1:false});
+        }
+        this.setState(
+        { image: e.target.files[0] }
+        )
+    }
+    
+    onTodoChange(value){
+        let errors = this.state.errors;
+        if(value.length > 1)
+        {
+            errors.name ="";
+            this.setState({valid:false});
+        }
+        else
+        {
+            errors.name = "Name is Required";
+            this.setState({valid:true});
+        }
+        this.setState({
+            name: value
+        });
+    }
     postDataHandler = async (e) =>{
         e.preventDefault();
         
-        const put = {
-            id:this.state.id,
-            name:this.state.name,
-            description:this.state.description
-        }   
-        await this.props.updateProductCategories(put.id,put);
+        // const put = {
+        //     id:this.state.id,
+        //     name:this.state.name,
+        //     description:this.state.description,
+        //     image:this.state.image
+        // }   
+        const data = new FormData()
+        data.append('id', this.state.id)
+        data.append('name', this.state.name)
+        // data.append('description', this.state.description)
+        data.append('image', this.state.image)
+        
+        await this.props.updateProductCategories(this.state.id,data);
         await this.props.fetchProductCategories();
-        await this.props.history.replace('/admin/product_categories');
+        await this.props.history.replace('/admin/productcategories');
     }
     render(){
-        console.log(this.props);
+        const {errors} = this.state;
+        let proderr = "";
+        if(this.state.valid === true && this.state.valid1 === true)
+        {   
+            proderr = "true";
+        }  
+        else if(this.state.valid === false && this.state.valid1 === false)
+        {
+            proderr = "false";
+        }
+        else
+        {
+            proderr = "true";
+        }
         return(
             <Card>
                 <Card.Header className={classes.Header}>
@@ -59,18 +119,27 @@ class ProductCategoriesEdit extends Component{
                     <Form.Control type="hidden" value={this.state.id || ''} onChange={(event) => this.setState({id: event.target.value})} placeholder="Enter Id" />
                     <Form.Group controlId="exampleForm.ControlTextarea1">
                         <Form.Label>Category Name</Form.Label>
-                        <Form.Control type="text" value={this.state.name || ''} onChange={(event) => this.setState({name: event.target.value})} placeholder="Enter Category" />
+                        <Form.Control isInvalid={errors.name}  type="text" value={this.state.name || ''} onChange={e => this.onTodoChange(e.target.value)} placeholder="Enter Category" />
+                        <Form.Control.Feedback type="invalid">
+                            {errors.name}
+                        </Form.Control.Feedback>
                     </Form.Group>
-                    <Form.Group controlId="exampleForm.ControlTextarea2">
-                        <Form.Label>Description</Form.Label>
-                        <Form.Control rows="4" type="text" value={this.state.description || ''} onChange={(event) => this.setState({description: event.target.value})} placeholder="Enter Description" />
-                    </Form.Group>
+
                     <Form.Group controlId="exampleForm.ControlTextarea3">
-                        <Button onClick={this.postDataHandler} variant="primary">
-                            Submit
-                        </Button>
+                        <Form.Label>Image</Form.Label>
+                        <Form.Control isInvalid={errors.image}  type="file" name="image" onChange={this.onFileChange}/>
+                        <Form.Control.Feedback type="invalid">
+                            {errors.image}
+                        </Form.Control.Feedback>
+                        {this.state.image === "" ? "":<img src={"http://localhost:8080"+this.state.myimg} alt="description" width="50px"/>}    
+                    </Form.Group>
+
+                    <Form.Group controlId="exampleForm.ControlTextarea4">
+                    <Button disabled={proderr === "true" ? true : false} onClick={this.postDataHandler} type="button" variant="primary">
+                        Submit
+                    </Button>
                         </Form.Group>
-                    </Form>
+                </Form>
                 </Card.Body>
             </Card>
         ) 

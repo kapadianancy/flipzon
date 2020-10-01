@@ -2,6 +2,7 @@ import * as types from '../ActionTypes'
 
 const initialStore = {
     orders: [],
+    ordersDetails: [],
     order:{},
     loading: false,
     error: ""
@@ -9,16 +10,27 @@ const initialStore = {
 
 const store = (state = initialStore, action) => {
     switch (action.type) {
+        case types.INIT_FETCH_ORDERS_DETAILS:
+            return {
+                ...state,
+                loading: true,
+            };
+        case types.FETCH_ORDERS_DETAILS_SUCCESS:
+            return {
+                ...state,
+                ordersDetails: action.ordersDetails,
+                loading: false
+            }
+        case types.FETCH_ORDERS_DETAILS_FAILED:
+            return {
+                ...state,
+                loading: false,
+                error:action.error
+            }    
         case types.INIT_FETCH_ORDERS:
             return {
                 ...state,
                 loading: true,
-            };    
-        case types.UPDATE_ORDERS:
-            return {
-                ...state,
-                orders: action.orders,
-                loading: true
             };    
         case types.FETCH_ORDERS_SUCCESS:
             return {
@@ -32,6 +44,24 @@ const store = (state = initialStore, action) => {
                 loading: false,
                 error: action.error
             }
+        case types.INIT_UPDATE_ORDERS:
+            return {
+                ...state,
+                loading: true,
+            };    
+        case types.UPDATE_ORDERS_SUCCESS:
+            let order = state.orders.filter(order => order.id === action.order_id);
+            return {
+                ...state,
+                orders: order,
+                loading: false
+            };
+        case types.UPDATE_ORDERS_FAILED:
+            return {
+                ...state,
+                loading: false,
+                error: action.error
+            }            
         default:
             return state;
     }

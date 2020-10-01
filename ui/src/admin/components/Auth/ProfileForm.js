@@ -61,15 +61,17 @@ const ProfileForm = (props) => {
             delete userObj.password;
             delete userObj.confirmPassword;
         }
-        await props.submit(userObj);
-        userObj = {
-            ...user,
-            password: "",
-            confirmPassword: ""
-        }
-        setUser(userObj);
-        setDone(true);
-        setTimeout( () => { setDone(false) }, 5000)
+        try {
+            await props.submit(userObj);
+            userObj = {
+                ...user,
+                password: "",
+                confirmPassword: ""
+            }
+            setUser(userObj);
+            setDone(true);
+            setTimeout( () => { setDone(false) }, 5000)
+        } catch(error) { }
     }
 
     let alert = null;
