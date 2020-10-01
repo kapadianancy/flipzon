@@ -43,7 +43,14 @@ const Products = (props) => {
                     <div className={classes.Title}>
                         Product List
                     </div>
-                    <Button as={Link} to={`${props.match.path}/add`} variant="primary">Add New</Button>
+                    <div className="input-group" style={{ maxWidth: "400px" }}>
+                        <input type="text" className="form-control" placeholder="Product Name" />
+                        <div className="input-group-append" id="button-addon4">
+                            <Button variant="outline-success">Search</Button>
+                            <Button variant="outline-secondary" onClick={ () => props.fetchProducts()}>Show All</Button>
+                            <Button as={Link} to={`${props.match.path}/add`} variant="outline-primary">Add New</Button>
+                        </div>
+                    </div>
                 </Card.Header>
                 <Card.Body>
                     {  productData }

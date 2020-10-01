@@ -19,6 +19,23 @@ module.exports = (app) => {
         let products = await productService.fetchProducts(req.query.page, req.query.limit);
         res.send(products);
     })
+    
+    // i/p: query [ text (required), strong (optional) ]
+    // o/p: returns list of products [ id, name, main_image, stock, product_category { name } ]
+    app.get("/admin/products/search", async (req,res,next) => {
+        try {
+            if(!req.query.text) {
+                let errorObj = { statusCode: 400, message: "Invalid search text" };
+                throw errorObj;
+            }
+            let strong = req.query.strong ? true : false;
+            let wordsArr = req.query.text.toLowerCase().split(" ");
+            let products = await productService.searchProducts(wordsArr, strong);
+            res.send(products);
+        } catch(error) {
+            next(error);
+        }
+    });
     app.get("/admin/products/:id", auth, async (req, res, next) => {
         try {
             let products = await productService.fetchSingleProduct(req.params.id);
