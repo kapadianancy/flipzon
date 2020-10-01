@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import img from '../../../images/product.png';
-import { ListGroup, Button } from 'react-bootstrap';
+import { ListGroup, Button,Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import Header from '../../Components/Header/Header';
@@ -71,8 +71,10 @@ class Product extends Component {
         return (
             <>
                 <Header />
-                <ListGroup style={{ width: "80%", margin: "20px auto" }}>
-                    {data}
+                <ListGroup style={{ width: "80%", margin: "20px auto"  }}>
+                
+                        {data}
+                 
 
                 </ListGroup>
                 <Footer />

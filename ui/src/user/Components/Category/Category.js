@@ -38,7 +38,8 @@ class Category extends Component {
                 <Card body className="shadow p-3 mb-5 bg-white rounded">
                 
                     <CardTitle style={style.cardTitle}>{c.name} </CardTitle>
-                    {/* <CardText>{c.description}</CardText> */}
+                    <Card.Img variant="top"  src={`http://localhost:8080${c.image}`} />
+                 
                     <Button style={style.cardBtn} onClick={()=>this.clickHandler(c.id)}>View Products</Button>
                 </Card>
             </Col>);

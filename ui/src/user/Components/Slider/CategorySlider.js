@@ -42,7 +42,6 @@ class CategorySlider extends Component {
                  
                     <Card.Body>
                         <Card.Title>{c[j].name}</Card.Title>
-                        {/* <Card.Text>{c[j].description}</Card.Text> */}
                         <Button style={style.cardBtn} onClick={() => this.clickHandler(c[j].id)}>View Product</Button>
 
                     </Card.Body>
