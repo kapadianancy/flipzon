@@ -26,6 +26,9 @@ router.get('/client/category-product/:cid',Product.getCategoryProduct);
 //product
 router.get('/client/product',Product.getAllProduct);
 
+//getProductById
+router.get('/client/getProductById/:pid',Product.getProductById);
+
 //getUserById
 router.get('/client/getUserById',auth,Authenticate.getUserById);
 

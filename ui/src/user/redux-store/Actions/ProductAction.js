@@ -51,3 +51,22 @@ export const orderedProducts = () => {
     }
 }
 
+export const productDetails = (pid) => {
+   
+    return async dispatch => {
+
+        await axiosInstance.get('client/getProductById/' + pid).then(response => {
+            console.log(response)
+            dispatch({
+                type: types.DISPLAY_SINGLE_PRODUCT,
+                products: response.data.product,
+                images:response.data.images
+            });
+        }).catch(error => {
+            dispatch({
+                type: types.DISPLAY_SINGLE_PRODUCT_FAILED,
+                error: error.message
+            });
+        })
+    };
+}

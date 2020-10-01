@@ -52,3 +52,30 @@ exports.getCategoryProduct=async(req,res)=>
     
 
 }
+
+
+exports.getProductById=async(req,res)=>
+{
+    try{
+        let pid=req.params.pid;
+        const p=await main.product.findOne({
+            where:{
+                id:pid
+            }
+        });
+
+        const i=await main.Product_image.findAll({
+            where:{
+                productId:p.id,
+                isDeleted : 0
+            }
+        });
+
+        res.status(200).send({"product":p,"images":i});
+    }catch(err)
+    {
+        res.status(400).send(err);
+    }
+    
+
+}

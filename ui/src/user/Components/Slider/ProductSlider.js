@@ -32,9 +32,6 @@ class ProductSlider extends Component {
     let products = [];
     let p = this.props.products;
     let n = this.props.products.length;
-    let i = 0;
-    let flag = "break;";
-    let path="localhost:8080/images/";
     let card = (j) => {
       return (
         <Card
