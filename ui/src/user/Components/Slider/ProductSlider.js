@@ -1,19 +1,32 @@
 import React, { Component } from "react";
 import { Card, Button, Carousel, CardDeck, CardGroup } from "react-bootstrap";
 import { connect } from "react-redux";
-
 import * as actions from "../../redux-store/Actions/ProductAction";
-import Product from "../../../images/product.png";
-import Product1 from "../../../images/product-2.jpg";
-import { Row, Col } from "reactstrap";
+import { withRouter } from 'react-router';
+
+
+
+
 
 class ProductSlider extends Component {
   componentDidMount() {
     this.props.orderedProducts();
   }
+
+  clickHandler = (pid) => {
+    this.props.history.push("/productDetails/" + pid);
+  }
   render() {
+
     const style = {
-      backgroundColor: "#fb641b",
+      cardBtn: {
+        alignSelf: 'center',
+        backgroundColor: "#fb641b",
+        borderColor: "#fb641b",
+        margin: '10px',
+        color: "white",
+        width: '170px'
+      }
     };
 
     let products = [];
@@ -21,40 +34,39 @@ class ProductSlider extends Component {
     let n = this.props.products.length;
     let i = 0;
     let flag = "break;";
-
+    let path="localhost:8080/images/";
     let card = (j) => {
       return (
         <Card
           key={p[j].id}
           style={{ width: "18rem", padding: "10px", display: "inline-block" }}
         >
-          <Card.Img variant="top" src={Product} />
+          <Card.Img variant="top" height="177px" width="266px" src={`http://localhost:8080${p[j].main_image}`}/>
           <Card.Body>
             <Card.Title>{p[j].name}</Card.Title>
             <Card.Text>{p[j].description}</Card.Text>
-            <Button style={style} variant="primary">
-              Add to Cart
-            </Button>
+            <Button style={style.cardBtn} onClick={() => this.clickHandler(p[j].id)}>View Deatails</Button>
+
           </Card.Body>
         </Card>
       );
     };
 
     for (let j = 0; j < n;) {
-     
-        products.push(
-          <Carousel.Item>
-           {card(j++)}
-           
-           {(j>=n)?null:card(j++)}
-           
-           {(j>=n)?null:card(j++)}
 
-           {(j>=n)?null:card(j++)}
-          
-          </Carousel.Item>
-        );
-    
+      products.push(
+        <Carousel.Item>
+          {card(j++)}
+
+          {(j >= n) ? null : card(j++)}
+
+          {(j >= n) ? null : card(j++)}
+
+          {(j >= n) ? null : card(j++)}
+
+        </Carousel.Item>
+      );
+
       //return products;
     }
 
@@ -64,30 +76,7 @@ class ProductSlider extends Component {
 
         <Carousel>{products}</Carousel>
 
-        {/* <Card style={{ width: '18rem',padding:"10px"}}>
-                    <Card.Img variant="top" src={Product} />
-                    <Card.Body>
-                        <Card.Title></Card.Title>
-                        <Card.Text>
-                        
-                        </Card.Text>
-                        <Button style={style} variant="primary">Add to Cart</Button>
-                    </Card.Body>
-                </Card> */}
 
-        {/* <Card style={{ width: '18rem',padding:"10px"}}>
-                    <Card.Img variant="top" src={Product} />
-                    <Card.Body>
-                        <Card.Title></Card.Title>
-                        <Card.Text>
-                        
-                        </Card.Text>
-                        <Button style={style} variant="primary">Add to Cart</Button>
-                    </Card.Body>
-                </Card> 
-            </CardGroup>
-          </Carousel.Item>
-        </Carousel> */}
       </div>
     );
   }
@@ -105,4 +94,4 @@ const mapStateToAction = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapStateToAction)(ProductSlider);
+export default connect(mapStateToProps, mapStateToAction)(withRouter(ProductSlider));

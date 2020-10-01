@@ -5,7 +5,8 @@ const initialStore = {
   token: "",
   error: "",
   user: {},
-  message: ""
+  message: "",
+  orders : []
 };
 
 const store = (state = initialStore, action) => {
@@ -87,6 +88,19 @@ const store = (state = initialStore, action) => {
         message: ""
       }
     }
+    case types.VIEW_ORDER : {
+      return{
+        ...state,
+        orders: action.orders
+      }
+    }
+    case types.VIEW_ORDER_FAILED : {
+      return{
+        ...state,
+        error: action.error
+      }
+    }
+
     default:
       return state;
   }
