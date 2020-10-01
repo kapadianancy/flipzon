@@ -61,7 +61,6 @@ class Order extends Component{
                     {ordersDetails.price}
                 </td>
             </tr>
-            <hr></hr>
             </tbody>
         )
     }
@@ -78,6 +77,7 @@ class Order extends Component{
                             <td>{orders[i].user.email}</td>
                             <td>{orders[i].user.contact}</td>
                             <td>{orders[i].totalPrice}</td>
+                            <td>{orders[i].orderDate}</td>
                             <td><Button variant="info" onClick={() => this.handleShow(orders[i].id)}>View Order</Button></td>
                             {orders[i].status === "Completed Delivery" ? <td><Alert variant="success"> {orders[i].status} </Alert></td> : 
 
@@ -91,7 +91,7 @@ class Order extends Component{
         }
     
     render(){
-        return <div>
+        return <>
         <Table responsive striped bordered hover size="sm">
         <thead>
         <tr>
@@ -101,6 +101,7 @@ class Order extends Component{
                 <th>Email ID</th>
                 <th>Contact No</th>
                 <th>Total Price</th>
+                <th>Order Date</th>
                 <th>Order</th>
                 <th>Status</th>
             </tr>
@@ -110,24 +111,24 @@ class Order extends Component{
         </tbody>
         </Table>
        
-        <Table>
-            <thead>
+        <Table responsive striped bordered hover size="sm">
             <Modal show={this.state.show}
-			onHide={this.handleHide}
-			dialogClassName="modal-90w"
-			aria-labelledby="example-custom-modal-styling-title">
-                <Modal.Header closeButton>
-                    <Modal.Title id="example-custom-modal-styling-title">
-                        Order Details
-                    </Modal.Title>
-                </Modal.Header>	
+                onHide={this.handleHide}
+                dialogClassName="modal-90w"
+                aria-labelledby="example-custom-modal-styling-title">
+            <thead>
+                    <Modal.Header closeButton>
+                        <Modal.Title id="example-custom-modal-styling-title">
+                            Order Details
+                        </Modal.Title>
+                    </Modal.Header>	
+            </thead>
                 <Modal.Body key={"mindex"} scrollable={"true"}>
                     {this.renderOrderDetails(this.props.ordersDetails) }
                 </Modal.Body>
             </Modal>
-            </thead>
         </Table>
-        </div>
+        </>
     }
 }
 

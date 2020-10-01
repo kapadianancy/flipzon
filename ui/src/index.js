@@ -18,7 +18,7 @@ import AdminOrdersReducer from './admin/store/reducers/OrdersReducer';
 import AdminTotalReducer from './admin/store/reducers/DashboardReducer';
 import ProductCategory from './user/redux-store/Reducers/ProductCategory';
 import Product from './user/redux-store/Reducers/Product';
-
+import AdminUserReducer from './admin/store/reducers/UserReducer'
 import AdminAuthReducer from './admin/store/reducers/AuthReducer';
 
 const rootReducer = combineReducers({
@@ -30,7 +30,10 @@ const rootReducer = combineReducers({
   adminTotalReducer:AdminTotalReducer,
   ProductCategory:ProductCategory,
   Product:Product,
-  adminAuth: AdminAuthReducer
+  adminAuth: AdminAuthReducer,
+  Product:Product,
+  adminAuth: AdminAuthReducer,
+  adminUser: AdminUserReducer
 });
 
 let init;
@@ -54,7 +57,7 @@ else
   };
 }
 
-console.log(init);
+//console.log(init);
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(rootReducer,init, composeEnhancers(
   applyMiddleware(thunk)

@@ -63,6 +63,7 @@ class Dashboard extends Component{
         d.push(this.props.total.totalOrder)
         d.push(this.props.total.totalCompletedOrder)
         d.push(this.props.total.totalPendingOrder)
+        console.log(d);
 
     } 
     renderCategoryProduct = () =>{

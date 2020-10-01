@@ -7,7 +7,7 @@ app.get("/admin/orders", auth,async (req, res, next) => {
     let orders = await ordersServices.getOrders();
     res.send(orders);
     })
-app.get("/admin/allorders/:id",  async (req, res, next) => {
+app.get("/admin/allorders/:id", async (req, res, next) => {
     let orders = await ordersServices.getAllOrders(req.params.id);
     res.send(orders);
     })    

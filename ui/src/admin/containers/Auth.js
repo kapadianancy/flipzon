@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Card from 'react-bootstrap/Card'
 import { connect } from 'react-redux';
-
 import * as classes from './Auth.module.css'
 import Login from '../components/Auth/Login'
 import Register from '../components/Auth/Register'

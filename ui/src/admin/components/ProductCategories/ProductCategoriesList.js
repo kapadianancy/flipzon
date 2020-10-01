@@ -56,7 +56,7 @@ class ProductCategoriesList extends Component{
                         <tr key={product_categories[i].id}>
                             <td>{i+1}</td>
                             <td>{product_categories[i].name}</td>
-                            <td><img src={"http://localhost:8080"+(product_categories[i].image)} alt="description" width="50px"/></td>
+                            <td><img src={"http://localhost:8080"+((product_categories[i].image).replace('/public',''))} alt="description" width="50px"/></td>
                             <td><Button variant="info" onClick={() => this.updateHandler(product_categories[i].id)} as={Link} to={`/admin/ProductCategoriesEdit/${product_categories[i].id}`}>Edit</Button></td>
                             <td><Button variant="danger" onClick={() => this.submit(product_categories[i].id)}>Delete</Button></td>
                         </tr>

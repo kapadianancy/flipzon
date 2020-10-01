@@ -12,6 +12,7 @@ const login = async (email, password) => {
         let user = await User.findAll({
             where: {
                 email,
+                roleId: 1,
                 isDeleted: false
             },
             attributes: ["id", "password", "username", "email", "contact", "address"]

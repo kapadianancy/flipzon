@@ -1,0 +1,12 @@
+h2{
+    text-align: center;
+    font-weight: bold;
+    color: #007bff;
+    font-family: Times New Roman;
+}
+.btn-circle.btn-md { 
+    padding: 5px 20px; 
+    border-radius: 25px; 
+    font-size: 10px; 
+    text-align: center; 
+} 

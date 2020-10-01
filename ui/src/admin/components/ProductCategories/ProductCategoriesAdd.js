@@ -96,7 +96,7 @@ class ProductCategoriesAdd extends Component{
         // this.setState({
         //     name: '',
         // })
-        await this.props.history.push('/admin/product_categories'); 
+        await this.props.history.push('/admin/productcategories'); 
     }
 
     render(){

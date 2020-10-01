@@ -36,7 +36,7 @@ class ProductCategoriesEdit extends Component{
             image:category[0].image
         })  
 
-        this.setState({myimg:category[0].image})
+        this.setState({myimg:(category[0].image).replace('/public','')})
     }
     onFileChange = (e) =>{
         const imageFile = e.target.files[0];
@@ -89,7 +89,7 @@ class ProductCategoriesEdit extends Component{
         
         await this.props.updateProductCategories(this.state.id,data);
         await this.props.fetchProductCategories();
-        await this.props.history.replace('/admin/product_categories');
+        await this.props.history.replace('/admin/productcategories');
     }
     render(){
         const {errors} = this.state;
@@ -127,7 +127,7 @@ class ProductCategoriesEdit extends Component{
 
                     <Form.Group controlId="exampleForm.ControlTextarea3">
                         <Form.Label>Image</Form.Label>
-                        <Form.Control isInvalid={errors.name}  type="file" name="image" onChange={this.onFileChange}/>
+                        <Form.Control isInvalid={errors.image}  type="file" name="image" onChange={this.onFileChange}/>
                         <Form.Control.Feedback type="invalid">
                             {errors.image}
                         </Form.Control.Feedback>

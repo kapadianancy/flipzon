@@ -67,6 +67,27 @@ exports.logout=async(req,res)=>
     res.send("logged out");
 }
 
+
+exports.getUserById = async(req,res) => {
+    try{
+        const User = await main.User.findOne({
+            where: {
+                id: req.validUser.id,
+                isDeleted : 0
+            }
+        });
+        if(User)
+        {
+            return res.status(200).send(User);
+        }
+       
+    }
+    catch(error)
+    {
+         res.status(400).send(error);
+    }
+}
+
 exports.editProfile= async(req,res) =>
 {
     try{

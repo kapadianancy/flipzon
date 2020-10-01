@@ -4,4 +4,5 @@ module.exports = (app) => {
     require('./ProductAdminController')(app);
     require('./DashboardController')(app);
     require('./AuthController')(app);
+    require('./UserController')(app);
 }

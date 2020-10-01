@@ -4,7 +4,8 @@ const initialStore = {
   userId: "",
   token: "",
   error: "",
-  message:""
+  user: {},
+  message: ""
 };
 
 const store = (state = initialStore, action) => {
@@ -37,13 +38,13 @@ const store = (state = initialStore, action) => {
       return {
         ...state,
         message: action.message,
-        error : ""
+        error: ""
       };
     case types.FORGET_PASSWORD_FAILED:
       return {
         ...state,
         error: action.error,
-        message : ""
+        message: ""
       };
     case types.LOGOUT:
       return {
@@ -51,6 +52,41 @@ const store = (state = initialStore, action) => {
         token: "",
         error: "",
       };
+    case types.GET_SINGLE_USER:
+      return {
+        user: action.user,
+        error: ""
+      };
+    case types.GET_SINGLE_USER_FAILED:
+      return {
+        error: action.error
+      }
+    case types.EDIT_PROFILE:
+      return {
+        ...state,
+        message: action.message,
+        error: ""
+      }
+    case types.EDIT_PROFILE:
+      return {
+        ...state,
+        error: action.error,
+        message: ""
+      }
+    case types.CHANGE_PASSWORD: {
+      return {
+        ...state,
+        message: action.message,
+        error: ""
+      }
+    }
+    case types.CHANGE_PASSWORD_FAILED: {
+      return {
+        ...state,
+        error: action.error,
+        message: ""
+      }
+    }
     default:
       return state;
   }

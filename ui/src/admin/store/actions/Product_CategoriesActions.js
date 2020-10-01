@@ -51,16 +51,11 @@ export const AddProductCategories = (post) => {
 
 export const RemoveProductCategories = (id) => {
    
-    return async (dispatch,getState) => {
+    return async (dispatch) => {
         dispatch({
             type:types.INIT_REMOVE_PRODUCT_CATEGORIES
         }) 
-        let token = getState().adminAuth.token
-        await axios.put('admin/categories/'+id,{
-            headers: {
-                "Authorization": token
-            }
-        }).then(response => {    
+        await axios.put('admin/categories/'+id).then(response => {    
             dispatch({
                 type:types.REMOVE_PRODUCT_CATEGORIES_SUCCESS,
                 product_categories_id : id

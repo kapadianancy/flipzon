@@ -26,11 +26,14 @@ router.get('/client/category-product/:cid',Product.getCategoryProduct);
 //product
 router.get('/client/product',Product.getAllProduct);
 
+//getUserById
+router.get('/client/getUserById',auth,Authenticate.getUserById);
+
 //editProfile
-router.put('/client/editProfile/:id',auth,Authenticate.editProfile);
+router.put('/client/editProfile',auth,Authenticate.editProfile);
 
 //change Password
-router.put('/client/changePassword/:id',auth,Authenticate.changePassword);
+router.put('/client/changePassword',auth,Authenticate.changePassword);
 
 //forget Password
 router.post('/client/forgetPassword',Authenticate.forgetPassword);

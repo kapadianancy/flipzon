@@ -11,6 +11,15 @@
     max-height: 700px;
     /* text-align: center; */
 }
+.CardHeader {
+    padding: 0px !important;
+    background-color: rgb(59, 59, 59) !important;
+    text-align: center;
+}
+.Logo {
+    width: 100px;
+    height: 75px;
+}
 .CardBody {
     padding: 0.75rem !important;
 }

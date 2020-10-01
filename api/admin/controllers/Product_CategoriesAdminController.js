@@ -3,7 +3,7 @@ var multer  = require('multer');
 const auth = require("../middlewares/auth");
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'images/')
+        cb(null, 'public/images/')
     },
     filename: (req, file, cb) => {
         console.log(file);
@@ -56,7 +56,7 @@ app.put("/admin/product_categories/:id", auth, upload.single('image'),async (req
         next(error);
     }
 })
-app.put("/admin/categories/:id", auth, async (req, res, next) => {
+app.put("/admin/categories/:id", async (req, res, next) => {
     try {
         let product_categories = await Product_Categories_Services.edit_DeleteProduct_Category(req.params.id);
         res.send(product_categories);
