@@ -1,5 +1,9 @@
 const Product_category = require("../../models/Product_category");
 
+function sayHelloTo() {
+    return `Hi,!`;
+  }
+
 const getProduct_Category = async () => {
     try{
         return await Product_category.findAll({
@@ -105,5 +109,6 @@ module.exports = {
     addProduct_Category,
     editProduct_Category,
     deleteProduct_Category,
-    edit_DeleteProduct_Category
+    edit_DeleteProduct_Category,
+    sayHelloTo
 }

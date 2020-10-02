@@ -9,7 +9,9 @@ import './ProductList.module.css'
 import Spinner from 'react-bootstrap/Spinner'
 import { RemoveProductCategories,SingleProductCategories } from '../../store/actions/Product_CategoriesActions'
 class ProductCategoriesList extends Component{
-    
+    state = {
+        searchValue:""
+    }
     removeHandler = (id) =>{
         this.props.RemoveProductCategories(id);
     }
@@ -48,6 +50,23 @@ class ProductCategoriesList extends Component{
         }
 
         renderProductCategories = (product_categories, activeOld, perPage) => {
+            let filtered="";
+            if(this.state.searchValue)
+            {
+                filtered = product_categories.filter((item) => (
+                            this.state.searchValue.includes(item.name)
+                        ));   
+
+                return filtered.map((prod,i) => 
+                <tr key={prod.id}>
+                    <td>{i+1}</td>
+                    <td>{prod.name}</td>
+                    <td><img src={"http://localhost:8080"+((prod.image).replace('/public',''))} alt="description" width="50px"/></td>
+                    <td><Button variant="info" onClick={() => this.updateHandler(prod.id)} as={Link} to={`/admin/ProductCategoriesEdit/${prod.id}`}>Edit</Button></td>
+                    <td><Button variant="danger" onClick={() => this.submit(prod.id)}>Delete</Button></td>
+                </tr>
+                )   
+            }
             let product_categoriesArr = [];
             let active = (activeOld-1)*perPage;
             for(let i=active;i<(activeOld*perPage);i++) {
@@ -69,7 +88,7 @@ class ProductCategoriesList extends Component{
    
     render(){
         // let items = [];
-        return <Table responsive striped bordered hover size="sm">
+        return <> <input type="text" placeholder="Enter Search Here..." className={"form-control"} onChange={(event) => this.setState({searchValue: event.target.value})}/> <Table responsive striped bordered hover size="sm">
         <thead>
             <tr>
                 <th>#</th>
@@ -84,7 +103,7 @@ class ProductCategoriesList extends Component{
             { this.props.loading ? <Spinner animation="border" /> : this.renderProductCategories(this.props.product_categories, this.props.active, this.props.perPage) }
         </tbody>
         
-    </Table>
+    </Table></>
     }
 }
 const mapStateToProps = (state) => ({

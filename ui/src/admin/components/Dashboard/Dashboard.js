@@ -63,7 +63,6 @@ class Dashboard extends Component{
         d.push(this.props.total.totalOrder)
         d.push(this.props.total.totalCompletedOrder)
         d.push(this.props.total.totalPendingOrder)
-        console.log(d);
 
     } 
     renderCategoryProduct = () =>{
@@ -155,16 +154,16 @@ class Dashboard extends Component{
                         </Card.Body>
                     </Card>
                 </CardDeck>
-            </Card.Body>
+             </Card.Body>
         
-            <Card style={{ width: '42rem', borderWidth:0}} key={"index3"}>
-                <Card.Body>
+            {/*<Card style={{ width: '42rem', borderWidth:0}} key={"index3"}> */}
+                <Card.Body style={{paddingBottom:'90px'}}>
                 <Card.Title>Categories wise Products</Card.Title>
-                <ul key={"u1"} className="list-group">
+                <ul key={"u1"} className="list-group" style={{maxHeight: '170px',overflow:'scroll'}}>
                     {this.renderCategoryProduct()}    
                 </ul>
                 </Card.Body>
-            </Card>
+            {/* </Card> */}
         </Card>
         <Card key={"index5"} >
             <Card.Body>
