@@ -56,7 +56,6 @@ export const productDetails = (pid) => {
     return async dispatch => {
 
         await axiosInstance.get('client/getProductById/' + pid).then(response => {
-            console.log(response)
             dispatch({
                 type: types.DISPLAY_SINGLE_PRODUCT,
                 products: response.data.product,

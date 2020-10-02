@@ -63,4 +63,9 @@ router.get("/client/orderedProducts/",Order.orderedProducts);
 //ViewOrder
 router.get("/client/viewOrder",auth,Order.viewOrder);
 
+//ViewOrderCart
+router.get("/client/viewOrderCart",auth,Order.viewOrderCart);
+
+router.get("/client/viewOrderDetails/:oid",auth,Order.viewOrderDetails);
+
 module.exports = router;
