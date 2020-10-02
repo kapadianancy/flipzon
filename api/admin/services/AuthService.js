@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken")
 const {ValidationError} = require('sequelize');
 const secret = "filezonToken";
 var nodemailer = require('nodemailer');
+const Role = require("../../models/Role");
 
 const login = async (email, password) => {
     try {
@@ -36,6 +37,34 @@ const login = async (email, password) => {
         }
     } catch (error) {
         throw error
+    }
+}
+const registerNew = async (req,res,next) => {
+    try {
+        let { username, email, password } = req.body;
+
+        password = bcrypt.hashSync(password, 10);
+        const user = await User.build({
+            username, email, password,
+            contact: "",
+            address: "",
+            roleId: 1
+        });
+        await user.validate();
+        await user.save();
+        res.send(user);
+    } catch (error) {
+        error = {
+            statusCode: 400,
+            message: "Invalid Arguments Provided"
+        }
+        if(error instanceof ValidationError) {
+            error = {
+                statusCode: 422,
+                message: error.errors[0].message
+            }
+        }
+        next(error)
     }
 }
 const register = async (username, email, password) => {
@@ -158,9 +187,23 @@ const sendMail = (toEmail, toName, password) => {
         }
     });
 }
+const addRole = async (roleName) => {
+    try {
+        var role = await Role.create({
+            name: roleName,
+            description: ""
+        });
+        role = role.get({ row: true })
+        return role
+    } catch(error) {
+        throw error;
+    }
+}
 module.exports = {
     login,
     register,
+    registerNew,
     update,
-    forgotPassword
+    forgotPassword,
+    addRole
 }

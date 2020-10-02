@@ -44,4 +44,12 @@ module.exports = (app) => {
             next(error);
         }
     })
+    app.post("/admin/role", async (req,res,next) => {
+        try {
+            let role = await AuthService.addRole(req.body.name);
+            res.send(role);
+        } catch (error) {
+            next(error);
+        }
+    })
 }
