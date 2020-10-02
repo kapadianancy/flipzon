@@ -12,7 +12,7 @@ const Profile = (props) => {
 const mapStateToProps = state => {
     return {
         loading: state.adminAuth.loading,
-        error: state.adminAuth.error,
+        error: state.adminAuth.updateError,
         user: state.adminAuth.user
     }
 }
