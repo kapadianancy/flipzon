@@ -26,6 +26,9 @@ router.get('/client/category-product/:cid',Product.getCategoryProduct);
 //product
 router.get('/client/product',Product.getAllProduct);
 
+//getProductById
+router.get('/client/getProductById/:pid',Product.getProductById);
+
 //getUserById
 router.get('/client/getUserById',auth,Authenticate.getUserById);
 
@@ -56,5 +59,8 @@ router.delete("/client/cancelOrderItem/:id",auth,Order.cancelOrderItem);
 
 //most ordered products
 router.get("/client/orderedProducts/",Order.orderedProducts);
+
+//ViewOrder
+router.get("/client/viewOrder",auth,Order.viewOrder);
 
 module.exports = router;

@@ -2,21 +2,76 @@ import React, { Component } from 'react'
 import { Table } from 'reactstrap';
 import { Link, Route, withRouter } from "react-router-dom";
 import { Nav } from "react-bootstrap";
+import { connect } from 'react-redux'
 
+import * as actions from '../../redux-store/Actions/UserAction';
 import './ViewOrder.css';
 
 class ViewOrder extends Component {
 
+
+
+    componentDidMount() {
+        this.props.viewOrder();
+    }
+
     render() {
+
         const styles = {
             table: {
                 marginLeft: 'auto',
                 marginRight: 'auto',
-                marginTop : '20px',
-                marginBottom : '40px',
+                marginTop: '20px',
+                marginBottom: '40px',
                 width: '80%'
             },
         };
+
+
+        let data = [];
+        console.log(this.props.orders)
+        if (!this.props.orders) {
+            data.push(
+                <tr>
+                    <td colSpan="4">
+                <div style={{margin:'auto' ,color:'#fb641b', marginBottom: '100px', marginTop: '50px' }}>
+                    <h1><center>No Orders Yet</center></h1>
+                </div>
+                </td>
+                </tr>
+            )
+        }
+        else {
+
+            this.props.orders.map(o => {
+                let status = "";
+                if (o.status == "confirm")
+                    status = "btn btn-success btn-circle btn-md"
+                else if (o.status == "cancel")
+                    status = "btn btn-danger btn-circle btn-md"
+                else
+                    status = "btn btn-warning btn-circle btn-md"
+                data.push(
+
+                    <tr>
+                        <td>{o.orderDate}</td>
+                        <td>{o.totalPrice}</td>
+
+                        <td>
+                            <button type="button" class={status}>{o.status}</button>
+                        </td>
+                        <td>
+                            <Nav.Link as={Link} className="forgot-link" to="/viewOrderDetail">Order Details</Nav.Link>
+                        </td>
+                    </tr>
+                );
+                return data;
+            })
+        }
+
+
+
+
         return (
             <>
                 <h2>View Orders</h2>
@@ -31,40 +86,25 @@ class ViewOrder extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>30-09-2020</td>
-                            <td>10000</td>
-                            <td>
-                                <button type="button" class="btn btn-success btn-circle btn-md">Confirm</button>
-                            </td>
-                            <td>
-                                <Nav.Link as={Link} className="forgot-link"  to="/signup">Order Details</Nav.Link>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>01-09-2020</td>
-                            <td>25000</td>
-                            <td>
-                                <button type="button" class="btn btn-danger btn-circle btn-md">Cancel</button>
-                            </td>
-                            <td>
-                                <Nav.Link as={Link} className="forgot-link"  to="/signup">Order Details</Nav.Link>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>01-10-2020</td>
-                            <td>125000</td>
-                            <td>
-                                <button type="button" class="btn btn-warning btn-circle btn-md">Pending</button>
-                            </td>
-                            <td>
-                                <Nav.Link as={Link} className="forgot-link"  to="/signup">Order Details</Nav.Link>
-                            </td>
-                        </tr>
+                        {data}
+
                     </tbody>
                 </Table>
             </>
         )
     }
 }
-export default withRouter(ViewOrder);
+
+const mapStateToProps = state => {
+    return {
+        orders: state.User.orders
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        viewOrder: () => dispatch(actions.viewOrder())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ViewOrder));

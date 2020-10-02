@@ -25,9 +25,9 @@
     background: linear-gradient(to bottom,  #3ec45c, #6ec682);
 }
 .list-group{
-    max-height: 170px;
+    /* max-height: 170px; */
     /* margin-bottom: 10px; */
-    overflow:scroll;
+    /* overflow:scroll; */
     -webkit-overflow-scrolling: touch;
 }
 

@@ -13,6 +13,21 @@ module.exports = (app) => {
     app.get("/admin/me", auth, (req,res,next) => {
         res.send(req.user);
     });
+    app.post("/admin/forgotPassword", async (req,res,next) => {
+        try {
+            if(!req.body.email) {
+                let error = {
+                    statusCode: 400,
+                    message: "Email is required"
+                }
+                throw error;
+            }
+            const message = await AuthService.forgotPassword(req.body.email);
+            res.send({ message })
+        } catch(error) {
+            next(error);
+        }
+    })
     app.post("/admin/register", async (req,res,next) => {
         try {
             let user = await AuthService.register(req.body.username, req.body.email, req.body.password );
@@ -25,6 +40,14 @@ module.exports = (app) => {
         try {
             await AuthService.update(req.body, req.user.id);
             res.send({ message: "Profile updated successfully!" });
+        } catch (error) {
+            next(error);
+        }
+    })
+    app.post("/admin/role", async (req,res,next) => {
+        try {
+            let role = await AuthService.addRole(req.body.name);
+            res.send(role);
         } catch (error) {
             next(error);
         }

@@ -144,3 +144,24 @@ export const changepassword = (passwords) => {
         })
     };
 };
+
+export const viewOrder = () => {
+    return async dispatch => {
+        const token = localStorage.getItem("token");
+        await axiosInstance.get('/client/viewOrder', {
+            headers: {
+                authorization: 'Bearer ' + token
+            }
+        }).then(response => {
+            dispatch({
+                type: types.VIEW_ORDER,
+                orders: response.data.orders
+            });
+        }).catch(error => {
+            dispatch({
+                type: types.VIEW_ORDER_FAILED,
+                error: error.message
+            });
+        })
+    };
+};

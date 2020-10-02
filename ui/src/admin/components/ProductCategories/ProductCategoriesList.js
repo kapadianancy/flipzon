@@ -54,7 +54,7 @@ class ProductCategoriesList extends Component{
             if(this.state.searchValue)
             {
                 filtered = product_categories.filter((item) => (
-                            this.state.searchValue.includes(item.name)
+                            this.state.searchValue.match(item.name)
                         ));   
 
                 return filtered.map((prod,i) => 
@@ -88,7 +88,9 @@ class ProductCategoriesList extends Component{
    
     render(){
         // let items = [];
-        return <> <input type="text" placeholder="Enter Search Here..." className={"form-control"} onChange={(event) => this.setState({searchValue: event.target.value})}/> <Table responsive striped bordered hover size="sm">
+        return <> 
+        <input type="text" placeholder="Enter Search Here..." className={"form-control"} onKeyUp={(event) => this.setState({searchValue: event.target.value})}/> 
+        <Table responsive striped bordered hover size="sm">
         <thead>
             <tr>
                 <th>#</th>

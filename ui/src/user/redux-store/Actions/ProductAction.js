@@ -3,7 +3,7 @@ import axiosInstance from '../../../axios';
 
 export const fetchProductCategories = () => {
     return async dispatch => {
-      
+
         await axiosInstance.get('client/category').then(response => {
             dispatch({
                 type: types.FETCH_PRODUCT_CATEGORIES_SUCCESS,
@@ -18,11 +18,10 @@ export const fetchProductCategories = () => {
     };
 };
 
-export const categoryWiseProduct=(cid)=>
-{
+export const categoryWiseProduct = (cid) => {
     return async dispatch => {
-      
-        await axiosInstance.get('client/category-product/'+cid).then(response => {
+
+        await axiosInstance.get('client/category-product/' + cid).then(response => {
             dispatch({
                 type: types.CATEGORY_PRODUCT,
                 products: response.data
@@ -36,22 +35,38 @@ export const categoryWiseProduct=(cid)=>
     };
 }
 
-export const orderedProducts=()=>
-{
-    return async dispatch=>
-    {
-        await axiosInstance.get("/client/orderedProducts").then(response=>
-            {
-                dispatch({
-                    type:types.ORDERED_PRODUCT,
-                    products:response.data
-                })
-            }).catch(error=>
-                {
-                    dispatch({
-                        type: types.ORDERED_PRODUCT_FAILED,
-                        error: error.message
-                    });
-                })
+export const orderedProducts = () => {
+    return async dispatch => {
+        await axiosInstance.get("/client/orderedProducts").then(response => {
+            dispatch({
+                type: types.ORDERED_PRODUCT,
+                products: response.data
+            })
+        }).catch(error => {
+            dispatch({
+                type: types.ORDERED_PRODUCT_FAILED,
+                error: error.message
+            });
+        })
     }
+}
+
+export const productDetails = (pid) => {
+   
+    return async dispatch => {
+
+        await axiosInstance.get('client/getProductById/' + pid).then(response => {
+            console.log(response)
+            dispatch({
+                type: types.DISPLAY_SINGLE_PRODUCT,
+                products: response.data.product,
+                images:response.data.images
+            });
+        }).catch(error => {
+            dispatch({
+                type: types.DISPLAY_SINGLE_PRODUCT_FAILED,
+                error: error.message
+            });
+        })
+    };
 }

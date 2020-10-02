@@ -18,7 +18,7 @@ const renderPaginationItems = (total, active, limit, changeActive) => {
     return items
 }
 const ProductCategorie = (props) => {
-    const perPage = 2;
+    const perPage = 4;
     const [active, setActive] = useState(1)
     useEffect( () => {
         if(props.product_categories.length === 0)

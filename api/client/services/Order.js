@@ -257,3 +257,33 @@ exports.orderedProducts=async(req,res)=>
         return res.status(400).send(err);
     }
 }
+
+exports.viewOrder = async (req,res) => {
+    try{
+        const o=await main.Order.findAll({
+            where : {
+                userId:req.validUser.id
+            }
+            
+        });
+     
+        if(o.length != 0)
+        {
+            const oi=await main.Order_details.findAll({
+                where : {
+                    orderId:o[0].id
+                }
+                
+            });
+            res.status(200).send({"orders":o});
+        }
+        else
+        {
+            res.status(401).send("No Orders Yet");
+        }
+        
+    }catch(err)
+    {
+        res.status(400).send(err);
+    }
+}
