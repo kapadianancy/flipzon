@@ -9,7 +9,7 @@ import Form from 'react-bootstrap/Form'
 
 import * as classes from './Products.module.css'
 import ProductList from '../components/Product/ProductList/ProductList';
-import { fetchProducts, deleteProduct } from '../store/actions/ProductActions'
+import { fetchProducts, deleteProduct, searchProducts } from '../store/actions/ProductActions'
 
 const renderPaginationItems = (total, active, limit, changeActive) => {
     let items = [];
@@ -24,16 +24,20 @@ const renderPaginationItems = (total, active, limit, changeActive) => {
 const Products = (props) => {
     const [perPage, setPerPage] = useState(5)
     const [active, setActive] = useState(1)
+    const [searchText, setSearchText] = useState("");
 
     useEffect(() => {
         props.fetchProducts();
     }, [props.fetchProducts]);
 
+    const searchProducts = () => {
+        props.searchProducts(searchText);
+    }
     const changeActive = (index) => {
         setActive(index);
     }
     let productData = <Spinner animation="border" />;
-    if(props.products.length > 0) {
+    if(!props.loading && props.products.length > 0) {
         productData = <ProductList key={1} deleteProduct={props.deleteProduct} active={active} perPage={perPage} products={props.products} />
     }
     return(
@@ -44,9 +48,9 @@ const Products = (props) => {
                         Product List
                     </div>
                     <div className="input-group" style={{ maxWidth: "400px" }}>
-                        <input type="text" className="form-control" placeholder="Product Name" />
+                        <input type="text" className="form-control" placeholder="Product Name" value={searchText} onChange={ (e) => setSearchText(e.target.value) } />
                         <div className="input-group-append" id="button-addon4">
-                            <Button variant="outline-success">Search</Button>
+                            <Button variant="outline-success" onClick={() => searchProducts()}>Search</Button>
                             <Button variant="outline-secondary" onClick={ () => props.fetchProducts()}>Show All</Button>
                             <Button as={Link} to={`${props.match.path}/add`} variant="outline-primary">Add New</Button>
                         </div>
@@ -86,7 +90,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         fetchProducts: () => dispatch(fetchProducts()),
-        deleteProduct: (id) => dispatch(deleteProduct(id))
+        deleteProduct: (id) => dispatch(deleteProduct(id)),
+        searchProducts: (text) => dispatch(searchProducts(text))
     }
 }
 

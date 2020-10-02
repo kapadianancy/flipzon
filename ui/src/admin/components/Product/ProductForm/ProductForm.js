@@ -39,8 +39,12 @@ const ProductForm = (props) => {
             tempProduct.description = editProduct.description ? editProduct.description : "";
             tempProduct.categoryId = editProduct.categoryId;
             setProduct(tempProduct);
+        } else {
+            let tempProduct = { ...product };
+            tempProduct.categoryId = props.categories[0] ? props.categories[0].id : "1";
+            setProduct(tempProduct);
         }
-    }, [props.product, setProduct, props.edit])
+    }, [props.product, setProduct, props.edit, props.categories])
 
     const productFieldChanged = (e, name, image) => {
         let oldProduct = { ...product }

@@ -18,6 +18,18 @@ export const fetchProducts = () => {
     }
 }
 
+export const searchProducts = (text) => {
+    return async(dispatch) => {
+        dispatch({ type: types.INIT_FETCH_PRODUCTS });
+        try {
+            const data = await axios.get(`admin/products/search?text=${text}`);
+            dispatch({ type: types.FETCH_PRODUCTS_SUCCESS, products: data.data });
+        } catch(error) {
+            dispatch({ type: types.FETCH_PRODUCTS_FAILED, error: error.message });
+        }
+    }
+}
+
 export const addProduct = (productData) => {
     return async(dispatch, getState) => {
         dispatch({ type: types.INIT_ADD_PRODUCT });
