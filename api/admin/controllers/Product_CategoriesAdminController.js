@@ -6,7 +6,6 @@ const storage = multer.diskStorage({
         cb(null, 'public/images/')
     },
     filename: (req, file, cb) => {
-        console.log(file);
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
         cb(null, file.fieldname + '-' + uniqueSuffix+'.png')
     }
@@ -35,7 +34,6 @@ app.post("/admin/product_categories", auth, upload.single('image'),async (req, r
     }
     try {
         let product_categories = await Product_Categories_Services.addProduct_Category(req.body);
-        console.log(product_categories);
         res.send(product_categories);
     } catch(error) {
         next(error);

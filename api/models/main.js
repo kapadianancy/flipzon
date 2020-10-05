@@ -12,10 +12,10 @@ let options = { alter: false };
 if(process.env.environment === "TEST") {
     options = { force: true };
 }
-
-db.sequelize.sync(options).then(() => {
-    console.log("DB Droped, Resync and roles created.");
-});
+const sync = async () => {
+    await db.sequelize.sync(options);
+}
+sync();
 
 module.exports={
     User:user,
