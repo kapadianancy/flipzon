@@ -16,7 +16,9 @@ import Footer from './Components/Footer/Footer';
 import Header from './Components/Header/Header';
 import Logout from './Components/Logout';
 import ProductDetails from './Containers/Product/ProductDetails';
-
+import ViewOrderCart from './Containers/ViewOrder/ViewOrderCart';
+import ViewBill from './Containers/ViewOrder/ViewBill';
+import ViewOrderDetails from './Containers/ViewOrder/ViewOrderDetails';
  
 class User extends Component {
   render() { 
@@ -36,6 +38,9 @@ class User extends Component {
           <Route path="/changepassword" exact component={ChangePassword}/>
           <Route path="/vieworder" exact component={ViewOrder}/>
           <Route path="/productDetails/:pid" exact component={ProductDetails}/>
+          <Route path="/viewordercart" exact component={ViewOrderCart}/>
+          <Route path="/viewbill" exact component={ViewBill}/>
+          <Route path="/vieworderdetails/:oid" exact component={ViewOrderDetails}/>
    </Switch>
       
       </div>

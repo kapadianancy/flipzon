@@ -7,8 +7,8 @@ const auth=async(req,res,next)=>
     try{
         console.log("auth running");
         const token=req.header("authorization").replace("Bearer ","");
+        //console.log(token);
         const valid=await jwt.verify(token,secret);
-        //console.log("-----------"+valid._id);
         const u=await main.User.findByPk(valid._id);
         //console.log(u);
         if(!u)
