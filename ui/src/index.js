@@ -38,6 +38,7 @@ const rootReducer = combineReducers({
   Order:OrdersReducer
 });
 
+//localStorage.clear();
 let init;
 if(localStorage.getItem("token"))
 {

@@ -89,7 +89,7 @@ exports.searchProducts=async(req,res)=>
         let strong = req.query.strong ? true : false;
         let wordsArr = req.params.pro.toLowerCase().split(" ");
         let qry = wordsArr.map( word => ({ [Op.like]: `%${word}%` }))
-        console.log(wordsArr+ "   "+qry );
+       // console.log(wordsArr+ "   "+qry );
         let products = await main.product.findAll({
             where: {
                 name: {

@@ -32,7 +32,14 @@ class Header extends Component {
 
   view_cart=()=>
   {
-    this.props.history.push('/viewordercart')
+    if(this.props.token=="")
+    {
+      this.props.history.push('/login');
+    }
+    else{
+      this.props.history.push('/viewordercart')
+    }
+    
   }
 
   componentDidMount() {
