@@ -68,4 +68,6 @@ router.get("/client/viewOrderCart",auth,Order.viewOrderCart);
 
 router.get("/client/viewOrderDetails/:oid",auth,Order.viewOrderDetails);
 
+router.get("/client/searchProduct/:pro",Product.searchProducts);
+
 module.exports = router;

@@ -1,4 +1,7 @@
 const main=require('../../models/main');
+const Sequelize = require("sequelize");
+const Op = Sequelize.Op;
+const $or = Op.or;
 
 exports.getAllCategory=async(req,res)=>
 {
@@ -77,5 +80,31 @@ exports.getProductById=async(req,res)=>
         res.status(400).send(err);
     }
     
+
+}
+
+exports.searchProducts=async(req,res)=>
+{
+    try {
+        let strong = req.query.strong ? true : false;
+        let wordsArr = req.params.pro.toLowerCase().split(" ");
+        let qry = wordsArr.map( word => ({ [Op.like]: `%${word}%` }))
+        console.log(wordsArr+ "   "+qry );
+        let products = await main.product.findAll({
+            where: {
+                name: {
+                    [strong ? Op.and : Op.or]: qry
+                },
+                isDeleted: false
+            },
+            include: [
+                { model: main.Product_category, as: "Product_category", attributes: ["name"] }
+            ]
+        });
+        res.status(200).send(products);
+    } catch(error) {
+        console.log(error);
+        res.status(400).send(error);
+    }
 
 }
