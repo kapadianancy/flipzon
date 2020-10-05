@@ -9,6 +9,7 @@ import Spinner from 'react-bootstrap/Spinner'
 import './Dashboard.css';
 
 class Dashboard extends Component{
+
     state = {
         totalOrder:"",
         totalPendingOrder:"",
@@ -51,18 +52,18 @@ class Dashboard extends Component{
             totalOrder:tot.totalOrder,
             totalPendingOrder:tot.totalPendingOrder,
             totalCompletedOrder:tot.totalCompletedOrder,
-            totalProduct:tot.totalProduct,
-            totalCategoies:tot.totalCategoies,
-            totalUser:tot.totalUser,
+            // totalProduct:tot.totalProduct,
+            // totalCategoies:tot.totalCategoies,
+            // totalUser:tot.totalUser,
             totalRevenue:tot.totalRevenue[0].totalPrice,
             tots:tots.cp.rows
         })
         
         let d = this.state.dataPie.datasets[0].data;
         
-        d.push(this.props.total.totalOrder)
-        d.push(this.props.total.totalCompletedOrder)
-        d.push(this.props.total.totalPendingOrder)
+        d.push(this.state.totalOrder)
+        d.push(this.state.totalCompletedOrder)
+        d.push(this.state.totalPendingOrder)
 
     } 
     renderCategoryProduct = () =>{
@@ -90,7 +91,7 @@ class Dashboard extends Component{
                         <Card.Body className={"text"}>
                         <Card.Title> Total Product </Card.Title>
                             <Card.Text>
-                                {this.state.totalProduct}
+                                {orders.totalProduct}
                             </Card.Text>
                         </Card.Body>
                     </Card>
@@ -98,7 +99,7 @@ class Dashboard extends Component{
                         <Card.Body className={"text"}> 
                         <Card.Title>Total Categories</Card.Title>
                             <Card.Text>
-                            {this.state.totalCategoies}
+                            {orders.totalCategoies}
                             </Card.Text>
                         </Card.Body>
                         
@@ -107,7 +108,7 @@ class Dashboard extends Component{
                         <Card.Body className={"text"}>
                         <Card.Title>Total User </Card.Title>
                             <Card.Text>
-                                {this.state.totalUser}
+                                {orders.totalUser}
                             </Card.Text>
                             <Card.Text>
                             
@@ -118,7 +119,7 @@ class Dashboard extends Component{
                         <Card.Body className={"text"}>
                         <Card.Title>Total Order</Card.Title>
                             <Card.Text>
-                                {this.state.totalOrder}
+                                {orders.totalOrder}
                             </Card.Text>
                         </Card.Body>
                     </Card>
@@ -133,7 +134,7 @@ class Dashboard extends Component{
                 </CardDeck>
             </Card.Body>
         </Card>
-        <Card key={"index2"} style={{ width: '42rem',float:'left',height:'415px' }}>
+        <Card key={"index2"} style={{ width: '42rem',float:'left',height:'360px' }}>
             <Card.Body>
                 <Card.Title>Order Statistics</Card.Title>
                 <CardDeck>
@@ -157,15 +158,15 @@ class Dashboard extends Component{
              </Card.Body>
         
             {/*<Card style={{ width: '42rem', borderWidth:0}} key={"index3"}> */}
-                <Card.Body style={{paddingBottom:'90px'}}>
+                <Card.Body style={{marginTop:'-30px'}}>
                 <Card.Title>Categories wise Products</Card.Title>
-                <ul key={"u1"} className="list-group" style={{maxHeight: '170px',overflow:'scroll'}}>
+                <ul key={"u1"} className="list-group" style={{maxHeight: '135px',overflow:'scroll'}}>
                     {this.renderCategoryProduct()}    
                 </ul>
                 </Card.Body>
             {/* </Card> */}
         </Card>
-        <Card key={"index5"} >
+        <Card key={"index5"} style={{height:"370px"}}>
             <Card.Body>
                 <Card.Title>Order Analysis</Card.Title>
                 <CardDeck>

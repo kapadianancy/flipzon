@@ -71,15 +71,17 @@ class ProductCategoriesAdd extends Component{
             errors.image = '';
             this.setState({valid1:false});
         }
-    
-        if (!imageFile.name.match(/\.(jpg|jpeg|png)$/)) {
-            errors.image = 'image Should be jpg,jpeg or png';
-            this.setState({valid1:true});
-        }
-        else
+        if(imageFile)
         {
-            errors.image = '';
-            this.setState({valid1:false});
+            if (!imageFile.name.match(/\.(jpg|jpeg|png)$/)) {
+                errors.image = 'image Should be jpg,jpeg or png';
+                this.setState({valid1:true});
+            }
+            else
+            {
+                errors.image = '';
+                this.setState({valid1:false});
+            }
         }
         this.setState(
         { image: e.target.files[0] }
