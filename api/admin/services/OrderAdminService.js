@@ -128,7 +128,7 @@ const editOrders = async (id) => {
             "				</tbody>\n" +
             "			</table>\n" +
             "					\n" +
-            "					<p>Please contact us via email <a href=\"mailto:dp297609@website.com\" target=\"_blank\">dp297609@website.com</a> or phone  (007) 123 456 7890.</p>\n" +
+            "					<p>Please contact us via email <a href=\"mailto:dp297609@website.com\" target=\"_blank\">flipzon@website.com</a> or phone  (007) 123 456 7890.</p>\n" +
             "					<p>Connect with us on social media: \n" +
             "				<a href=\"https://www.facebook.com\" target=\"_blank\" data-saferedirecturl=\"https://www.google.com/url?q=https://www.facebook.com&amp;source=gmail&amp;ust=1597124127911000&amp;usg=AFQjCNGI49Hpn5uDYTvqIof-bOwo6sz_Bg\"><img src=\"https://mail.google.com/mail/u/0?ui=2&amp;ik=b974c79857&amp;attid=0.1.2&amp;permmsgid=msg-f:1635663097844123044&amp;th=16b30aebdf36c5a4&amp;view=fimg&amp;sz=s0-l75-ft&amp;attbid=ANGjdJ-xJ0RQ_O5HKXKagaohsDTVz_XGa3Yvq5IVGVejyFm0cq6xaEhJoH5Msml2Ecb0aab4u7VmgkVCDf5RDbony_UKUA1yBDaPn0uie_JtpSVyseFEjGvzx5Xzvl0&amp;disp=emb\" class=\"m_5592298769751509350imgclass CToWUd\" style=\"vertical-align:bottom;height:20px;width:20px\" data-image-whitelisted=\"\" width=\"20px\" height=\"20px\"></a>&nbsp;&nbsp;\n" +
             "				<a href=\"https://www.instagram.com\" target=\"_blank\" data-saferedirecturl=\"https://www.google.com/url?q=https://www.instagram.com&amp;source=gmail&amp;ust=1597124127911000&amp;usg=AFQjCNEs6YOqHxeSA1j6gFtWk9HVFCHDeg\"><img src=\"https://mail.google.com/mail/u/0?ui=2&amp;ik=b974c79857&amp;attid=0.1.3&amp;permmsgid=msg-f:1635663097844123044&amp;th=16b30aebdf36c5a4&amp;view=fimg&amp;sz=s0-l75-ft&amp;attbid=ANGjdJ8ieOtP5p4TcZn1vVnyq-Km5Qn75hqwR5kUzXqEjKScvBCCSR7FGLmbRHYpkX5d0lzBBpJRa8PvKsJHG8MS2jrZSzsl4gWNKs-WHsbPqWOqn_dvulAuQcPjGNg&amp;disp=emb\" class=\"m_5592298769751509350imgclass CToWUd\" style=\"vertical-align:bottom;height:20px;width:20px\" data-image-whitelisted=\"\" width=\"20px\" height=\"20px\"></a>&nbsp;&nbsp; \n" +
@@ -139,7 +139,7 @@ const editOrders = async (id) => {
             "					<p style=\"margin:0px\">Flipzon</p>\n" +
             "					<p style=\"margin:0px\">LaNet Pvt Ltd</p>\n" +
             "					<p style=\"margin:0px\">Email: <a href=\"mailto:dp297609@gmail.com\" target=\"_blank\">dp297609@gmail.com</a></p>\n" +
-            "					<p style=\"margin:0px\">Web: <a href=\"mailto:flipzon@website.com\" target=\"_blank\">dp297609@website.com</a></p>\n" +
+            "					<p style=\"margin:0px\">Web: <a href=\"mailto:flipzon@website.com\" target=\"_blank\">flipzon@website.com</a></p>\n" +
             "					<p style=\"margin:0px\">Add:    405/406 Luxuria Business Hub,</p>\n" +
             "					<p style=\"margin:0px\"> Near VR mall, Surat - Dumas Rd, </p>\n" +
             "					<p style=\"margin:0px\">Surat, Gujarat 395007</p><div class=\"yj6qo\"></div><div class=\"adL\">\n" +

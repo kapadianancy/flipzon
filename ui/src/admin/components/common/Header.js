@@ -19,7 +19,7 @@ const Header = (props) => {
             <Nav.Link as={NavLink} activeClassName={classes.Active} to="/admin/order">Order</Nav.Link>
             <Nav.Link as={NavLink} activeClassName={classes.Active} to="/admin/users">Users</Nav.Link>
         </Nav>
-        <DropdownButton alignRight id="dropdown-basic-button" title={props.user.username+" "}>
+        <DropdownButton id="dropdown-basic-button" title={props.user.username+" "} drop={"left"}>
             <Dropdown.Item as={NavLink} to="/admin/profile">Manage Profile</Dropdown.Item>
             <Dropdown.Item onClick={() => props.logout()} href="#">Logout</Dropdown.Item>
         </DropdownButton>

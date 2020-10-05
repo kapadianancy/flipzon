@@ -14,9 +14,6 @@ class Dashboard extends Component{
         totalOrder:"",
         totalPendingOrder:"",
         totalCompletedOrder:"",
-        totalProduct:"",
-        totalCategoies:"",
-        totalUser:"",
         totalRevenue:"",
         tots:"",
         dataPie: {
@@ -42,29 +39,25 @@ class Dashboard extends Component{
         }
       }
     componentDidMount = async () =>{
-
+        let d = this.state.dataPie.datasets[0].data;
+        console.log(this.props.total.totalOrder);
+        
         await this.props.fetchTotal();
-        await this.props.fetchProductTotal();
         let tot = await this.props.total;
+        d.push(tot.totalOrder)
+        d.push(tot.totalPendingOrder)
+        d.push(tot.totalCompletedOrder)
+
+        await this.props.fetchProductTotal();
         let tots = await this.props.totals;
 
         this.setState({
             totalOrder:tot.totalOrder,
             totalPendingOrder:tot.totalPendingOrder,
             totalCompletedOrder:tot.totalCompletedOrder,
-            // totalProduct:tot.totalProduct,
-            // totalCategoies:tot.totalCategoies,
-            // totalUser:tot.totalUser,
             totalRevenue:tot.totalRevenue[0].totalPrice,
             tots:tots.cp.rows
         })
-        
-        let d = this.state.dataPie.datasets[0].data;
-        
-        d.push(this.state.totalOrder)
-        d.push(this.state.totalCompletedOrder)
-        d.push(this.state.totalPendingOrder)
-
     } 
     renderCategoryProduct = () =>{
         let dataArr = [];
@@ -79,8 +72,7 @@ class Dashboard extends Component{
                 </li>)
             }
         }
-        return(dataArr);
-        
+        return(dataArr);        
     }
     renderTotal = (orders) => { 
         let orderData = <div key="div1">
