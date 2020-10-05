@@ -32,7 +32,14 @@ class Header extends Component {
 
   view_cart=()=>
   {
-    this.props.history.push('/viewordercart')
+    if(this.props.token=="")
+    {
+      this.props.history.push('/login');
+    }
+    else{
+      this.props.history.push('/viewordercart')
+    }
+    
   }
 
   componentDidMount() {
@@ -43,6 +50,14 @@ class Header extends Component {
     event.preventDefault();
     this.props.history.push("/login");
   };
+
+  search=(event)=>
+  {
+    event.preventDefault();
+    //alert(document.getElementById("searchtext").value);
+    let text=document.getElementById("searchtext").value;
+    this.props.history.push('/searchProduct/'+text);
+  }
   render() {
     
     this.category = [];
@@ -80,6 +95,8 @@ class Header extends Component {
         marginRight: "20px",
       },
     };
+
+
 
     let loginBtn = null;
     if (this.props.token == "") {
@@ -146,11 +163,12 @@ class Header extends Component {
             </NavDropdown>
             <Form inline>
               <FormControl
-                type="text"
+                type="text" 
+                id="searchtext"
                 placeholder="Search Product"
                 className="mr-sm-2 formControl"
               />
-              <Button variant="outline-light" style={style.btn}>
+              <Button variant="outline-light" style={style.btn} onClick={this.search}>
                 Search
               </Button>
             </Form>

@@ -59,14 +59,37 @@ exports.addOrderItems = async (req, res) => {
         }
         const price = p.price;
 
-        //Add Details of OrderItem
-        const orderItem = await main.Order_details.create({
-            orderId: req.orderId,
-            productId: data.productId,
-            quantity: data.quantity,
-            price: price * data.quantity
-        });
+        const temp = await main.Order_details.findAll({
+            where: {
+                orderId: req.orderId,
+                productId: data.productId,
+                isDeleted: 0
+            }
+        })
+        const orderItem = "";
+        if (temp.length > 0) {
+            
+            orderItem = await main.Order_details.update(
+                {
+                    quantity: temp[0].quantity + data.quantity,
+                    price: temp[0].price + price * data.quantity
+                },
+                {
+                    where: {
+                        id: temp[0].id
+                    }
+                })
+        }
 
+        else {
+            //Add Details of OrderItem
+            orderItem = await main.Order_details.create({
+                orderId: req.orderId,
+                productId: data.productId,
+                quantity: data.quantity,
+                price: price * data.quantity
+            });
+        }
         //Decrement Product Quantity
         if (orderItem) {
             const pro = await main.product.update({ stock: p.stock - data.quantity }, {
@@ -268,7 +291,7 @@ exports.viewOrder = async (req, res) => {
 exports.viewOrderCart = async (req, res) => {
     try {
         const o = await sequelize.query("SELECT od.*,p.name,p.main_image,p.price FROM orders o,products p,order_details od where o.id=od.orderId and od.productId=p.id and o.status='Pending' and od.isDeleted=0");
-       
+
         res.status(200).send(o[0]);
     } catch (err) {
         res.status(400).send(err);
@@ -277,8 +300,8 @@ exports.viewOrderCart = async (req, res) => {
 
 exports.viewOrderDetails = async (req, res) => {
     try {
-        const o = await sequelize.query("SELECT od.*,p.name,p.main_image,p.price FROM orders o,products p,order_details od where o.id=od.orderId and od.productId=p.id and o.id="+ req.params.oid +" and od.isDeleted=0");
-       
+        const o = await sequelize.query("SELECT od.*,p.name,p.main_image,p.price FROM orders o,products p,order_details od where o.id=od.orderId and od.productId=p.id and o.id=" + req.params.oid + " and od.isDeleted=0");
+
         res.status(200).send(o[0]);
     } catch (err) {
         res.status(400).send(err);

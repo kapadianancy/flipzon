@@ -36,6 +36,11 @@ const store = (state = initialStore, action) => {
                 ...state,
                 error: action.error
             }
+            case types.SEARCH_PRODUCT:
+                return{
+                    ...state,
+                    products:action.products
+                }
         default:
             return state;
     }

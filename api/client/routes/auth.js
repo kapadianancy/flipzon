@@ -5,7 +5,7 @@ const secret="flipzoneToken";
 const auth=async(req,res,next)=>
 {
     try{
-        console.log("auth running");
+        //console.log("auth running");
         const token=req.header("authorization").replace("Bearer ","");
         //console.log(token);
         const valid=await jwt.verify(token,secret);
