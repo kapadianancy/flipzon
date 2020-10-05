@@ -173,7 +173,7 @@ const ProductForm = (props) => {
                             }
                             {
                                 props.edit ?
-                                <Image src={`http://localhost:8080/${props.product.main_image}`} fluid /> : null
+                                <Image src={`http://localhost:8080/${props.product.main_image}`} className={classes.mainImage} /> : null
                             }
                         </Col>
                     </Form.Group>
@@ -190,8 +190,8 @@ const ProductForm = (props) => {
                                             props.product.images.map( image => (
                                                 <Col key={image.id} sm="4">
                                                     <div className={classes.icontainer} onClick={()=> props.deleteProductImage(image.id)}>
-                                                        <Image src={`http://localhost:8080/${image.image}`} fluid />
-                                                        <div className={classes.after}>Delete</div>
+                                                        <Image src={`http://localhost:8080/${image.image}`} />
+                                                        <div className={classes.after}>x</div>
                                                     </div>
                                                 </Col>
                                             ))
