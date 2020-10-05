@@ -1,27 +1,51 @@
 import React, { Component } from "react";
 import img from '../../../images/product.png';
-import { ListGroup, Button,Row } from 'react-bootstrap';
+import { ListGroup, Button, Row, Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import NumericInput from 'react-numeric-input';
 
 import Header from '../../Components/Header/Header';
 import Footer from '../../Components/Footer/Footer';
 import * as actions from '../../redux-store/Actions/ProductAction';
+import * as Orderactions from '../../redux-store/Actions/OrderAction';
 
 class Product extends Component {
 
-    componentDidMount() {
-        // alert(this.props.match.params.cid);
-        this.props.getProducts(this.props.match.params.cid);
-
+    state = {
+        qty: 1
     }
+    componentDidMount() {
+        this.props.getProducts(this.props.match.params.cid);
+    }
+
     componentDidUpdate() {
         this.props.getProducts(this.props.match.params.cid);
     }
+    
+    addToCart = async (pid, qty) => {
+        if (this.props.token == "") {
+            this.props.history.push("/login");
+        }
+        else {
+            await this.props.addToCart(pid, qty);
+            if (this.props.error !== "") {
+                this.props.history.push("/error/" + this.props.error);
+            }
+            this.props.history.push("/viewordercart");
+        }
+    }
+
 
     clickHandler = (pid) => {
-
         this.props.history.push("/productDetails/" + pid);
     }
+
+    handleChange = (event) => {
+        this.setState({
+            qty: event
+        })
+    }
+
 
     render() {
         const style = {
@@ -45,24 +69,47 @@ class Product extends Component {
         else {
 
             this.props.products.map(p => {
+
+                let disable = false;
+                let x;
+                if (p.stock === 0) {
+                    disable = true
+                    x = "Out Of Stock";
+                }
+
                 data.push(
-                    <ListGroup.Item id={p.id}>
-                        <div class="card flex-row flex-wrap">
-                            <div class="card-header border-0">
-                                <img src={`http://localhost:8080${p.main_image}`} height="150px" width="200px" alt="image" />
-                            </div>
-                            <div class="card-block px-2">
-                                <h4 class="card-title">{p.name}</h4>
-                                <p class="card-text">Description : {p.description}</p>
-                                <p class="card-text">Price : {p.price}</p>
+                    <Form>
+                        <ListGroup.Item>
+                            <div class="card flex-row flex-wrap">
+                                <div class="card-header border-0">
+                                    <img src={`http://localhost:8080${p.main_image}`} height="150px" width="200px" alt="image" />
+                                </div>
+                                <div class="card-block px-2">
+                                    <h4 class="card-title">{p.name}</h4>
+                                    <p class="card-text">Description : {p.description}</p>
+                                    <p class="card-text">Price : {p.price}</p>
+                                    <div className="text-danger"><b>{x}</b></div>
+                                    <NumericInput
+                                        disabled={disable}
+                                        className="form-control"
+                                        defaultValue={1}
+                                        min={1}
+                                        max={p.stock}
+                                        step={1}
+                                        precision={0}
+                                        size={5}
+                                        mobile
+                                        onChange={(event) => this.handleChange(event)}
+                                    />
 
-                                <Button style={style.cardBtn} onClick={() => this.clickHandler(p.id)}>Add To Cart</Button>
-                                <Button style={style.cardBtn} onClick={() => this.clickHandler(p.id)}>View Deatails</Button>
-                            </div>
-                            <div class="w-100"></div>
+                                    <Button disabled={disable} id={p.id} style={style.cardBtn} onClick={() => this.addToCart(p.id, this.state.qty)}>Add To Cart</Button>
+                                    <Button style={style.cardBtn} onClick={() => this.clickHandler(p.id)}>View Deatails</Button>
+                                </div>
+                                <div class="w-100"></div>
 
-                        </div>
-                    </ListGroup.Item>
+                            </div>
+                        </ListGroup.Item>
+                    </Form>
                 );
                 return data;
             })
@@ -71,12 +118,14 @@ class Product extends Component {
         return (
             <>
                 <Header />
-                <ListGroup style={{ width: "80%", margin: "20px auto"  }}>
-                
-                        {data}
-                 
+
+                <ListGroup style={{ width: "80%", margin: "20px auto" }}>
+
+                    {data}
+
 
                 </ListGroup>
+
                 <Footer />
             </>
         );
@@ -84,13 +133,16 @@ class Product extends Component {
 };
 const mapStateToProp = (state) => {
     return {
-        products: state.Product.products
+        products: state.Product.products,
+        error: state.Order.error,
+        token: state.User.token
     }
 }
 
 const mapStateToAction = (dispatch) => {
     return {
-        getProducts: (cid) => dispatch(actions.categoryWiseProduct(cid))
+        getProducts: (cid) => dispatch(actions.categoryWiseProduct(cid)),
+        addToCart: (pid, qty) => dispatch(Orderactions.addToCart(pid, qty))
     }
 
 }

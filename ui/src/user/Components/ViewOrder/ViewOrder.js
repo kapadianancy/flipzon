@@ -5,6 +5,7 @@ import { Nav } from "react-bootstrap";
 import { connect } from 'react-redux'
 
 import * as actions from '../../redux-store/Actions/UserAction';
+import * as oaction from '../../redux-store/Actions/OrderAction';
 import './ViewOrder.css';
 
 class ViewOrder extends Component {
@@ -12,6 +13,13 @@ class ViewOrder extends Component {
 
 
     componentDidMount() {
+        this.props.viewOrder();
+    }
+
+    cancelOrder=async(oid)=>
+    {
+        alert(oid);
+        await this.props.cancelOrder(oid);
         this.props.viewOrder();
     }
 
@@ -24,33 +32,55 @@ class ViewOrder extends Component {
                 marginTop: '20px',
                 marginBottom: '40px',
                 width: '80%'
-            },
+            },cardBtn: {
+                backgroundColor: "#fb641b",
+                borderColor: "#fb641b",
+                margin: '10px',
+                color: "white"
+            }
         };
-
+      
+            
 
         let data = [];
-        console.log(this.props.orders)
         if (!this.props.orders) {
             data.push(
                 <tr>
                     <td colSpan="4">
-                <div style={{margin:'auto' ,color:'#fb641b', marginBottom: '100px', marginTop: '50px' }}>
-                    <h1><center>No Orders Yet</center></h1>
-                </div>
-                </td>
+                        <div style={{ margin: 'auto', color: '#fb641b', marginBottom: '100px', marginTop: '50px' }}>
+                            <h1><center>No Orders Yet</center></h1>
+                        </div>
+                    </td>
                 </tr>
             )
         }
         else {
-
+            let btn = null;
+            let details=null;
             this.props.orders.map(o => {
                 let status = "";
-                if (o.status == "confirm")
-                    status = "btn btn-success btn-circle btn-md"
-                else if (o.status == "cancel")
-                    status = "btn btn-danger btn-circle btn-md"
-                else
-                    status = "btn btn-warning btn-circle btn-md"
+                if (o.status == "Confirm") {
+                    status = "btn btn-success btn-circle btn-md";
+                    btn = null;
+                    details=(
+                        <Nav.Link as={Link} className="forgot-link" to={"/vieworderdetails/" + o.id}>Order Details</Nav.Link>
+                    );
+                }
+
+                else if (o.status == "Cancel") {
+                    status = "btn btn-danger btn-circle btn-md";
+                    btn = null;
+                    details="---";
+                }
+
+                else {
+                    status = "btn btn-warning btn-circle btn-md";
+                    btn = (
+                        <button type="button" style={styles.cardBtn} onClick={() => this.cancelOrder(o.id)}>X</button>
+                    );
+                    details=null;
+                }
+
                 data.push(
 
                     <tr>
@@ -61,7 +91,9 @@ class ViewOrder extends Component {
                             <button type="button" class={status}>{o.status}</button>
                         </td>
                         <td>
-                            <Nav.Link as={Link} className="forgot-link" to="/viewOrderDetail">Order Details</Nav.Link>
+                            
+                            {btn}
+                            {details}
                         </td>
                     </tr>
                 );
@@ -103,7 +135,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        viewOrder: () => dispatch(actions.viewOrder())
+        viewOrder: () => dispatch(actions.viewOrder()),
+        cancelOrder:(oid)=>dispatch(oaction.cancelOrder(oid))
     }
 }
 

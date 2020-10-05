@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button } from "reactstrap";
 import { Navbar, Nav, Form, FormControl, NavDropdown } from "react-bootstrap";
-import { Link, Route, withRouter } from "react-router-dom";
+import { Link, Route, withRouter, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import {
   ButtonDropdown,
@@ -30,6 +30,11 @@ class Header extends Component {
     });
   };
 
+  view_cart=()=>
+  {
+    this.props.history.push('/viewordercart')
+  }
+
   componentDidMount() {
     this.props.displaycategory();
   }
@@ -39,6 +44,7 @@ class Header extends Component {
     this.props.history.push("/login");
   };
   render() {
+    
     this.category = [];
     let i = 1;
     this.props.categories.map((c) => {
@@ -53,6 +59,7 @@ class Header extends Component {
             >
               {c.name}
             </Nav.Link>
+
           </NavDropdown.Item>
         );
         i++;
@@ -150,7 +157,7 @@ class Header extends Component {
           </Nav>
 
           <Form inline>
-            <img src={cart} height="40px" width="40px" style={style.img}></img>
+            <img src={cart} height="40px" width="40px" style={style.img} onClick={this.view_cart}></img>
             {loginBtn}
           </Form>
         </Navbar>

@@ -20,6 +20,7 @@ import ProductCategory from './user/redux-store/Reducers/ProductCategory';
 import Product from './user/redux-store/Reducers/Product';
 import AdminUserReducer from './admin/store/reducers/UserReducer'
 import AdminAuthReducer from './admin/store/reducers/AuthReducer';
+import OrdersReducer from './user/redux-store/Reducers/Order';
 
 const rootReducer = combineReducers({
   User:UserReducer,
@@ -33,7 +34,8 @@ const rootReducer = combineReducers({
   adminAuth: AdminAuthReducer,
   Product:Product,
   adminAuth: AdminAuthReducer,
-  adminUser: AdminUserReducer
+  adminUser: AdminUserReducer,
+  Order:OrdersReducer
 });
 
 let init;
