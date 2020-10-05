@@ -30,9 +30,15 @@ class Header extends Component {
     });
   };
 
-  view_cart=()=>
-  {
-    this.props.history.push('/viewordercart')
+  view_cart = () => {
+
+    if (this.props.token == "") {
+      this.props.history.push("/login");
+    }
+    else {
+      this.props.history.push("/viewordercart");
+    }
+
   }
 
   componentDidMount() {
@@ -44,15 +50,14 @@ class Header extends Component {
     this.props.history.push("/login");
   };
 
-  search=(event)=>
-  {
+  search = (event) => {
     event.preventDefault();
     //alert(document.getElementById("searchtext").value);
-    let text=document.getElementById("searchtext").value;
-    this.props.history.push('/searchProduct/'+text);
+    let text = document.getElementById("searchtext").value;
+    this.props.history.push('/searchProduct/' + text);
   }
   render() {
-    
+
     this.category = [];
     let i = 1;
     this.props.categories.map((c) => {
@@ -156,7 +161,7 @@ class Header extends Component {
             </NavDropdown>
             <Form inline>
               <FormControl
-                type="text" 
+                type="text"
                 id="searchtext"
                 placeholder="Search Product"
                 className="mr-sm-2 formControl"
