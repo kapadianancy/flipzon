@@ -6,15 +6,16 @@ import Dashboards from '../components/Dashboard/Dashboard';
 // import { PieChart } from 'react-minimal-pie-chart';
 
 const Dashboard = (props) => {
-    useEffect( () => {
+    useEffect(() => {
         if(props.total.length === 0)
         {
            props.fetchTotal();
+           props.fetchProductTotal();
         }
     }, [props])
     return(
         <div>
-            <Dashboards total={props.total}/>
+            <Dashboards total={props.total} totals={props.totals}/>
         </div>
     )
 }

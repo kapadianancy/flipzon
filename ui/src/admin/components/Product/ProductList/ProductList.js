@@ -26,7 +26,7 @@ const renderProducts = (products, deleteProduct, activeOld, perPage) => {
 }
 
 const ProductList = (props) => {
-    return <Table responsive striped bordered hover size="sm">
+    return <Table striped bresponsive ordered hover size="sm">
         <thead>
             <tr>
                 <th>#</th>

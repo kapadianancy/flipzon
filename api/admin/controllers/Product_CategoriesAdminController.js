@@ -6,7 +6,6 @@ const storage = multer.diskStorage({
         cb(null, 'public/images/')
     },
     filename: (req, file, cb) => {
-        console.log(file);
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
         cb(null, file.fieldname + '-' + uniqueSuffix+'.png')
     }
@@ -16,7 +15,7 @@ const upload = multer({ storage: storage });
 module.exports = (app) => {
 
   // return list of Product_Category
-app.get("/admin/product_categories", auth, async (req, res, next) => {
+app.get("/admin/product_categories", auth,async (req, res, next) => {
     let product_categories = await Product_Categories_Services.getProduct_Category();
     res.send(product_categories);
     })
@@ -30,12 +29,11 @@ app.post("/admin/product_categories", auth, upload.single('image'),async (req, r
     if(req.file) {
         req.body = {
             ...req.body,
-            image: "/"+req.file.destination+req.file.filename
+            image:"/images/"+req.file.filename
         }
     }
     try {
         let product_categories = await Product_Categories_Services.addProduct_Category(req.body);
-        console.log(product_categories);
         res.send(product_categories);
     } catch(error) {
         next(error);
@@ -46,7 +44,7 @@ app.put("/admin/product_categories/:id", auth, upload.single('image'),async (req
     if(req.file) {
         req.body = {
             ...req.body,
-            image: "/"+req.file.destination+req.file.filename
+            image: "/images/"+req.file.filename
         }
     }
     try {

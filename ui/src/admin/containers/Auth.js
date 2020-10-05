@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import Card from 'react-bootstrap/Card'
 import { connect } from 'react-redux';
+import Image from 'react-bootstrap/Image'
+
+import Logo from '../../images/logo-2.jpg'
 import * as classes from './Auth.module.css'
 import Login from '../components/Auth/Login'
 import Register from '../components/Auth/Register'
 import { login, register, forgotPassword } from '../store/actions/AuthActions'
 import ForgotPassword from '../components/Auth/ForgotPassword'
-import Logo from '../../images/logo-2.jpg'
-import Image from 'react-bootstrap/Image'
 
 const Auth = (props) => {
     const [activeKey, setActiveKey] = useState("login")

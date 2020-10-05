@@ -28,10 +28,12 @@ class Order extends Component{
                 <th>
                     #{index+1}
                 </th>
+                <th>
+                </th>
             </tr>        
             <tr>
                 <th>
-                    Product Categories :- 
+                    Product Categories 
                 </th>
                 <td>
                     {ordersDetails.product.Product_category.name}
@@ -39,7 +41,7 @@ class Order extends Component{
             </tr>
             <tr>
                 <th>
-                    Product Name :- 
+                    Product Name 
                 </th>
                 <td>
                     {ordersDetails.product.name}
@@ -47,7 +49,7 @@ class Order extends Component{
             </tr>
             <tr>
                 <th>
-                    Quantity :- 
+                    Quantity 
                 </th>
                 <td>
                     {ordersDetails.quantity}
@@ -55,7 +57,7 @@ class Order extends Component{
             </tr>
             <tr>
                 <th>
-                    Price :- 
+                    Price 
                 </th>
                 <td>
                     {ordersDetails.price}
@@ -77,7 +79,7 @@ class Order extends Component{
                             <td>{orders[i].user.email}</td>
                             <td>{orders[i].user.contact}</td>
                             <td>{orders[i].totalPrice}</td>
-                            <td>{orders[i].orderDate}</td>
+                            <td>{new Date(orders[i].orderDate).toLocaleDateString()}</td>
                             <td><Button variant="info" onClick={() => this.handleShow(orders[i].id)}>View Order</Button></td>
                             {orders[i].status === "Completed Delivery" ? <td><Alert variant="success"> {orders[i].status} </Alert></td> : 
 
@@ -100,7 +102,7 @@ class Order extends Component{
                 <th>Address</th>
                 <th>Email ID</th>
                 <th>Contact No</th>
-                <th>Total Price</th>
+                <th>Total Amount</th>
                 <th>Order Date</th>
                 <th>Order</th>
                 <th>Status</th>
@@ -110,24 +112,22 @@ class Order extends Component{
         { this.renderProductOrder(this.props.orders, this.props.active, this.props.perPage) }     
         </tbody>
         </Table>
-       
-        <Table responsive striped bordered hover size="sm">
+            
             <Modal show={this.state.show}
                 onHide={this.handleHide}
                 dialogClassName="modal-90w"
                 aria-labelledby="example-custom-modal-styling-title">
-            <thead>
-                    <Modal.Header closeButton>
-                        <Modal.Title id="example-custom-modal-styling-title">
-                            Order Details
-                        </Modal.Title>
-                    </Modal.Header>	
-            </thead>
+                <Modal.Header closeButton>
+                    <Modal.Title id="example-custom-modal-styling-title">
+                        Order Details
+                    </Modal.Title>
+                </Modal.Header>	
                 <Modal.Body key={"mindex"} scrollable={"true"}>
-                    {this.renderOrderDetails(this.props.ordersDetails) }
+                    <Table responsive striped bordered hover size="sm">
+                        {this.renderOrderDetails(this.props.ordersDetails) }
+                    </Table>
                 </Modal.Body>
             </Modal>
-        </Table>
         </>
     }
 }

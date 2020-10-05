@@ -42,14 +42,26 @@ class ProductCategoriesEdit extends Component{
         const imageFile = e.target.files[0];
         let errors = this.state.errors;
 
-        if (!imageFile.name.match(/\.(jpg|jpeg|png)$/)) {
-            errors.image = 'image Should be jpg,jpeg or png';
+        if (!imageFile) {
+            errors.image = 'image Required';
             this.setState({valid1:true});
         }
         else
         {
             errors.image = '';
             this.setState({valid1:false});
+        }
+        if(imageFile)
+        {
+            if (!imageFile.name.match(/\.(jpg|jpeg|png)$/)) {
+                errors.image = 'image Should be jpg,jpeg or png';
+                this.setState({valid1:true});
+            }
+            else
+            {
+                errors.image = '';
+                this.setState({valid1:false});
+            }
         }
         this.setState(
         { image: e.target.files[0] }
