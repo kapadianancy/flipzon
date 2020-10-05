@@ -69,3 +69,17 @@ export const productDetails = (pid) => {
         })
     };
 }
+
+export const searchProduct = (text) => {
+    return async dispatch => {
+
+        await axiosInstance.get('client/searchProduct/' + text).then(response => {
+            dispatch({
+                type: types.SEARCH_PRODUCT,
+                products: response.data
+            });
+        }).catch(error => {
+            
+        })
+    };
+}

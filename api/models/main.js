@@ -8,7 +8,7 @@ const Product_image=require("../models/Product_image");
 const Order=require("../models/Order");
 const Order_details=require("../models/Order_details");
 
-let options = { alter: false };
+let options = { alter: true };
 if(process.env.environment === "TEST") {
     options = { force: true };
 }

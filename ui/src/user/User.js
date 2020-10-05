@@ -19,6 +19,7 @@ import ProductDetails from './Containers/Product/ProductDetails';
 import ViewOrderCart from './Containers/ViewOrder/ViewOrderCart';
 import ViewBill from './Containers/ViewOrder/ViewBill';
 import ViewOrderDetails from './Containers/ViewOrder/ViewOrderDetails';
+import searchProduct from './Containers/Product/searchProduct';
  
 class User extends Component {
   render() { 
@@ -32,6 +33,7 @@ class User extends Component {
           <Route path="/login" exact component={Login}/>
           <Route path="/logout" exact component={Logout}/>
           <Route path="/signup" exact component={Signup}/>
+          <Route path="/searchProduct/:text" exact component={searchProduct}/>
           <Route path="/error/:error" exact component={Error}/>
           <Route path="/forgetpassword" exact component={Forgetpassword}/>
           <Route path="/editprofile" exact component={EditProfile}/>
