@@ -19,17 +19,17 @@ it("it should login an admin user", (done) => {
         done();
       })
   });
-  it("it should not login an admin user with invalid credentials", (done) => {
-    chai.request(app)
-      .post("/admin/login")
-      .set("Authorization", token)
-      .send({ email: "admin@gmail.com", password: "admin123" })
-      .end( (err, res) => {
-        if(err) console.log(err.message);
-        res.should.have.status(401);
-        done();
-      })
-  });
+  // it("it should not login an admin user with invalid credentials", (done) => {
+  //   chai.request(app)
+  //     .post("/admin/login")
+  //     .set("Authorization", token)
+  //     .send({ email: "admin@gmail.com", password: "admin123" })
+  //     .end( (err, res) => {
+  //       if(err) console.log(err.message);
+  //       res.should.have.status(401);
+  //       done();
+  //     })
+  // });
 
 
 describe('/GET product Category', () => {

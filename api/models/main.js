@@ -10,7 +10,7 @@ const Order_details=require("../models/Order_details");
 
 let options = { alter: true };
 if(process.env.environment === "TEST") {
-    options = { force: true };
+    options = { alter: true };
 }
 
 db.sequelize.sync(options).then(() => {
@@ -23,5 +23,6 @@ module.exports={
     Product_category:Product_category,
     Order:Order,
     Order_details:Order_details,
-    Product_image:Product_image
+    Product_image:Product_image,
+    Role: role
 }
