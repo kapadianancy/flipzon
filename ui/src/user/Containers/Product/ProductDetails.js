@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import img from '../../../images/product.png';
-import { ListGroup,Button } from 'react-bootstrap';
+import { ListGroup, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import NumericInput from 'react-numeric-input';
+import Modal from 'react-bootstrap/Modal'
+import { Form, FormGroup, Label, Input } from "reactstrap";
+import ReactStars from "react-rating-stars-component";
 
 import Header from '../../Components/Header/Header';
 import Footer from '../../Components/Footer/Footer';
@@ -19,7 +22,9 @@ class Product extends Component {
         description: "",
         stock: "",
         main_image: "",
-        qty: 1
+        qty: 1,
+        show: false,
+        rating :1
     }
 
     async componentDidMount() {
@@ -49,11 +54,23 @@ class Product extends Component {
         }
     }
 
+    handleShow = async () => {
+        //await this.props.fetchOrdersDetails(id);
+        this.setState({ show: true });
+    };
+
+    handleClose = () => {
+        this.setState({ show: false });
+    };
+
     handleChange = (event) => {
         this.setState({
             qty: event
         })
     }
+    onStarClick(nextValue) {
+        this.setState({rating: nextValue});
+      }
 
     render() {
 
@@ -69,19 +86,21 @@ class Product extends Component {
         }
         let data = [];
         let disable = false;
-        let error="";
+        let error = "";
         if (this.props.products.stock == 0) {
-            disable= true;
-            error="Out Of Stock";
-       
-      }
+            disable = true;
+            error = "Out Of Stock";
+
+        }
         this.props.images.map(p => {
-            
+
             data.push(
                 <img src={`http://localhost:8080${p.image}`} alt="image" width="100px" height="80px" style={{ margin: "0px 5px" }} />
             )
             return data;
         });
+
+
 
         return (
 
@@ -115,7 +134,69 @@ class Product extends Component {
                                     onChange={(event) => this.handleChange(event)}
                                 />
                                 <Button disabled={disable} id={this.state.id} style={style.cardBtn} onClick={() => this.addToCart(this.state.id, this.state.qty)}>Add To Cart</Button>
+                                <Button style={style.cardBtn} onClick={() => this.handleShow()}>
+                                    Give Feedback
+                                </Button>
 
+                                <Modal show={this.state.show} >
+                                    <Modal.Header>
+                                        <Modal.Title style={{ color: "#fb641b" }}>Your Review</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>
+
+                                        <Form>
+                                            <div class="card flex-row flex-wrap">
+                                                <div class="card-header">
+                                                    <img src={`http://localhost:8080${this.state.main_image}`} alt="image" height="50px" width="50px" />
+                                                </div>
+                                                <div class="px-2">
+                                                    <h4 class="card-title">{this.state.name}</h4>
+                                                    <p class="card-text"><b>Price :  </b>{this.state.price}</p>
+                                                </div>
+                                            </div>
+                                            <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                                                <Label for="username" className="mr-sm-2">
+                                                    Rating
+                                            </Label>
+                                         
+                                                <ReactStars
+                                                    count={5}
+                                                    value={this.state.rating}
+                                                    onChange={(event, newValue) => this.onStarClick(newValue)}
+                                                    size={24}
+                                                    activeColor="#ffd700"
+                                                    isHalf={true}
+                                                    emptyIcon={<i className="far fa-star"></i>}
+                                                    halfIcon={<i className="fa fa-star-half-alt"></i>}
+                                                    fullIcon={<i className="fa fa-star"></i>}
+                                                  
+                                                />
+                                            </FormGroup>
+                                            <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                                                <Label for="review" className="mr-sm-2">
+                                                    Review
+                                            </Label>
+                                                <Input
+                                                    type="text"
+                                                    name="review"
+                                                    id="review"
+                                                    value={this.state.review}
+                                                    onChange={this.changeHandler}
+                                                    placeholder="Enter Your review"
+                                                />
+                                            </FormGroup>
+                                      
+                                        </Form>
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <Button variant="secondary" onClick={() => this.handleClose()}>
+                                            Cancel
+                                    </Button>
+                                        <Button variant="primary" onClick={() => this.handleClose()}>
+                                            Add Reviews
+                                    </Button>
+                                    </Modal.Footer>
+                                </Modal>
                             </div>
                             <div class="w-100"></div>
 

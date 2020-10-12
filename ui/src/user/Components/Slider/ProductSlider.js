@@ -42,7 +42,7 @@ class ProductSlider extends Component {
           <Card.Body>
             <Card.Title>{p[j].name}</Card.Title>
             <Card.Text>{p[j].description}</Card.Text>
-            <Button style={style.cardBtn} onClick={() => this.clickHandler(p[j].id)}>View Deatails</Button>
+            <Button style={style.cardBtn} onClick={() => this.clickHandler(p[j].id)}>View Details</Button>
 
           </Card.Body>
         </Card>
