@@ -2,7 +2,7 @@ import React from 'react';
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import { Link } from 'react-router-dom';
-
+import { confirmAlert } from 'react-confirm-alert';
 
 const renderProducts = (products, deleteProduct, activeOld, perPage) => {
     let productsArr = [];
@@ -26,7 +26,38 @@ const renderProducts = (products, deleteProduct, activeOld, perPage) => {
 }
 
 const ProductList = (props) => {
-    return <Table striped bresponsive ordered hover size="sm">
+    const deleteAlert = (id) => { 
+        confirmAlert({
+            customUI: ({ onClose }) => {
+                return (
+                    <table>
+                        <thead>
+                        <tr>    
+                            <td>
+                                <h1>Are you sure?</h1>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>You want to delete?</p>
+                            </td>
+                        </tr>
+                        <tr> 
+                            <td>
+                            <Button onClick={() => { props.deleteProduct(id)
+                                onClose(); }}> Yes, Delete it! </Button>
+                            </td>
+                            <td>
+                                <Button onClick={onClose}>Cancel</Button>
+                            </td>
+                        </tr>
+                        </thead>
+                    </table>
+                );
+            }
+        });
+    }
+    return <Table striped responsive ordered hover size="sm">
         <thead>
             <tr>
                 <th>#</th>
@@ -39,7 +70,7 @@ const ProductList = (props) => {
             </tr>
         </thead>
         <tbody>
-            { renderProducts(props.products, props.deleteProduct, props.active, props.perPage) }
+            { renderProducts(props.products, deleteAlert, props.active, props.perPage) }
         </tbody>
     </Table>
 }

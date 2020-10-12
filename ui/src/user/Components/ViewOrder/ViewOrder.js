@@ -18,7 +18,7 @@ class ViewOrder extends Component {
 
     cancelOrder=async(oid)=>
     {
-        alert(oid);
+       // alert(oid);
         await this.props.cancelOrder(oid);
         this.props.viewOrder();
     }

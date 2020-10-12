@@ -30,6 +30,7 @@ class Header extends Component {
     });
   };
 
+<<<<<<< HEAD
   view_cart = () => {
 
     if (this.props.token == "") {
@@ -39,6 +40,18 @@ class Header extends Component {
       this.props.history.push("/viewordercart");
     }
 
+=======
+  view_cart=()=>
+  {
+    if(this.props.token=="")
+    {
+      this.props.history.push('/login');
+    }
+    else{
+      this.props.history.push('/viewordercart')
+    }
+    
+>>>>>>> master
   }
 
   componentDidMount() {

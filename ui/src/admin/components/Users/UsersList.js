@@ -1,6 +1,7 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
+import { confirmAlert } from 'react-confirm-alert';
 
 const renderUsers = (users, showOrders, deleteUser, activeOld, perPage) => {
     let usersArr = [];
@@ -24,6 +25,37 @@ const renderUsers = (users, showOrders, deleteUser, activeOld, perPage) => {
 }
 
 const UsersList = (props) => {
+    const deleteAlert = (id) => { 
+        confirmAlert({
+            customUI: ({ onClose }) => {
+                return (
+                    <table>
+                        <thead>
+                        <tr>    
+                            <td>
+                                <h1>Are you sure?</h1>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>You want to delete?</p>
+                            </td>
+                        </tr>
+                        <tr> 
+                            <td>
+                            <Button onClick={() => { props.deleteUser(id)
+                                onClose(); }}> Yes, Delete it! </Button>
+                            </td>
+                            <td>
+                                <Button onClick={onClose}>Cancel</Button>
+                            </td>
+                        </tr>
+                        </thead>
+                    </table>
+                );
+            }
+        });
+    }
     return <Table responsive striped bordered hover size="sm">
         <thead>
             <tr>
@@ -37,7 +69,7 @@ const UsersList = (props) => {
             </tr>
         </thead>
         <tbody>
-            { renderUsers(props.users, props.showOrders, props.deleteUser, props.active, props.perPage) }
+            { renderUsers(props.users, props.showOrders, deleteAlert, props.active, props.perPage) }
         </tbody>
     </Table>
 }

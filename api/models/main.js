@@ -7,10 +7,12 @@ const Product=require("../models/Product");
 const Product_image=require("../models/Product_image");
 const Order=require("../models/Order");
 const Order_details=require("../models/Order_details");
+const Review = require("./Review");
+const Specification = require("./Specification");
 
 let options = { alter: true };
 if(process.env.environment === "TEST") {
-    options = { force: true };
+    options = { alter: true };
 }
 
 db.sequelize.sync(options).then(() => {
@@ -23,5 +25,8 @@ module.exports={
     Product_category:Product_category,
     Order:Order,
     Order_details:Order_details,
-    Product_image:Product_image
+    Product_image:Product_image,
+    Role: role,
+    Review: Review,
+    Specification: Specification
 }

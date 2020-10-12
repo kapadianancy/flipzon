@@ -27,6 +27,15 @@ const Product =db.sequelize.define("Product", {
             type:DataTypes.INTEGER,
             allowNull:false
         },        
+        discount: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0
+        },
+        isInOffer: {
+            type: DataTypes.BOOLEAN,
+            defaultValue: false
+        },
+        videoLink: DataTypes.TEXT,
         categoryId: {
             type: DataTypes.INTEGER
         },
