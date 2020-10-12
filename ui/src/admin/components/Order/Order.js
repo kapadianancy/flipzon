@@ -8,7 +8,7 @@ import { fetchOrdersDetails,updateOrders } from '../../store/actions/OrderAction
 
 class Order extends Component{
 	state = {
-		show: false,
+		show: false
 	};
 
 	handleShow = async (id) => {
@@ -16,8 +16,8 @@ class Order extends Component{
 		this.setState({ show: true });
 	};
 
-    updateHandler = async (id) => {
-        await this.props.updateOrders(id);
+    updateHandler = async (id,status) => {
+        await this.props.updateOrders(id,status);
 	};
 	handleHide = (id) => {
 		this.setState({ show: false });
@@ -81,9 +81,10 @@ class Order extends Component{
                             <td>{orders[i].totalPrice}</td>
                             <td>{new Date(orders[i].orderDate).toLocaleDateString()}</td>
                             <td><Button variant="info" onClick={() => this.handleShow(orders[i].id)}>View Order</Button></td>
-                            {orders[i].status === "Completed Delivery" ? <td><Alert variant="success"> {orders[i].status} </Alert></td> : 
-
-                            <td><Alert variant="warning"> <Alert.Link onClick={() => this.updateHandler(orders[i].id)}>{orders[i].status}</Alert.Link></Alert></td>
+                            {
+                             orders[i].status === "Delivered" ? <td><Alert variant="success"> {orders[i].status} </Alert></td> :
+                             orders[i].status === "Canceled" ? <td><Alert variant="danger"> {orders[i].status} </Alert></td> : 
+                            <td><Alert variant="info"> <Alert.Link onClick={() => this.updateHandler(orders[i].id,"Delivered")}>{orders[i].status}</Alert.Link></Alert></td>
                             }
                         </tr>
                     )
@@ -142,7 +143,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         fetchOrdersDetails: (id) => dispatch(fetchOrdersDetails(id)),
-        updateOrders:(id)=>dispatch(updateOrders(id))
+        updateOrders:(id,status)=>dispatch(updateOrders(id,status))
     }
 }
 

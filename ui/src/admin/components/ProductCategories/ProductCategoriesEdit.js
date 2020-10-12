@@ -130,7 +130,7 @@ class ProductCategoriesEdit extends Component{
                     
                     <Form.Control type="hidden" value={this.state.id || ''} onChange={(event) => this.setState({id: event.target.value})} placeholder="Enter Id" />
                     <Form.Group controlId="exampleForm.ControlTextarea1">
-                        <Form.Label>Category Name</Form.Label>
+                        <Form.Label>Category Name</Form.Label><span><font style={{color:"red"}}> *</font></span>
                         <Form.Control isInvalid={errors.name}  type="text" value={this.state.name || ''} onChange={e => this.onTodoChange(e.target.value)} placeholder="Enter Category" />
                         <Form.Control.Feedback type="invalid">
                             {errors.name}
@@ -138,12 +138,12 @@ class ProductCategoriesEdit extends Component{
                     </Form.Group>
 
                     <Form.Group controlId="exampleForm.ControlTextarea3">
-                        <Form.Label>Image</Form.Label>
+                        <Form.Label>Image</Form.Label><span><font style={{color:"red"}}> *</font></span>
                         <Form.Control isInvalid={errors.image}  type="file" name="image" onChange={this.onFileChange}/>
                         <Form.Control.Feedback type="invalid">
                             {errors.image}
                         </Form.Control.Feedback>
-                        {this.state.image === "" ? "":<img src={"http://localhost:8080"+this.state.myimg} alt="description" width="50px"/>}    
+                        {this.state.image === "" ? "":<img src={"http://localhost:8080"+this.state.myimg} alt="description" width="150px"/>}    
                     </Form.Group>
 
                     <Form.Group controlId="exampleForm.ControlTextarea4">

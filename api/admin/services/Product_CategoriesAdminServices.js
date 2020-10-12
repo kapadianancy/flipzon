@@ -32,12 +32,12 @@ const addProduct_Category = async (data) => {
         let errorObj = {
             statusCode: 400
         }
-        // if(!data.name) {
-        //     errorObj.message = "category Name is required";
-        // }
-        // if(!data.image) {
-        //     errorObj.message = "Image is required";
-        // }
+        if(!data.name) {
+            errorObj.message = "category Name is required";
+        }
+        if(!data.image) {
+            errorObj.message = "Image is required";
+        }
         if(errorObj.message) throw errorObj;
         let product_category = await Product_category.create({
             name: data.name,

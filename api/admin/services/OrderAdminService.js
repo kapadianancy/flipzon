@@ -40,7 +40,7 @@ const getOrders = async () => {
     }  
 }
   
-const editOrders = async (id) => {
+const editOrders = async (id,status) => {
     try {
         let errorObj = { 
             statusCode:200 
@@ -51,10 +51,10 @@ const editOrders = async (id) => {
             errorObj.message = "Orders not found";
         }
         if(errorObj.message) throw errorObj
-        orders = await Orders.update({status:"Completed Delivery"}, {
+        orders = await Orders.update({status:status}, {
             where: { id : id }
         });
-        
+        // console.log("orders = "+orders);
         if(orders)
         {
             let d = await Orders.findByPk(id,{
@@ -67,6 +67,7 @@ const editOrders = async (id) => {
                     IsDeleted:0
                 }
             });
+        
             let d1 = await OrdersDetails.findAll({
                 include: [{
                     model:product,as:"product",
@@ -79,12 +80,13 @@ const editOrders = async (id) => {
                     orderId:id
                 }
             })
-
+            if(d.status === 'Delivered')
+            {
             var transporter = nodemailer.createTransport({
                 service: 'gmail',
                 auth: {
                 user: 'dp297609@gmail.com',
-                pass: 'dhaval2552'
+                pass: 'dhaval1216'
                 }
             });
             var html1 = "<br/>";
@@ -122,8 +124,8 @@ const editOrders = async (id) => {
             "					</tr>	\n" +
             "					\n" +
             "					<tr style=\"line-height:60px\">\n" +
-            "<td style=\"background-color:white;color:black;padding-left:9px\">Total Cost:-</td>\n" +
-            "<td style=\"background-color:white;color:black;padding-left:9px;font-size:19px\">"+d.totalPrice+"<span> ₹ /-</span></td>\n" +
+            "                   <td style=\"background-color:white;color:black;padding-left:9px\">Total Cost:-</td>\n" +
+            "                   <td style=\"background-color:white;color:black;padding-left:9px;\">"+d.totalPrice+"<span> ₹ /-</span></td>\n" +
             "					</tr>\n" +
             "				</tbody>\n" +
             "			</table>\n" +
@@ -160,7 +162,7 @@ const editOrders = async (id) => {
                 console.log('Email sent: ' + info.response);
                 }
             });
-
+            }
         }
 
         return await Orders.findByPk(id);

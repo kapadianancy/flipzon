@@ -15,7 +15,7 @@ const upload = multer({ storage: storage });
 module.exports = (app) => {
 
   // return list of Product_Category
-app.get("/admin/product_categories", auth,async (req, res, next) => {
+app.get("/admin/product_categories", async (req, res, next) => {
     let product_categories = await Product_Categories_Services.getProduct_Category();
     res.send(product_categories);
     })

@@ -2,16 +2,12 @@ import * as types from '../ActionTypes'
 import axios from '../../../axios'
 
 export const fetchProductCategories = () => {
-    return async (dispatch,getState) => {
+    return async (dispatch) => {
         dispatch({
             type:types.INIT_FETCH_PRODUCT_CATEGORIES
         }) 
-        let token = getState().adminAuth.token
-        await axios.get('admin/product_categories',{
-            headers: {
-                "Authorization": token
-            }
-        }).then(response => {
+        // let token = getState().adminAuth.token
+        await axios.get('admin/product_categories').then(response => {
             dispatch({
                 type:types.FETCH_PRODUCT_CATEGORIES_SUCCESS,
                 product_categories:response.data

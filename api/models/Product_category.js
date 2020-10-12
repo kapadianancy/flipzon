@@ -27,6 +27,10 @@ const Product_category = db.sequelize.define('Product_category', {
                 }
             }
         },
+        // parent:
+        // {
+        //     type:DataTypes.INTEGER
+        // },
         isDeleted: {
             type: DataTypes.BOOLEAN,
             defaultValue: 0

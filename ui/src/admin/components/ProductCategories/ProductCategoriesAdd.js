@@ -5,6 +5,9 @@ import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 import * as classes from '../../containers/Products.module.css'
 import { AddProductCategories,fetchProductCategories } from '../../store/actions/Product_CategoriesActions'
+// import Overlay from 'react-bootstrap/Overlay'
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Tooltip from 'react-bootstrap/Tooltip'
 const validateForm = (errors) => {
     let valid = true;
     Object.values(errors).forEach(
@@ -17,6 +20,7 @@ class ProductCategoriesAdd extends Component{
     state = {
         name:"",
         image:"",
+        inputList:[{sub_category:""}],
         valid:true,
         valid1:true,
         errors: {
@@ -32,7 +36,7 @@ class ProductCategoriesAdd extends Component{
         
         switch (name) {
           case 'name': 
-            errors.name = value.length < 1 ? 'Name is Required' : '';
+                errors.name = value.length < 1 ? 'Name is Required' : '';
             break;
           default:
             break;
@@ -100,8 +104,45 @@ class ProductCategoriesAdd extends Component{
         // })
         await this.props.history.push('/admin/productcategories'); 
     }
+    handleInputChange = (e, index) => {
+        let inp = this.state.inputList;
+        const { name, value } = e.target;
+        const list = [...this.state.inputList];
+        list[index][name] = value;
+        // setInputList(list);
+        this.setState({inputList:list}, ()=> {
+            console.log(list)
+        })
+    };
+    handleAddClick = () => {
+        const list = this.state.inputList;
+        this.setState([...list , {sub_category:""}]);
+    };
 
+    subCategoryHandler = () => {
+        let myArr = [];
+        this.state.inputList.map((x,i)=> {
+            myArr.push(<> 
+                <Form.Control onChange={e => this.handleInputChange(e, i)} name="sub_category" value={x.sub_category} />
+                {this.state.inputList.length !== 1 ? <Button variant="primary" className="mr10">Remove</Button> : "" }
+                {this.state.inputList.length -1 === i ? <Button variant="primary" onClick={()=>this.handleAddClick}>Add</Button> : "" }
+                </>)
+        })
+        return myArr;
+    }
     render(){
+        
+        const renderTooltip = (props) => (
+            <Tooltip id="button-tooltip" {...props}>
+             <font> Required Name</font>
+            </Tooltip>
+          );
+        const renderTooltip2 = (props) => (
+            <Tooltip id="button-tooltip" {...props}>
+                <font> Required Image</font>
+            </Tooltip>
+        );  
+          
         const {errors} = this.state;
         let proderr = "";
         if(this.state.valid === true && this.state.valid1 === true)
@@ -125,17 +166,33 @@ class ProductCategoriesAdd extends Component{
                 </Card.Header>
                 <Card.Body>
                     <Form onSubmit={() => this.handleSubmit}>
-
+                    {/* <span>(<font style={{color:"red"}}> * </font></span>Mandatory field)  */}
                     <Form.Group controlId="exampleForm.ControlTextarea1">
                         <Form.Label>Category Name</Form.Label>
+                        <OverlayTrigger
+                            placement="right"
+                            delay={{ show: 250, hide: 400 }}
+                            overlay={renderTooltip}>
+                            <span><font style={{color:"red"}}> *</font></span>
+                        </OverlayTrigger>
                         <Form.Control isInvalid={errors.name} type="text" name="name" onChange={this.handleChange} placeholder="Enter Category"/>
+                        
                         <Form.Control.Feedback type="invalid">
                             {errors.name}
                         </Form.Control.Feedback>
                     </Form.Group>
-
+                    <Form.Group controlId="exampleForm.ControlTextarea1">
+                        <Form.Label>Sub Category Name</Form.Label>
+                            {this.subCategoryHandler()}
+                    </Form.Group>    
                     <Form.Group controlId="exampleForm.ControlTextarea2">
                         <Form.Label>Image</Form.Label>
+                        <OverlayTrigger
+                            placement="right"
+                            delay={{ show: 250, hide: 400 }}
+                            overlay={renderTooltip2}>
+                            <span><font style={{color:"red"}}> *</font></span>
+                        </OverlayTrigger>
                         <Form.Control isInvalid={errors.image} type="file" name="image" onChange={this.onFileChange}/>
                         <Form.Control.Feedback type="invalid">
                             {errors.image}

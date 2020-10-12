@@ -7,6 +7,11 @@ import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css'
 import './ProductList.module.css'
 import Spinner from 'react-bootstrap/Spinner'
+import Accordion from 'react-bootstrap/Accordion'
+import Card from 'react-bootstrap/Card'
+import { Form } from 'react-bootstrap'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import { RemoveProductCategories,SingleProductCategories } from '../../store/actions/Product_CategoriesActions'
 class ProductCategoriesList extends Component{
     state = {
@@ -74,7 +79,29 @@ class ProductCategoriesList extends Component{
                     product_categoriesArr.push(
                         <tr key={product_categories[i].id}>
                             <td>{i+1}</td>
-                            <td>{product_categories[i].name}</td>
+                            <td>
+                            {/* <Accordion>
+                            <Card>
+                                <Accordion.Toggle as={Card.Header} eventKey={i+1}> */}
+                                    {product_categories[i].name}
+                                 {/* </Accordion.Toggle>
+                                <td><Accordion.Collapse eventKey={i+1}>
+                                    <Card.Body>
+                                    <Form.Group controlId="exampleForm.ControlTextarea1">
+                                        <Row>
+                                            <Col>
+                                                <Form.Control type="text"/>
+                                            </Col>
+                                            <Col>
+                                                <Button>+</Button>
+                                            </Col>
+                                        </Row>
+                                    </Form.Group>    
+                                    </Card.Body> 
+                                </Accordion.Collapse></td>
+                            </Card>
+                            </Accordion> */}
+                            </td>
                             <td><img src={"http://localhost:8080"+((product_categories[i].image).replace('/public',''))} alt="description" width="50px"/></td>
                             <td><Button variant="info" onClick={() => this.updateHandler(product_categories[i].id)} as={Link} to={`/admin/ProductCategoriesEdit/${product_categories[i].id}`}>Edit</Button></td>
                             <td><Button variant="danger" onClick={() => this.submit(product_categories[i].id)}>Delete</Button></td>

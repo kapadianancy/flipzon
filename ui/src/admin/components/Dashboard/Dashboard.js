@@ -12,12 +12,13 @@ class Dashboard extends Component{
 
     state = {
         totalOrder:"",
-        totalPendingOrder:"",
+        totalConfirmdOrder:"",
         totalCompletedOrder:"",
         totalRevenue:"",
+        totalCanceledOrder:"",
         tots:"",
         dataPie: {
-          labels: ["Total Orders", "Completed Orders", "Pending Orders"],
+          labels: ["Total Orders", "Completed Orders", "Confirm Orders","Canceled Orders"],
           datasets: 
           [
             {
@@ -40,21 +41,20 @@ class Dashboard extends Component{
       }
     componentDidMount = async () =>{
         let d = this.state.dataPie.datasets[0].data;
-        console.log(this.props.total.totalOrder);
-        
         await this.props.fetchTotal();
         let tot = await this.props.total;
         d.push(tot.totalOrder)
-        d.push(tot.totalPendingOrder)
         d.push(tot.totalCompletedOrder)
-
+        d.push(tot.totalConfirmdOrder)
+        d.push(tot.totalCanceledOrder)
         await this.props.fetchProductTotal();
         let tots = await this.props.totals;
 
         this.setState({
             totalOrder:tot.totalOrder,
-            totalPendingOrder:tot.totalPendingOrder,
+            totalConfirmdOrder:tot.totalConfirmdOrder,
             totalCompletedOrder:tot.totalCompletedOrder,
+            totalCanceledOrder:tot.totalCanceledOrder,
             totalRevenue:tot.totalRevenue[0].totalPrice,
             tots:tots.cp.rows
         })
@@ -140,9 +140,9 @@ class Dashboard extends Component{
                     </Card>
                     <Card bg={'Light'.toLowerCase()} key={"6"} text={'Light'.toLowerCase() === 'light' ? 'dark' : 'white'} className="mb-2" style={{ width: '18rem' }}>
                         <Card.Body>
-                        <Card.Title>Pending Orders</Card.Title>
+                        <Card.Title>Confirm Orders</Card.Title>
                             <Card.Text>
-                                {this.state.totalPendingOrder}
+                                {this.state.totalConfirmdOrder}
                             </Card.Text>
                         </Card.Body>
                     </Card>

@@ -24,16 +24,18 @@ const getCount = async () => {
         let totalCategoies =await productcategory.count({
             where:{ IsDeleted:0 } })
         let totalOrder =await Orders.count({
-            where:{ IsDeleted:0 } })
+            where:{  } })
         let totalCompletedOrder =await Orders.count({
-            where:{ IsDeleted:0 , status:"Completed Delivery" } })
-        let totalPendingOrder =await Orders.count({
-            where:{ IsDeleted:0 , status:"Pending" } })                            
+            where:{ IsDeleted:0 , status:"Delivered" } })
+        let totalConfirmdOrder =await Orders.count({
+            where:{ IsDeleted:0 , status:"Confirm" } })
+        let totalCanceledOrder =await Orders.count({
+            where:{ status:"Canceled" } })
         let totalUser =await user.count({
             where:{ IsDeleted:0 , roleId:2 } })
         let totalRevenue =await Orders.findAll({
             attributes: ['totalPrice', [sequelize.fn('sum', sequelize.col('totalPrice')), 'totalPrice']],
-            where:{ IsDeleted:0 , status:"Completed Delivery" } })
+            where:{ IsDeleted:0 , status:"Delivered" } })
             //findAndCountAll
                 
             //SELECT category.name, COUNT(category_id) 
@@ -44,7 +46,8 @@ const getCount = async () => {
             totalCategoies,
             totalOrder,
             totalCompletedOrder,
-            totalPendingOrder,
+            totalConfirmdOrder,
+            totalCanceledOrder,
             totalUser,
             totalRevenue
         }      

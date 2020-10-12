@@ -49,14 +49,21 @@ export const fetchOrdersDetails = (id) => {
     };
 };
 
-export const updateOrders = (id,put) => {
+export const updateOrders = (id,status,put) => {
    
     return async (dispatch,getState) => {
         dispatch({
             type:types.INIT_UPDATE_ORDERS
         }) 
+        
         let token = getState().adminAuth.token
-        await axios.put('admin/orders/'+id,put,{
+        var request = {
+            params: {
+              id:id,
+              status:status
+            }
+          }
+        await axios.put('admin/orders/'+request.params.id+'/'+request.params.status,put,{
             headers: {
                 "Authorization": token
             }
