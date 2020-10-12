@@ -35,7 +35,7 @@ const Product =db.sequelize.define("Product", {
             type: DataTypes.BOOLEAN,
             defaultValue: false
         },
-        videoLink: DataTypes.STRING,
+        videoLink: DataTypes.TEXT,
         categoryId: {
             type: DataTypes.INTEGER
         },
