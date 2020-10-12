@@ -20,14 +20,14 @@ changes in database
 	- Specifications <br/>
 		- id, productId, Title, Details<br/>
 	- categories add "parent" and images are optional<br/>
-		- 1 for main, 2 for child 3 for sub-child<br/>
+		- 0 for "parent" in main-category, chil	d-category had categoryId in "parent" field<br/>
 	- product table modifications/add-ones<br/>
 		- discount(percentage),<br/>
 		- isInOffer<br/>
 		- description will be HTML ( no change in table )<br/>
 		- video link<br/>
 	- Reviews Table<br/>
-		- id, review, rating, userId, productId<br/>
+		- id, review, rating(1-5), userId, productId<br/>
 	- message table (future)<br/>
 		- messageId, userId, message, seen?(bool), user?(bool)<br/>
 			( userId is the id of user seding message,
