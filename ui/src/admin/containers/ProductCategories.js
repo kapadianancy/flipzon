@@ -7,7 +7,7 @@ import * as classes from './Products.module.css'
 import { Link } from 'react-router-dom';
 import Pagination from 'react-bootstrap/Pagination'
 import ProductCategoriesList from '../components/ProductCategories/ProductCategoriesList';
-import { fetchProductCategories } from '../store/actions/Product_CategoriesActions'
+import { fetchProductCategories,searchCategories } from '../store/actions/Product_CategoriesActions'
 const renderPaginationItems = (total, active, limit, changeActive) => {
     let items = [];
     for(let i=1;i<=Math.ceil(total/limit);i++) {
@@ -19,13 +19,19 @@ const renderPaginationItems = (total, active, limit, changeActive) => {
 }
 const ProductCategorie = (props) => {
     const perPage = 4;
-    const [active, setActive] = useState(1)
+    const [active, setActive] = useState(1);
+    const [searchText, setSearchText] = useState("");
+
     useEffect( () => {
         if(props.product_categories.length === 0)
         {
             props.fetchProductCategories()
         }
     }, [props])
+
+    const searchCategories = () => {
+        props.searchCategories(searchText);
+    }
     const changeActive = (index) => {
         setActive(index);
     }
@@ -44,7 +50,15 @@ const ProductCategorie = (props) => {
                 <div className={classes.Title}>
                     Product Categories List
                 </div>
-                <Button as={Link} to="/admin/ProductCategoriesAdd" variant="primary">Add New</Button>
+                <div className="input-group" style={{ maxWidth: "400px" }}>
+                        <input type="text" className="form-control" placeholder="Category Name" value={searchText} onChange={ (e) => setSearchText(e.target.value) } />
+                        <div className="input-group-append" id="button-addon4">
+                            <Button variant="outline-success" onClick={() => searchCategories()}>Search</Button>
+                            <Button variant="outline-secondary" onClick={() => props.fetchProductCategories()}>Show All</Button>
+                            <Button as={Link} to="/admin/ProductCategoriesAdd" variant="outline-primary">Add New</Button>
+                        </div>
+                    </div>
+
             </Card.Header>
             <Card.Body>
                 {productCategories}
@@ -61,7 +75,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchProductCategories: () => dispatch(fetchProductCategories())
+        fetchProductCategories: () => dispatch(fetchProductCategories()),
+        searchCategories: (text) => dispatch(searchCategories(text))
     }
 }
 

@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-// import axios from 'axios';
 import { Form} from 'react-bootstrap'
-// import * as classes from './ProductList.module.css';
-// import Table from 'react-bootstrap/Table'
 import { connect } from 'react-redux'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
@@ -13,7 +10,7 @@ class ProductCategoriesEdit extends Component{
     state = {
         id:'',
         name:'',
-        // description:'',
+        category:"",
         image:'',
         myimg:'',
         valid:false,
@@ -27,17 +24,27 @@ class ProductCategoriesEdit extends Component{
     componentDidMount = async () =>
     {
         await this.props.SingleProductCategories(this.props.match.params.id);
-        let category = await this.props.product_categorie
+        let prod_category = await this.props.product_categorie
             
         this.setState({
-            id:category[0].id,
-            name:category[0].name,
-            // description:category[0].description,
-            image:category[0].image
+            id:prod_category[0].id,
+            name:prod_category[0].name,
+            image:prod_category[0].image,
+            category:prod_category[0].parent
         })  
 
-        this.setState({myimg:(category[0].image).replace('/public','')})
+        this.setState({myimg:(prod_category[0].image).replace('/public','')})
     }
+    handleChange = (event) => {
+        event.preventDefault();
+        let name = event.target.name;
+        let value = event.target.value;
+        let errors = this.state.errors;
+        
+        this.setState({errors, [name]: value}, ()=> {
+            console.log(name + " <=> " + value)
+        })
+      }
     onFileChange = (e) =>{
         const imageFile = e.target.files[0];
         let errors = this.state.errors;
@@ -86,19 +93,12 @@ class ProductCategoriesEdit extends Component{
     }
     postDataHandler = async (e) =>{
         e.preventDefault();
-        
-        // const put = {
-        //     id:this.state.id,
-        //     name:this.state.name,
-        //     description:this.state.description,
-        //     image:this.state.image
-        // }   
+       
         const data = new FormData()
         data.append('id', this.state.id)
         data.append('name', this.state.name)
-        // data.append('description', this.state.description)
         data.append('image', this.state.image)
-        
+        data.append('parent', this.state.category)
         await this.props.updateProductCategories(this.state.id,data);
         await this.props.fetchProductCategories();
         await this.props.history.replace('/admin/productcategories');
@@ -136,7 +136,17 @@ class ProductCategoriesEdit extends Component{
                             {errors.name}
                         </Form.Control.Feedback>
                     </Form.Group>
-
+                    
+                    <Form.Group controlId="exampleForm.ControlTextarea1">
+                        <Form.Label>Parent Category:</Form.Label>
+                        <select name="category"  className="form-control" value={this.state.category || ''} onChange={this.handleChange}>
+                            <option value="Select">---select---</option>
+                            <option value="MainCategory">Main Category</option>
+                            {
+                                this.props.product_categories.map( cat => <option key={cat.id} value={cat.id}>{cat.name}</option>)
+                            }
+                        </select>
+                    </Form.Group> 
                     <Form.Group controlId="exampleForm.ControlTextarea3">
                         <Form.Label>Image</Form.Label><span><font style={{color:"red"}}> *</font></span>
                         <Form.Control isInvalid={errors.image}  type="file" name="image" onChange={this.onFileChange}/>
@@ -160,7 +170,8 @@ class ProductCategoriesEdit extends Component{
 
 //export default ProductCategoriesList;
 const mapStateToProps = (state) => ({
-    product_categorie: state.adminProductCategories.product_categorie
+    product_categorie: state.adminProductCategories.product_categorie,
+    product_categories: state.adminProductCategories.product_categories
 });
 
 const mapDispatchToProps = dispatch => {

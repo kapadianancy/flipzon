@@ -19,5 +19,13 @@ app.get("/admin/dashboardProduct", auth, async (req, res, next) => {
     }catch (error) {
         throw error;
     }  
+})
+app.get("/admin/dashboardProductRevenue", async (req, res, next) => {
+    try{
+        let total = await totalDataServices.getRevenueCount();
+        await res.send(total);
+    }catch (error) {
+        throw error;
+    }  
     })
-};
+};  

@@ -48,3 +48,27 @@ export const fetchProductTotal = () => {
         })
     };
 };
+
+export const fetchRevenueTotal = () => {
+    return async (dispatch,getState) => {
+        dispatch({
+            type:types.INIT_REVENUE_TOTAL
+        }) 
+        let token = getState().adminAuth.token
+        await axios.get('admin/dashboardProductRevenue',{
+            headers: {
+                "Authorization": token
+            }
+        }).then(response => {
+            dispatch({
+                type:types.FETCH_REVENUE_TOTAL_SUCCESS,
+                revtotal:response.data
+            });
+        }).catch(error => {
+            dispatch({
+                type:types.FETCH_REVENUE_TOTAL_FAILED,
+                error:error.message
+            });
+        })
+    };
+};

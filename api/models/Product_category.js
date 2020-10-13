@@ -27,15 +27,20 @@ const Product_category = db.sequelize.define('Product_category', {
                 }
             }
         },
-        // parent:
-        // {
-        //     type:DataTypes.INTEGER
-        // },
+        parent: {
+            type: DataTypes.INTEGER
+        },
         isDeleted: {
             type: DataTypes.BOOLEAN,
             defaultValue: 0
         }
     });
 
-
+    Product_category.hasMany(Product_category, {
+        foreignKey: "parent",
+        as: "parentCategory",
+        onDelete: "CASCADE",
+        onUpdate: "NO ACTION"
+    })
+    
 module.exports=Product_category;

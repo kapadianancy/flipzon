@@ -4,7 +4,8 @@ const initialStore = {
     total:{},
     totals:{},
     loading: false,
-    error: ""
+    error: "",
+    revtotal:{}
 };
 
 const store = (state = initialStore, action) => {
@@ -43,7 +44,23 @@ const store = (state = initialStore, action) => {
                 loading: false,
                 error:action.error
             }        
-                  
+        case types.INIT_REVENUE_TOTAL:
+            return {
+                ...state,
+                loading: true,
+            };
+        case types.FETCH_REVENUE_TOTAL_SUCCESS:
+            return {
+                ...state,
+                revtotal: action.revtotal,
+                loading: false
+            }
+        case types.FETCH_REVENUE_TOTAL_FAILED:
+            return {
+                ...state,
+                loading: false,
+                error:action.error
+            }                          
         default:
             return state;
     }

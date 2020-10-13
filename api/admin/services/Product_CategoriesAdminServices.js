@@ -1,18 +1,31 @@
 const Product_category = require("../../models/Product_category");
-
+const { sequelize } = require('../../db/db');
 function sayHelloTo() {
     return `Hi,!`;
   }
 
 const getProduct_Category = async () => {
     try{
+        // return await sequelize.query("select distinct parent FROM product_categories where isDeleted=0 ORDER BY parent and Group By name,image");
         return await Product_category.findAll({
             where: {
                 IsDeleted:0
             }
         })
     }catch(error) {
-        throw error;
+        throw error;    
+    }  
+}
+const getProduct_CategorySearch = async (search) => {
+    try{
+        return await Product_category.findAll({
+            where: {
+                IsDeleted:0,
+                name:search
+            }
+        })
+    }catch(error) {
+        throw error;    
     }  
 }
 const getSingleProduct_Category = async (id) =>{
@@ -27,7 +40,7 @@ const getSingleProduct_Category = async (id) =>{
         throw error;
     }   
 }
-const addProduct_Category = async (data) => {
+const addProduct_Category = async (id,data) => {
     try {
         let errorObj = {
             statusCode: 400
@@ -39,10 +52,36 @@ const addProduct_Category = async (data) => {
             errorObj.message = "Image is required";
         }
         if(errorObj.message) throw errorObj;
-        let product_category = await Product_category.create({
-            name: data.name,
-            image:data.image
-        });
+        let list = await Product_category.findOne({order: [ [ 'createdAt', 'DESC' ]]});
+        let newId=1;
+        let nid = id.toString();
+        let product_category="";
+        if(nid==="0")
+        {
+            newId = 0;
+            console.log("new = "+newId);
+            product_category = await Product_category.create({
+                name: data.name,
+                image:data.image,
+                // parent:NULL
+            }).then((data)=>{
+                let product_categorys = Product_category.findByPk(data.id);
+                product_categorys = Product_category.update({parent : data.id}, {
+                    where: { id:data.id }
+                });
+            }).catch(error=>{
+                console.log("update "+error);
+            });
+        }
+        else
+        {
+            product_category = await Product_category.create({
+                name: data.name,
+                image:data.image,
+                parent:nid
+            })
+        }
+        // console.log(product_category);
         return product_category;
     } catch(error) {
         throw error.message;
@@ -110,5 +149,6 @@ module.exports = {
     editProduct_Category,
     deleteProduct_Category,
     edit_DeleteProduct_Category,
+    getProduct_CategorySearch,
     sayHelloTo
 }
