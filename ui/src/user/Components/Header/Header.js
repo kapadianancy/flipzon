@@ -194,13 +194,8 @@ class Header extends Component {
           </Nav>
 
           <Form inline>
-<<<<<<< HEAD
             {/* <img src={cart} height="40px" width="40px" style={style.img} onClick={this.view_cart}></img> */}
             {viewcart}
-=======
-          
-            <img src={cart} height="40px" width="40px" style={style.img} onClick={this.view_cart}></img>
->>>>>>> nancyKapadia
             {loginBtn}
           </Form>
         </Navbar>

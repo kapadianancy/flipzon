@@ -129,7 +129,7 @@ class Product extends Component {
                                     />
 
                                     <Button disabled={disable} id={p.id} style={style.cardBtn} onClick={() => this.addToCart(p.id, this.state.qty)}>Add To Cart</Button>
-                                    <Button style={style.cardBtn} onClick={() => this.clickHandler(p.id)}>View Deatails</Button>
+                                    <Button style={style.cardBtn} onClick={() => this.clickHandler(p.id)}>View Details</Button>
                                 </div>
                                 <div class="w-100"></div>
 

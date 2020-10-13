@@ -70,11 +70,9 @@ router.get("/client/viewOrderDetails/:oid",auth,Order.viewOrderDetails);
 
 router.get("/client/searchProduct/:pro",Product.searchProducts);
 
-<<<<<<< HEAD
 //Add Review
 router.post("/client/addReview",auth,Product.addReviews)
-=======
+
 router.put("/client/updateUserId/:uid",auth,Order.updateUserId);
->>>>>>> 3f2f5ac864adf45d57c286d8df839ca7f8be9d7a
 
 module.exports = router;
