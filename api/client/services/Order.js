@@ -6,24 +6,27 @@ const main = require('../../models/main');
 exports.checkOrder = async (req, res) => {
     let oid;
     try {
-
+        //console.log(req.body.userId);
         const order = await main.Order.findOne({
             where:
             {
-                userId: req.validUser.id,
+                userId: req.body.userId,
                 status: "Pending",
                 isDeleted: 0
             }
         })
+        
         if (order) {
             oid = order.id;
             req.orderId = oid;
-            this.addOrderItems(req, res);
+            await this.addOrderItems(req, res);
         }
         else {
-            this.placeOrder(req, res);
+            await this.placeOrder(req, res);
 
         }
+        //return res.status(200).send("added to cart");
+
     } catch (err) {
         return res.status(400).send("bad request");
     }
@@ -33,15 +36,15 @@ exports.placeOrder = async (req, res) => {
     try {
         //const data=req.body;
         const order = await main.Order.create({
-            userId: req.validUser.id,
+            userId: req.body.userId,
             orderDate: Date.now(),
             totalPrice: 0,
             status: 'Pending'
         });
         oid = order.id;
         req.orderId = oid;
-        this.addOrderItems(req, res);
-        //res.status(201).send(order);
+        await this.addOrderItems(req, res);
+       // res.status(201).send(order);
     }
     catch (error) {
         return res.status(400).send(error);
@@ -66,7 +69,7 @@ exports.addOrderItems = async (req, res) => {
                 isDeleted: 0
             }
         })
-        const orderItem = "";
+        let orderItem;
         if (temp.length > 0) {
             
             orderItem = await main.Order_details.update(
@@ -98,6 +101,7 @@ exports.addOrderItems = async (req, res) => {
                 }
             });
         }
+       //console.log(orderItem);
         res.status(201).send({ "orderItem": orderItem });
     }
     catch (error) {
@@ -290,7 +294,9 @@ exports.viewOrder = async (req, res) => {
 
 exports.viewOrderCart = async (req, res) => {
     try {
-        const o = await sequelize.query("SELECT od.*,p.name,p.main_image,p.price FROM orders o,products p,order_details od where o.id=od.orderId and od.productId=p.id and o.status='Pending' and od.isDeleted=0");
+        let uid=req.params.uid;
+        //console.log("----uid-----"+req.params.uid);
+        const o = await sequelize.query("SELECT od.*,p.name,p.main_image,p.price FROM orders o,products p,order_details od where o.id=od.orderId and od.productId=p.id and o.status='Pending' and od.isDeleted=0 and o.userId='"+uid+"'");
 
         res.status(200).send(o[0]);
     } catch (err) {
@@ -304,6 +310,21 @@ exports.viewOrderDetails = async (req, res) => {
 
         res.status(200).send(o[0]);
     } catch (err) {
+        res.status(400).send(err);
+    }
+}
+
+exports.updateUserId=async(req,res)=>
+{
+    try{
+        const result = await main.Order.update({ userId:req.validUser.id }, {
+            where: {
+                userId: req.params.uid
+            }
+        });
+        res.status(200).send(result);
+    }
+    catch(err){
         res.status(400).send(err);
     }
 }
