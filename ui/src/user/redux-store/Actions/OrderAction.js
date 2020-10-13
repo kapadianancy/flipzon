@@ -1,18 +1,15 @@
 import * as types from '../actionNames'
 import axiosInstance from '../../../axios';
 
-export const addToCart = (pid,qty) => {
+export const addToCart = (pid,qty,uid) => {
     return async dispatch => {
-        const token = localStorage.getItem("token");
+        //const token = localStorage.getItem("token");
         const order = {
             "productId" : pid,
-            "quantity" : qty
+            "quantity" : qty,
+            "userId":uid
         }
-        await axiosInstance.post('/client/checkOrder', order,{
-            headers: {
-                authorization: 'Bearer ' + token
-            }
-        }).then(response => {
+        await axiosInstance.post('/client/checkOrder', order).then(response => {
             dispatch({
                 type: types.ADD_TO_CART,
                 orderItems:response.data.orderItems
@@ -28,13 +25,18 @@ export const addToCart = (pid,qty) => {
 
 export const viewCart = () => {
     return async dispatch => {
-        const token = localStorage.getItem("token");
-       
-        await axiosInstance.get('/client/viewOrderCart',{
-            headers: {
-                authorization: 'Bearer ' + token
-            }
-        }).then(response => {
+        let uid;
+        //const token = localStorage.getItem("token");
+       if(localStorage.getItem("userId")!=null)
+       {
+           uid=localStorage.getItem("userId");
+       }
+       else
+       {
+           uid=localStorage.getItem("device");
+       }
+       // alert("action------"+uid);
+        await axiosInstance.get('/client/viewOrderCart/'+uid).then(response => {
             dispatch({
                 type: types.VIEW_CART,
                 orderItems:response.data

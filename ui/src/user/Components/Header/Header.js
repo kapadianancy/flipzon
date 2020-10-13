@@ -168,6 +168,9 @@ class Header extends Component {
             <Nav.Link as={Link} to="/" style={style.header}>
               Home
             </Nav.Link>
+            <Nav.Link as={Link} to="/" style={style.header}>
+              Offers
+            </Nav.Link>
             <NavDropdown title="Category" style={style.header}>
               {this.category}
               <NavDropdown.Item id="0">
@@ -176,6 +179,7 @@ class Header extends Component {
                 </Nav.Link>
               </NavDropdown.Item>
             </NavDropdown>
+            
             <Form inline>
               <FormControl
                 type="text"
@@ -190,8 +194,13 @@ class Header extends Component {
           </Nav>
 
           <Form inline>
+<<<<<<< HEAD
             {/* <img src={cart} height="40px" width="40px" style={style.img} onClick={this.view_cart}></img> */}
             {viewcart}
+=======
+          
+            <img src={cart} height="40px" width="40px" style={style.img} onClick={this.view_cart}></img>
+>>>>>>> nancyKapadia
             {loginBtn}
           </Form>
         </Navbar>

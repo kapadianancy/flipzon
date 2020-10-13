@@ -3,6 +3,8 @@ import img from '../../../images/product.png';
 import { ListGroup, Button, Row, Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import NumericInput from 'react-numeric-input';
+import nextId from "react-id-generator";
+import { setPrefix } from "react-id-generator";
 
 import Header from '../../Components/Header/Header';
 import Footer from '../../Components/Footer/Footer';
@@ -27,17 +29,34 @@ class Product extends Component {
     }
     
     addToCart = async (pid, qty) => {
+        // localStorage.removeItem("device");
+    
+        let id;
         if (this.props.token == "") {
-            this.props.history.push("/login");
+          if (localStorage.getItem("device") == null) {
+            console.log("device generate");
+            setPrefix("deviceId-");
+            id = nextId();
+            localStorage.setItem("device", id);        
+          }
+          else
+          {
+              id=localStorage.getItem("device");
+          }
+        } else {
+          id = this.props.userId;
+          // localStorage.removeItem("device");
         }
-        else {
-            await this.props.addToCart(pid, qty);
-            if (this.props.error !== "") {
-                this.props.history.push("/error/" + this.props.error);
-            }
-            this.props.history.push("/viewordercart");
+        //alert("id===="+id);
+        await this.props.addToCart(pid, qty, id);
+        if (this.props.error !== "") {
+          this.props.history.push("/error/" + this.props.error);
         }
-    }
+        this.props.history.push("/viewordercart");
+      };
+    
+
+   
 
 
     clickHandler = (pid) => {
@@ -139,14 +158,15 @@ const mapStateToProp = (state) => {
     return {
         products: state.Product.products,
         error: state.Order.error,
-        token: state.User.token
+        token: state.User.token,
+        userId:state.User.userId
     }
 }
 
 const mapStateToAction = (dispatch) => {
     return {
         getProducts: (text) => dispatch(actions.searchProduct(text)),
-        addToCart: (pid, qty) => dispatch(Orderactions.addToCart(pid, qty))
+        addToCart: (pid, qty,id) => dispatch(Orderactions.addToCart(pid, qty,id))
     }
 
 }

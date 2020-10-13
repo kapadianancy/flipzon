@@ -3,6 +3,8 @@ import img from '../../../images/product.png';
 import { ListGroup, Button, Row, Form } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import NumericInput from 'react-numeric-input';
+import nextId from "react-id-generator";
+import { setPrefix } from "react-id-generator";
 
 import Header from '../../Components/Header/Header';
 import Footer from '../../Components/Footer/Footer';
@@ -21,21 +23,45 @@ class Product extends Component {
     componentDidUpdate() {
         this.props.getProducts(this.props.match.params.cid);
     }
+
+    makeid() {
+       var result           = '';
+       var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+       var charactersLength = characters.length;
+       for ( var i = 0; i < 6; i++ ) {
+          result += characters.charAt(Math.floor(Math.random() * charactersLength));
+       }
+       return result;
+    }
     
     addToCart = async (pid, qty) => {
+        // localStorage.removeItem("device");
+    
+        let id;
         if (this.props.token == "") {
-            this.props.history.push("/login");
+          if (localStorage.getItem("device") == null) {
+            console.log("device generate");
+           
+            id = this.makeid();
+            localStorage.setItem("device", id);  
+            alert(id);      
+          }
+          else
+          {
+              id=localStorage.getItem("device");
+          }
+        } else {
+          id = this.props.userId;
+          // localStorage.removeItem("device");
         }
-        else {
-            await this.props.addToCart(pid, qty);
-            if (this.props.error !== "") {
-                this.props.history.push("/error/" + this.props.error);
-            }
-            this.props.history.push("/viewordercart");
+        //alert("id===="+id);
+        await this.props.addToCart(pid, qty, id);
+        if (this.props.error !== "") {
+          this.props.history.push("/error/" + this.props.error);
         }
-    }
-
-
+        this.props.history.push("/viewordercart");
+      };
+    
     clickHandler = (pid) => {
         this.props.history.push("/productDetails/" + pid);
     }
@@ -135,14 +161,15 @@ const mapStateToProp = (state) => {
     return {
         products: state.Product.products,
         error: state.Order.error,
-        token: state.User.token
+        token: state.User.token,
+        userId:state.User.userId
     }
 }
 
 const mapStateToAction = (dispatch) => {
     return {
         getProducts: (cid) => dispatch(actions.categoryWiseProduct(cid)),
-        addToCart: (pid, qty) => dispatch(Orderactions.addToCart(pid, qty))
+        addToCart: (pid, qty,id) => dispatch(Orderactions.addToCart(pid, qty,id))
     }
 
 }

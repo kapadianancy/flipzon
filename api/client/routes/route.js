@@ -43,7 +43,7 @@ router.post('/client/forgetPassword',Authenticate.forgetPassword);
 
 //placeOrder
 //router.post("/placeOrder",auth,Order.placeOrder);
-router.post("/client/checkOrder",auth,Order.checkOrder);
+router.post("/client/checkOrder",Order.checkOrder);
 
 //addOrderItems
 //router.post('/addOrderItems',auth,Order.addOrderItems);
@@ -55,7 +55,7 @@ router.put("/client/confirmOrder/:id",auth,Order.confirmOrder);
 router.delete("/client/cancelOrder/:id",auth,Order.cancelOrder);
 
 //cancel order item
-router.delete("/client/cancelOrderItem/:id",auth,Order.cancelOrderItem);
+router.delete("/client/cancelOrderItem/:id",Order.cancelOrderItem);
 
 //most ordered products
 router.get("/client/orderedProducts/",Order.orderedProducts);
@@ -64,10 +64,12 @@ router.get("/client/orderedProducts/",Order.orderedProducts);
 router.get("/client/viewOrder",auth,Order.viewOrder);
 
 //ViewOrderCart
-router.get("/client/viewOrderCart",auth,Order.viewOrderCart);
+router.get("/client/viewOrderCart/:uid",Order.viewOrderCart);
 
 router.get("/client/viewOrderDetails/:oid",auth,Order.viewOrderDetails);
 
 router.get("/client/searchProduct/:pro",Product.searchProducts);
+
+router.put("/client/updateUserId/:uid",auth,Order.updateUserId);
 
 module.exports = router;
