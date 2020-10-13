@@ -31,6 +31,7 @@ class ProductSlider extends Component {
 
     let products = [];
     let p = this.props.products;
+   
     let n = this.props.products.length;
     let card = (j) => {
       return (
@@ -42,7 +43,7 @@ class ProductSlider extends Component {
           <Card.Body>
             <Card.Title>{p[j].name}</Card.Title>
             <Card.Text>{p[j].description}</Card.Text>
-            <Button style={style.cardBtn} onClick={() => this.clickHandler(p[j].id)}>View Deatails</Button>
+            <Button style={style.cardBtn} onClick={() => this.clickHandler(p[j].id)}>View Details</Button>
 
           </Card.Body>
         </Card>
@@ -68,8 +69,10 @@ class ProductSlider extends Component {
     }
 
     return (
+     
       <div style={{ padding: "20px" }}>
-        <h2 style={{ padding: "10px" }}>Most Ordered Products</h2>
+         {products.length==0?null:
+        <h2 style={{ padding: "10px" }}>Most Ordered Products</h2>}
 
         <Carousel>{products}</Carousel>
 

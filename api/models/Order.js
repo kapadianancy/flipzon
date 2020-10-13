@@ -9,7 +9,7 @@ const Order =db.sequelize.define("Order", {
             autoIncrement:true
         },
         userId:{
-            type:DataTypes.INTEGER,
+            type:DataTypes.TEXT,
         },
         orderDate:
         {
@@ -33,7 +33,7 @@ const Order =db.sequelize.define("Order", {
         },
 });
 
-//relationship
+// relationship
 Order.belongsTo(User,{
     foreignKey:"userId",
     onDelete:"cascade",

@@ -140,8 +140,6 @@ class ProductCategoriesEdit extends Component{
                     <Form.Group controlId="exampleForm.ControlTextarea1">
                         <Form.Label>Parent Category:</Form.Label>
                         <select name="category"  className="form-control" value={this.state.category || ''} onChange={this.handleChange}>
-                            <option value="Select">---select---</option>
-                            <option value="MainCategory">Main Category</option>
                             {
                                 this.props.product_categories.map( cat => <option key={cat.id} value={cat.id}>{cat.name}</option>)
                             }

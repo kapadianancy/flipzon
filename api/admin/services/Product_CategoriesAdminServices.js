@@ -59,7 +59,6 @@ const addProduct_Category = async (id,data) => {
         if(nid==="0")
         {
             newId = 0;
-            console.log("new = "+newId);
             product_category = await Product_category.create({
                 name: data.name,
                 image:data.image,

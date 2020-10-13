@@ -13,12 +13,14 @@ import {
 import logo from "../../../images/logo-2.jpg";
 import cart from "../../../images/shopping-cart.png";
 import * as actions from "../../redux-store/Actions/ProductAction";
+import * as Oactions from "../../redux-store/Actions/OrderAction";
 import "./Header.css";
 
 class Header extends Component {
   state = {
     dropdownOpen: false,
     setOpen: false,
+    cartCount: 0
   };
 
   toggle = () => {
@@ -30,20 +32,25 @@ class Header extends Component {
     });
   };
 
-  view_cart=()=>
-  {
-    if(this.props.token=="")
-    {
-      this.props.history.push('/login');
+  view_cart = () => {
+
+    if (this.props.token == "") {
+      this.props.history.push("/login");
     }
-    else{
-      this.props.history.push('/viewordercart')
+    else {
+      this.props.history.push("/viewordercart");
     }
-    
+
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.props.displaycategory();
+    if (this.props.token !== "") {
+      await this.props.viewCart();
+      this.setState({
+        cartCount: this.props.orderItems.length
+      })
+    }
   }
 
   clickHandler = async (event) => {
@@ -51,15 +58,14 @@ class Header extends Component {
     this.props.history.push("/login");
   };
 
-  search=(event)=>
-  {
+  search = (event) => {
     event.preventDefault();
     //alert(document.getElementById("searchtext").value);
-    let text=document.getElementById("searchtext").value;
-    this.props.history.push('/searchProduct/'+text);
+    let text = document.getElementById("searchtext").value;
+    this.props.history.push('/searchProduct/' + text);
   }
   render() {
-    
+
     this.category = [];
     let i = 1;
     this.props.categories.map((c) => {
@@ -92,7 +98,7 @@ class Header extends Component {
         color: "white",
       },
       img: {
-        marginRight: "20px",
+         marginRight: "20px",
       },
     };
 
@@ -143,6 +149,15 @@ class Header extends Component {
         </ButtonDropdown>
       );
     }
+
+    let viewcart = (
+      <span id="group">
+          <img src={cart} height="40px" width="40px" style={style.img} onClick={this.view_cart} />
+        <span className="cart-count">{this.state.cartCount}</span>    
+      </span>
+     
+    );
+
     return (
       <>
         <Navbar bg="primary" variant="dark" sticky="top">
@@ -153,6 +168,9 @@ class Header extends Component {
             <Nav.Link as={Link} to="/" style={style.header}>
               Home
             </Nav.Link>
+            <Nav.Link as={Link} to="/" style={style.header}>
+              Offers
+            </Nav.Link>
             <NavDropdown title="Category" style={style.header}>
               {this.category}
               <NavDropdown.Item id="0">
@@ -161,9 +179,10 @@ class Header extends Component {
                 </Nav.Link>
               </NavDropdown.Item>
             </NavDropdown>
+            
             <Form inline>
               <FormControl
-                type="text" 
+                type="text"
                 id="searchtext"
                 placeholder="Search Product"
                 className="mr-sm-2 formControl"
@@ -175,6 +194,7 @@ class Header extends Component {
           </Nav>
 
           <Form inline>
+          
             <img src={cart} height="40px" width="40px" style={style.img} onClick={this.view_cart}></img>
             {loginBtn}
           </Form>
@@ -187,12 +207,17 @@ class Header extends Component {
 
 const mapStateTOProp = (state) => {
   return {
+    orderItems: state.Order.orderItems,
+    product: state.Product.products,
+    error: state.Order.error,
     categories: state.ProductCategory.product_categories,
     token: state.User.token,
   };
 };
 const mapStateToActions = (dispatch) => {
   return {
+    viewCart: () => dispatch(Oactions.viewCart()),
+    getProduct: (pid) => dispatch(actions.productDetails(pid)),
     displaycategory: () => dispatch(actions.fetchProductCategories()),
   };
 };
