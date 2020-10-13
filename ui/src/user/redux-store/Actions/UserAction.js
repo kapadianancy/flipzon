@@ -23,9 +23,29 @@ export const signup = (user) => {
 
 export const login = (user) => {
     return async dispatch => {
-        await axiosInstance.post('/client/login', user).then(response => {
+
+        await axiosInstance.post('/client/login', user).then(async(response) => {
             localStorage.setItem("token", response.data.token);
             localStorage.setItem("userId", response.data.user.id);
+            if(localStorage.getItem("device")!=null)
+            {
+                await axiosInstance.put("/client/updateUserId/"+localStorage.getItem("device"),{},{
+                    headers: {
+                        authorization: 'Bearer ' + localStorage.getItem("token")
+                    }
+                })
+                .then(response=>
+                {
+                    alert("done");
+                    localStorage.removeItem("device");
+                }).catch(err=>
+                    {
+                        alert("error");
+                        console.log("error in user id update");
+                    })
+            }
+           
+
             dispatch({
                 type: types.LOGIN,
                 user: response.data.user.id,
@@ -68,6 +88,7 @@ export const logout = () => {
         }).then(response => {
             localStorage.removeItem("token");
             localStorage.removeItem("userId");
+            localStorage.removeItem("device");
             dispatch({
                 type: types.LOGOUT,
             })

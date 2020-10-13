@@ -31,6 +31,7 @@ class ProductSlider extends Component {
 
     let products = [];
     let p = this.props.products;
+   
     let n = this.props.products.length;
     let card = (j) => {
       return (
@@ -68,8 +69,10 @@ class ProductSlider extends Component {
     }
 
     return (
+     
       <div style={{ padding: "20px" }}>
-        <h2 style={{ padding: "10px" }}>Most Ordered Products</h2>
+         {products.length==0?null:
+        <h2 style={{ padding: "10px" }}>Most Ordered Products</h2>}
 
         <Carousel>{products}</Carousel>
 

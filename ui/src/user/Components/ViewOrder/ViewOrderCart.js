@@ -8,9 +8,9 @@ import * as paction from '../../redux-store/Actions/ProductAction';
 import './ViewOrder.css';
 class ViewOrderCart extends Component {
 
-    componentDidMount() {
-        this.props.viewCart();
-    }
+   componentDidMount(){
+       this.props.viewCart();
+   }
 
     componentDidUpdate() {
         this.props.viewCart();
@@ -18,7 +18,15 @@ class ViewOrderCart extends Component {
 
 
     placeOrder = async () => {
-        this.props.history.push('viewbill');
+        if(this.props.token=="")
+        {
+            this.props.history.push('/login');
+        }
+        else
+        {
+            this.props.history.push('viewbill');
+        }
+      
     }
 
     removeItem = async (oid)=> {
@@ -101,7 +109,7 @@ class ViewOrderCart extends Component {
                     </tbody>
                 </Table>
                 <button type="button" style={styles.btn}
-                    onClick={this.placeOrder}>Place Order</button>
+                    onClick={this.placeOrder}>Checkout</button>
 
             </>
         );
@@ -112,7 +120,8 @@ const mapStateToProps = (state) => {
     return {
         orderItems: state.Order.orderItems,
         product: state.Product.products,
-        error: state.Order.error
+        error: state.Order.error,
+        token:state.User.token
     }
 
 }
