@@ -83,3 +83,24 @@ export const searchProduct = (text) => {
         })
     };
 }
+
+export const addReview = (review) => {
+    return async dispatch => {
+        const token = localStorage.getItem("token");
+        
+        await axiosInstance.post('/client/addReview', review,{
+            headers: {
+                authorization: 'Bearer ' + token
+            }
+        }).then(response => {
+            dispatch({
+                type: types.ADD_REVIEW,
+                review:response.data
+            });
+        }).catch(error => {
+            dispatch({
+                error: error.message
+            });
+        })
+    };
+};

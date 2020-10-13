@@ -24,7 +24,8 @@ class Product extends Component {
         main_image: "",
         qty: 1,
         show: false,
-        rating :1
+        feedback: "",
+        rating: 1
     }
 
     async componentDidMount() {
@@ -55,8 +56,14 @@ class Product extends Component {
     }
 
     handleShow = async () => {
-        //await this.props.fetchOrdersDetails(id);
-        this.setState({ show: true });
+        if (this.props.token !== "") {
+            this.setState({ show: true });
+        }
+        else {
+            this.props.history.push("/login");
+        }
+
+
     };
 
     handleClose = () => {
@@ -68,9 +75,31 @@ class Product extends Component {
             qty: event
         })
     }
-    onStarClick(nextValue) {
-        this.setState({rating: nextValue});
-      }
+    handleChanged(e) {
+        const name = e.target.name;
+        const value = e.target.value;
+
+
+        this.setState({
+            [name]: value
+        })
+    }
+    onStarClick(event) {
+        this.setState({ rating: event });
+    }
+
+    addReview = async () => {
+        const review = {
+            "review": this.state.feedback,
+            "rating": this.state.rating,
+            "productId": this.state.id
+        }
+        await this.props.addReview(review);
+        if (this.props.error !== "") {
+            this.props.history.push("/error/" + this.props.error);
+        }
+        this.setState({ show: false });
+    }
 
     render() {
 
@@ -119,7 +148,7 @@ class Product extends Component {
                             <div class="card-block px-2" style={{ padding: "20px", margin: "20px" }}>
                                 <h4 class="card-title" style={{ color: "#fb641b" }}>{this.state.name}</h4>
                                 <p class="card-text"><b>Description :</b> {this.state.description}</p>
-                                <p class="card-text"><b>Price :  </b>{this.state.price}</p>
+                                <p class="card-text"><b>Price :  </b>₹ {this.state.price}</p>
                                 <div className="text-danger"><b>{error}</b></div>
                                 <NumericInput
                                     disabled={disable}
@@ -155,44 +184,41 @@ class Product extends Component {
                                                 </div>
                                             </div>
                                             <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                                                <Label for="username" className="mr-sm-2">
+                                                <Label for="rating" className="mr-sm-2">
                                                     Rating
                                             </Label>
-                                         
+
                                                 <ReactStars
                                                     count={5}
                                                     value={this.state.rating}
-                                                    onChange={(event, newValue) => this.onStarClick(newValue)}
+                                                    onChange={(event) => this.onStarClick(event)}
                                                     size={24}
                                                     activeColor="#ffd700"
-                                                    isHalf={true}
-                                                    emptyIcon={<i className="far fa-star"></i>}
-                                                    halfIcon={<i className="fa fa-star-half-alt"></i>}
                                                     fullIcon={<i className="fa fa-star"></i>}
-                                                  
+
                                                 />
                                             </FormGroup>
                                             <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                                                <Label for="review" className="mr-sm-2">
+                                                <Label for="feedback" className="mr-sm-2">
                                                     Review
                                             </Label>
                                                 <Input
                                                     type="text"
-                                                    name="review"
-                                                    id="review"
-                                                    value={this.state.review}
-                                                    onChange={this.changeHandler}
+                                                    name="feedback"
+                                                    id="feedback"
+                                                    value={this.state.feedback}
+                                                    onChange={this.handleChanged.bind(this)}
                                                     placeholder="Enter Your review"
                                                 />
                                             </FormGroup>
-                                      
+
                                         </Form>
                                     </Modal.Body>
                                     <Modal.Footer>
                                         <Button variant="secondary" onClick={() => this.handleClose()}>
                                             Cancel
                                     </Button>
-                                        <Button variant="primary" onClick={() => this.handleClose()}>
+                                        <Button variant="primary" onClick={() => this.addReview()}>
                                             Add Reviews
                                     </Button>
                                     </Modal.Footer>
@@ -214,6 +240,7 @@ const mapStateToProp = (state) => {
         products: state.Product.products,
         images: state.Product.images,
         error: state.Order.error,
+        review: state.Product.review,
         token: state.User.token
     }
 }
@@ -221,7 +248,8 @@ const mapStateToProp = (state) => {
 const mapStateToAction = (dispatch) => {
     return {
         productDetails: (pid) => dispatch(actions.productDetails(pid)),
-        addToCart: (pid, qty) => dispatch(Orderactions.addToCart(pid, qty))
+        addToCart: (pid, qty) => dispatch(Orderactions.addToCart(pid, qty)),
+        addReview: (review) => dispatch(actions.addReview(review))
     }
 
 }

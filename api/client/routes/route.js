@@ -70,4 +70,7 @@ router.get("/client/viewOrderDetails/:oid",auth,Order.viewOrderDetails);
 
 router.get("/client/searchProduct/:pro",Product.searchProducts);
 
+//Add Review
+router.post("/client/addReview",auth,Product.addReviews)
+
 module.exports = router;

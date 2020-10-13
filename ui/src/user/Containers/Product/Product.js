@@ -87,7 +87,7 @@ class Product extends Component {
                                 <div class="card-block px-2">
                                     <h4 class="card-title">{p.name}</h4>
                                     <p class="card-text">Description : {p.description}</p>
-                                    <p class="card-text">Price : {p.price}</p>
+                                    <p class="card-text">Price : ₹ {p.price}</p>
                                     <div className="text-danger"><b>{x}</b></div>
                                     <NumericInput
                                         disabled={disable}
