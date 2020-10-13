@@ -3,7 +3,7 @@
     max-height: 250px;
     object-fit: cover;
 }
-.icontainer {
+.iContainer {
     transition: all 3s ease;
 }
 .after {
@@ -17,20 +17,20 @@
     font-weight: bold;
     transition: all .5s ease;
 }
-.icontainer img {
+.iContainer img {
     max-width: 100%;
     max-height: 150px;
     object-fit: cover;
 }
-.icontainer:hover {
+.iContainer:hover {
     cursor: pointer
 }
-.icontainer:hover .after {
+.iContainer:hover .after {
     transition: .5s ease;
     display: block;
     color: red;
     /* background: rgba(0, 0, 0, .2); */
 }
-.icontainer:hover img {
+.iContainer:hover img {
     opacity: 0.3;
 }

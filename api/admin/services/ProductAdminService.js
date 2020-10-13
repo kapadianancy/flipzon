@@ -28,7 +28,7 @@ const fetchSingleProduct = async(id) => {
                 id,
                 isDeleted: false
             },
-            attributes: [ "id", "name", "main_image", "stock", "price", "categoryId", "description" ]
+            attributes: [ "id", "name", "main_image", "stock", "price", "categoryId", "description", "isInOffer", "discount", "videoLink" ]
         });
         if(!product) throw { statusCode: 404, message: "Product not found" }
         let images = await ProductImages.findAll({
@@ -88,6 +88,9 @@ const addProduct = async (data, images) => {
         if(!data.price) {
             errorObj.message = "Product Price is required";
         }
+        if(data.isInOffer === "true" && (+data.discount) <= 0) {
+            errorObj.message = "Discount is not valid";
+        }
         if(errorObj.message) throw errorObj;
 
         var product = await Product.create({
@@ -96,7 +99,11 @@ const addProduct = async (data, images) => {
             stock: data.stock,
             price: data.price,
             description: data.description,
-            categoryId: data.categoryId
+            categoryId: data.categoryId,
+            isInOffer: data.isInOffer === "true" ? true : false,
+            discount: data.isInOffer === "true" ? data.discount : 0,
+            videoLink: data.videoLink ? data.videoLink : "",
+
         });
         product = product.get({ row: true })
 
@@ -122,6 +129,9 @@ const editProduct = async (id, data, images) => {
         if(!product) {
             errorObj.statusCode = 404
             errorObj.message = "Product not found";
+        }
+        if(data.isInOffer === "true" && (+data.discount) <= 0) {
+            errorObj.message = "Discount is not valid";
         }
         if(errorObj.message) throw errorObj
 
