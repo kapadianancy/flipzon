@@ -78,4 +78,8 @@ router.post("/client/addReview",auth,Product.addReviews)
 
 router.put("/client/updateUserId/:uid",auth,Order.updateUserId);
 
+//Offers
+router.get('/client/offer-product',Product.getOfferProduct);
+
+
 module.exports = router;

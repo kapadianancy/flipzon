@@ -21,6 +21,17 @@ const store = (state = initialStore, action) => {
                 ...state,
                 error: action.error
             }
+        case types.DISPLAY_OFFER_PRODUCT:
+            return {
+                ...state,
+                products: action.products
+
+            }
+        case types.DISPLAY_OFFER_PRODUCT_FAILED:
+            return {
+                ...state,
+                error: action.error
+            }
         case types.ORDERED_PRODUCT:
             return {
                 ...state,
@@ -45,7 +56,7 @@ const store = (state = initialStore, action) => {
         case types.ADD_REVIEW:
             return {
                 ...state,
-                review:action.review
+                review: action.review
             }
         default:
             return state;
