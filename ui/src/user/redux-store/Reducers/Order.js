@@ -13,7 +13,7 @@ const store = (state = initialStore, action) => {
         case types.ADD_TO_CART:
             return {
                 ...state,
-                orderItems: action.orderItems,
+                //orderItems: action.orderItems,
                 error: "",
             };
         case types.ADD_TO_CART_FAILED:

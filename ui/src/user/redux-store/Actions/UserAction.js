@@ -36,9 +36,11 @@ export const login = (user) => {
                 })
                 .then(response=>
                 {
+                   
                     localStorage.removeItem("device");
                 }).catch(err=>
                     {
+                        
                         console.log("error in user id update");
                     })
             }

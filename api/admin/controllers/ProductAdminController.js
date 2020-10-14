@@ -81,20 +81,23 @@ module.exports = (app) => {
             next(error);
         }
     })
-    
-    app.delete("/admin/products/:id", auth, async (req, res, next) => {
+
+    app.post("/admin/products/images", auth, async (req, res, next) => {
         try {
-            let product = await productService.deleteProduct(req.params.id);
-            res.send(product);
+            if(!req.body.ids || req.body.ids.length == 0) {
+                throw { statusCode: 400, message: "Invalid arguments provided"}
+            };
+            let result = await productService.deleteProductImage(req.body.ids);
+            res.send(result);
         } catch (error) {
             next(error);
         }
     })
 
-    app.delete("/admin/products/images/:id", auth, async (req, res, next) => {
+    app.delete("/admin/products/:id", auth, async (req, res, next) => {
         try {
-            let result = await productService.deleteProductImage(req.params.id);
-            res.send(result);
+            let product = await productService.deleteProduct(req.params.id);
+            res.send(product);
         } catch (error) {
             next(error);
         }

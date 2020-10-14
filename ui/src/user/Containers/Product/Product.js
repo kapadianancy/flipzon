@@ -40,11 +40,10 @@ class Product extends Component {
         let id;
         if (this.props.token == "") {
           if (localStorage.getItem("device") == null) {
-            console.log("device generate");
-           
+         
             id = this.makeid();
             localStorage.setItem("device", id);  
-            alert(id);      
+                  
           }
           else
           {

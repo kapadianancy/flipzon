@@ -1,219 +1,210 @@
 import React, { Component } from "react";
-import {
-    MDBContainer, MDBCol, MDBRow, MDBCard, MDBCardBody, MDBBtn, MDBNav, MDBNavItem, MDBNavLink, MDBTabPane,
-    MDBTabContent, MDBSelect, MDBSelectInput, MDBSelectOption, MDBSelectOptions
-} from "mdbreact";
-import { connect } from 'react-redux';
 
-import { withRouter } from 'react-router-dom';
+import { connect } from "react-redux";
+import { Form, Card, Button } from "react-bootstrap";
+import { withRouter } from "react-router-dom";
 
-import * as actions from '../../redux-store/Actions/OrderAction';
-import * as paction from '../../redux-store/Actions/ProductAction';
+import * as actions from "../../redux-store/Actions/OrderAction";
+import * as paction from "../../redux-store/Actions/ProductAction";
+import * as uactions from "../../redux-store/Actions/UserAction";
 
 class viewBill extends Component {
-    state = {
-        activePill: "1",
-    }
+  state = {
+    userid: "",
+    username: "",
+    email: "",
+    address: "",
+    contact: "",
+    disbale: true,
+    visibility:"hidden"
+  };
 
-    togglePills = tab => {
-        if (this.state.activePill !== tab) {
-            this.setState({
-                ctivePill: tab
-            });
-        }
-    }
+  async componentDidMount() {
+    this.props.viewCart();
+    await this.props.getSingleUser();
+    this.setState({
+      userid: this.props.user.id,
+      username: this.props.user.username,
+      email: this.props.user.email,
+      address: this.props.user.address,
+      contact: this.props.user.contact,
+    });
+  }
 
-    selectNextTab = () => {
-        this.setState({
-            activePill: (this.state.activePill + 1).toString()
-        });
-    }
+  placeOrder = async () => {
+    await this.props.placeOrder(this.props.orderItems[0].orderId);
+    alert("Your Order Is Placed . check Your email for confirmation");
+  };
 
-    componentDidMount() {
-        this.props.viewCart();
-    }
+  payment=()=>
+  {
+      this.setState({
+          ...this.state,
+          visibility:"visible"
+      })
+  }
 
-    placeOrder = async () => {
-         await this.props.placeOrder(this.props.orderItems[0].orderId);
-         alert("Your Order Is Placed");
-        
-    }
+  radiochange=(event)=>
+  {
+      if(event.target.value=="COD")
+      {
+          this.setState({
+              ...this.state,
+              disbale:false
+          })
+      }
+  }
 
-    render() {
-        const { activePill } = this.state;
+  render() {
+    let rows = [];
+    let total_price = 0;
 
-        let rows = [];
-        let total_price = 0;
+    this.props.orderItems.map(async (row) => {
+      total_price += row.quantity * row.price;
+      rows.push(
+        <>
+          <table style={{ width: "100%", padding: "5px" }}>
+            <tr>
+              <th>Product</th>
+              <th>Quantity</th>
+              <th>Price</th>
+            </tr>
+            <tr>
+              <td>{row.name}</td>
+              <td>qty-{row.quantity}</td>
+              <td>{row.quantity * row.price}</td>
+            </tr>
+          </table>
+          <hr />
+        </>
+      );
 
-        this.props.orderItems.map(async (row) => {
-            total_price += row.quantity * row.price;
-            rows.push(
-                <>
-                    <MDBRow>
-                        <MDBCol sm="8">
-                            {row.name}- qty-{row.quantity}
-                        </MDBCol>
-                        <MDBCol sm="4">
-                            {row.quantity * row.price}
-                        </MDBCol>
-                    </MDBRow>
-                    <hr />
-                </>
-            )
+      return rows;
+    });
 
-            return rows;
-        });
+    return (
+      <>
+        <Card
+          style={{
+            width: "50%",
+            padding: "10px",
+            margin: "10px",
+            display: "inline-block",
+            marginRight: "190px",
+          }}
+        >
+          <Card.Body>
+            <Card.Title>Personal Information</Card.Title>
+            <hr />
+            <Card.Text>
+              <table style={{ width: "100%", padding: "5px" }}>
+                <tr>
+                  <th>Customer name:</th>
+                  <td>{this.state.username}</td>
+                </tr>
+                <tr>
+                  <th>Customer email:</th>
+                  <td>{this.state.email}</td>
+                </tr>
+                <tr>
+                  <th>Customer contact:</th>
+                  <td>{this.state.contact}</td>
+                </tr>
+                <tr>
+                  <th>delivery name:</th>
+                  <td>{this.state.address}</td>
+                </tr>
+              </table>
+            </Card.Text>
+            <Button
+              style={{ width: "100%" }}
+              variant="primary"
+              onClick={this.payment}
+            >
+              Payment Method
+            </Button>
+          </Card.Body>
+        </Card>
 
+        <Card
+          style={{
+            width: "18rem",
+            padding: "10px",
+            margin: "10px",
+            display: "inline-block",
+          }}
+        >
+          <Card.Body>
+            <Card.Title>Order summary</Card.Title>
+            <hr />
+            <Card.Text>
+              {rows}
+              <table style={{ width: "100%", padding: "5px" }}>
+                <tr>
+                  <th>Total amount</th>
+                  <th>&#x20B9; {total_price}</th>
+                </tr>
+              </table>
+            </Card.Text>
+            <Button
+              style={{ width: "100%" }}
+              variant="primary"
+              disabled={this.state.disbale}
+              onClick={this.placeOrder}
+            >
+              Place Order
+            </Button>
+          </Card.Body>
+        </Card>
 
-        return (
-            <MDBContainer>
-                <MDBRow className="my-2" center>
-                    <MDBCard className="w-100">
-                        <MDBCardBody>
-                            <MDBRow>
-                                <MDBCol lg="8" className="mb-4">
-                                    <MDBNav pills color="primary" className="nav-justified">
-                                        <MDBNavItem>
-                                            <MDBNavLink to="#" className={activePill === "1" ? "active" : ""} onClick={() => this.togglePills("1")}
-                                            >
-                                                <strong>1. Billing</strong>
-                                            </MDBNavLink>
-                                        </MDBNavItem>
-                                    </MDBNav>
-                                    <MDBTabContent className="pt-4" activeItem={activePill}>
-                                        <MDBTabPane tabId="1">
-                                            <form>
-                                                <MDBRow>
-                                                    <MDBCol md="6" className="mb-4">
-                                                        <label htmlFor="firstName">First name</label>
-                                                        <input type="text" id="firstName" className="form-control" />
-                                                    </MDBCol>
-                                                    <MDBCol md="6" className="mb-2">
-                                                        <label htmlFor="lastName">Last name</label>
-                                                        <input type="text" id="lastName" className="form-control" />
-                                                    </MDBCol>
-                                                    <MDBCol>
-
-                                                        <label htmlFor="email">Email (optional)</label>
-                                                        <input type="text" id="email" className="form-control mb-4" placeholder="youremail@example.com" />
-                                                        <label htmlFor="address">Address</label>
-                                                        <input type="text" id="address" className="form-control mb-4" placeholder="1234 Main St" />
-                                                        <label htmlFor="address-2">Address 2 (optional)</label>
-                                                        <input type="text" id="address-2" className="form-control mb-4" placeholder="Apartment or suite" />
-                                                    </MDBCol>
-                                                </MDBRow>
-
-                                                <hr />
-
-
-                                            </form>
-                                            <MDBNav pills color="primary" className="nav-justified">
-                                                <MDBNavItem>
-                                                    <MDBNavLink to="#" className={activePill === "1" ? "active" : ""} onClick={() => this.togglePills("1")}
-                                                    >
-                                                        <strong>2. Payment</strong>
-                                                    </MDBNavLink>
-                                                </MDBNavItem>
-                                            </MDBNav>
-
-                                            <div className="d-block my-3">
-                                                <div className="mb-2">
-                                                    <input name="group2" type="radio" className="form-check-input with-gap" id="radioWithGap4" required />
-                                                    <label className="form-check-label" htmlFor="radioWithGap4">Credit card</label>
-                                                </div>
-                                                <div className="mb-2">
-                                                    <input iname="group2" type="radio" className="form-check-input with-gap" id="radioWithGap5"
-                                                        required />
-                                                    <label className="form-check-label" htmlFor="radioWithGap5">Debit card</label>
-                                                </div>
-                                                <div className="mb-2">
-                                                    <input name="group2" type="radio" className="form-check-input with-gap" id="radioWithGap6" required />
-                                                    <label className="form-check-label" htmlFor="radioWithGap6">Paypal</label>
-                                                </div>
-                                                <MDBRow>
-                                                    <MDBCol md="6" className="mb-3">
-                                                        <label htmlFor="cc-name123">Name on card</label>
-                                                        <input type="text" className="form-control" id="cc-name123" required />
-                                                        <small className="text-muted">Full name as displayed on card</small>
-                                                        <div className="invalid-feedback">
-                                                            Name on card is required
-                          </div>
-                                                    </MDBCol>
-                                                    <MDBCol md="6" className="mb-3">
-                                                        <label htmlFor="cc-number123">Credit card number</label>
-                                                        <input type="text" className="form-control" id="cc-number123" required />
-                                                        <div className="invalid-feedback">
-                                                            Credit card number is required
-                          </div>
-                                                    </MDBCol>
-                                                </MDBRow>
-                                                <MDBRow>
-                                                    <MDBCol md="3" className="mb-3">
-                                                        <label htmlFor="cc-name123">Expiration</label>
-                                                        <input type="text" className="form-control" id="cc-name123" required />
-                                                        <div className="invalid-feedback">
-                                                            Name on card is required
-                          </div>
-                                                    </MDBCol>
-                                                    <MDBCol md="3" className="mb-3">
-                                                        <label htmlFor="cc-cvv123">CVV</label>
-                                                        <input type="text" className="form-control" id="cc-cvv123" required />
-                                                        <div className="invalid-feedback">
-                                                            Security code required
-                          </div>
-                                                    </MDBCol>
-                                                </MDBRow>
-                                            </div>
-                                        </MDBTabPane>
-
-
-                                    </MDBTabContent>
-                                </MDBCol>
-                                <MDBCol lg="4" className="mb-4">
-                                    <MDBBtn color="primary" size="lg" onClick={this.placeOrder} block>
-                                        Place order
-                </MDBBtn>
-                                    <MDBCard>
-                                        <MDBCardBody>
-                                            <h4 className="mb-4 mt-1 h5 text-center font-weight-bold">Summary</h4>
-                                            <hr />
-                                            {rows}
-                                            <MDBRow>
-                                                <MDBCol sm="8">
-                                                    <strong>Total</strong>
-                                                </MDBCol>
-                                                <MDBCol sm="4">
-                                                    <strong>{total_price}</strong>
-                                                </MDBCol>
-                                            </MDBRow>
-                                        </MDBCardBody>
-                                    </MDBCard>
-                                </MDBCol>
-                            </MDBRow>
-                        </MDBCardBody>
-                    </MDBCard>
-                </MDBRow>
-            </MDBContainer>
-        );
-    }
+        <div>
+          <Card
+            style={{
+              visibility: this.state.visibility,
+              width: "50%",
+              padding: "10px",
+              display: "inline-block",
+              marginLeft: "-487px"
+            }}
+          >
+            <Card.Body>
+              <Card.Title>select Payment Mathod</Card.Title>
+              <Form>
+                  <div style={{textAlign: "-webkit-left"}}>
+               <input type="radio" value="COD" name="payment" onChange={this.radiochange}/> COD
+               <br/>
+               <input type="radio" value="Card" name="payment"/> Credit/Debit card
+               <br/>
+               <input type="radio" value="Net" name="payment"/> Net Banking
+               <br/>
+               <input type="radio" value="upi" name="payment"/> UPI
+               <br/>
+               <input type="radio" value="wallet" name="payment"/> Wallet
+               </div>
+              </Form>
+            </Card.Body>
+          </Card>
+        </div>
+      </>
+    );
+  }
 }
-
 
 const mapStateToProps = (state) => {
-    return {
-        orderItems: state.Order.orderItems,
-        product: state.Product.products,
-        error: state.Order.error
-    }
-
-}
+  return {
+    orderItems: state.Order.orderItems,
+    product: state.Product.products,
+    error: state.Order.error,
+    user: state.User.user,
+  };
+};
 const mapStateToAction = (dispatch) => {
-
-    return {
-        viewCart: () => dispatch(actions.viewCart()),
-        getProduct: (pid) => dispatch(paction.productDetails(pid)),
-        placeOrder: (oid) => dispatch(actions.placeOrder(oid))
-    }
-}
+  return {
+    viewCart: () => dispatch(actions.viewCart()),
+    getProduct: (pid) => dispatch(paction.productDetails(pid)),
+    placeOrder: (oid) => dispatch(actions.placeOrder(oid)),
+    getSingleUser: () => dispatch(uactions.getSingleUser()),
+  };
+};
 
 export default connect(mapStateToProps, mapStateToAction)(withRouter(viewBill));
