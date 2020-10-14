@@ -188,8 +188,8 @@ exports.confirmOrder = async (req, res) => {
                     pass: 'nidhi0921nancy'
                 }
             });
-            const order_detail_link = 'http://localhost:3000/vieworderdetails/'+orderid.id;
-            const msg = '<html><body><b>Your Order id ' + orderid.id + ' is Confirmed ...</b><br/>Total Order Item :' + c + '<br /> <h2>Total Cost : ' + total_price + '</h2><a href="'+order_detail_link+'">View Order Details</a></body></html>';
+            const order_detail_link = 'http://localhost:3000/vieworderdetails/' + orderid.id;
+            const msg = '<html><body><b>Your Order id ' + orderid.id + ' is Confirmed ...</b><br/>Total Order Item :' + c + '<br /> <h2>Total Cost : ' + total_price + '</h2><a href="' + order_detail_link + '">View Order Details</a></body></html>';
 
             var mailOptions = {
                 from: 'nidhinancy0921@gmail.com',

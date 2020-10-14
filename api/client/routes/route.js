@@ -41,6 +41,9 @@ router.put('/client/changePassword',auth,Authenticate.changePassword);
 //forget Password
 router.post('/client/forgetPassword',Authenticate.forgetPassword);
 
+//update Password
+router.post('/client/updatePassword',Authenticate.updatePassword);
+
 //placeOrder
 //router.post("/placeOrder",auth,Order.placeOrder);
 router.post("/client/checkOrder",Order.checkOrder);

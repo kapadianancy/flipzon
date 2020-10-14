@@ -67,11 +67,10 @@ class Product extends Component {
         if (this.props.error !== "") {
             this.props.history.push("/error/" + this.props.error);
         }
-        else
-        {
+        else {
             this.props.history.push("/viewordercart");
         }
-        
+
     };
 
     handleShow = async () => {
@@ -157,6 +156,7 @@ class Product extends Component {
                         <div class="card flex-row flex-wrap">
                             <div class="card-header border-0">
                                 <img src={`http://localhost:8080${this.state.main_image}`} alt="image" height="150px" />
+
                                 <div style={{ marginTop: "25px" }}>
                                     {data}
                                 </div>
@@ -198,8 +198,11 @@ class Product extends Component {
                                             <div class="card flex-row flex-wrap">
                                                 <div class="card-header">
                                                     <img src={`http://localhost:8080${this.state.main_image}`} alt="image" height="50px" width="50px" />
+
+
                                                 </div>
                                                 <div class="px-2">
+
                                                     <h4 class="card-title">{this.state.name}</h4>
                                                     <p class="card-text"><b>Price :  </b>{this.state.price}</p>
                                                 </div>

@@ -76,6 +76,22 @@ export const forgetpassword = (email) => {
     };
 };
 
+export const updatepassword = (passwords) => {
+    return async dispatch => {
+         await axiosInstance.post('/client/updatepassword',passwords)
+         .then(response => {
+            dispatch({
+                type: types.CHANGE_PASSWORD,
+                message : response.data
+            });
+        }).catch(error => {
+            dispatch({
+                type: types.CHANGE_PASSWORD_FAILED,
+                error: error.message
+            });
+        })
+    };
+};
 
 export const logout = () => {
 
