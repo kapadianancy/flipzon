@@ -40,11 +40,10 @@ class Product extends Component {
         let id;
         if (this.props.token == "") {
           if (localStorage.getItem("device") == null) {
-            console.log("device generate");
-           
+         
             id = this.makeid();
             localStorage.setItem("device", id);  
-            alert(id);      
+                  
           }
           else
           {
@@ -113,7 +112,7 @@ class Product extends Component {
                                 <div class="card-block px-2">
                                     <h4 class="card-title">{p.name}</h4>
                                     <p class="card-text">Description : {p.description}</p>
-                                    <p class="card-text">Price : {p.price}</p>
+                                    <p class="card-text">Price : ₹ {p.price}</p>
                                     <div className="text-danger"><b>{x}</b></div>
                                     <NumericInput
                                         disabled={disable}
@@ -129,7 +128,7 @@ class Product extends Component {
                                     />
 
                                     <Button disabled={disable} id={p.id} style={style.cardBtn} onClick={() => this.addToCart(p.id, this.state.qty)}>Add To Cart</Button>
-                                    <Button style={style.cardBtn} onClick={() => this.clickHandler(p.id)}>View Deatails</Button>
+                                    <Button style={style.cardBtn} onClick={() => this.clickHandler(p.id)}>View Details</Button>
                                 </div>
                                 <div class="w-100"></div>
 

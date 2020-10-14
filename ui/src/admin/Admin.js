@@ -15,6 +15,7 @@ import { tryAutoLogin, logout } from './store/actions/AuthActions'
 import Profile from './containers/Profile';
 import Users from './containers/Users';
 import * as classes from './Admin.module.css'
+import ResetPassword from './containers/ResetPassword'
 
 const Admin = (props) => {
     useEffect(() => {
@@ -26,10 +27,11 @@ const Admin = (props) => {
     let content = <Redirect to="/" />
 
     if(props.location.pathname.startsWith("/admin") && !props.loggedIn) {
-        content = <div>
+        content = <Switch>
+            <Route path="/admin/resetPassword" exact component={ResetPassword} />
             <Route path="/admin/auth" exact component={Auth} />
             <Redirect to="/admin/auth" />
-        </div>
+        </Switch>
     } else if(props.location.pathname.startsWith("/admin") && props.loggedIn) {
         content = <>
             <Header logout={props.logout} user={props.user} />

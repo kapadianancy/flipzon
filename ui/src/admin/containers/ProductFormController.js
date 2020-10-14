@@ -36,7 +36,7 @@ const ProductFormController = (props) => {
                 <Card.Body>
                     <ProductForm 
                         categories={props.categories}
-                        deleteProductImage={props.deleteProductImage}
+                        deleteProductImages={props.deleteProductImages}
                         addProduct={addProduct} 
                         product={props.product} 
                         edit={props.match.params.id ? true : false} 
@@ -64,7 +64,7 @@ const mapDispatchToProps = dispatch => {
         addProduct: (productData) => dispatch(addProduct(productData)),
         fetchOneProduct: (id) => dispatch(fetchOneProduct(id)),
         editProduct: (id, productData) => dispatch(editProduct(id, productData)),
-        deleteProductImage: (id) => dispatch(deleteProductImage(id)),
+        deleteProductImages: (ids) => dispatch(deleteProductImage(ids)),
         fetchProductCategories: () => dispatch(fetchProductCategories())
     }
 }

@@ -27,7 +27,32 @@ module.exports = (app) => {
         } catch(error) {
             next(error);
         }
-    })
+    });
+    app.get("/admin/checkLink", async (req,res,next) => {
+        try {
+            if(req.query.iv && req.query.data) {
+                await AuthService.decryptLink({ iv: req.query.iv, encryptedData: req.query.data })
+                res.send();
+            } else {
+                throw { statusCode: 400, message: "Link is not valid" };
+            }
+        } catch(error) {
+            next(error);
+        }
+    });
+    app.post("/admin/resetPassword", async (req,res,next) => {
+        try {
+            if(req.query.iv && req.query.data) {
+                let email = await AuthService.decryptLink({ iv: req.query.iv, encryptedData: req.query.data });
+                let result = await AuthService.resetPassword(email, req.body.password);
+                res.send({ message: "Password updated!" });
+            } else {
+                throw { statusCode: 400, message: "Link is not valid" };
+            }
+        } catch(error) {
+            next(error);
+        }
+    });
     app.post("/admin/register", async (req,res,next) => {
         try {
             let user = await AuthService.register(req.body.username, req.body.email, req.body.password );

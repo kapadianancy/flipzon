@@ -3,7 +3,8 @@ import * as types from '../actionNames'
 const initialStore = {
     products: [],
     images: [],
-    error: ""
+    error: "",
+    review: {}
 };
 
 const store = (state = initialStore, action) => {
@@ -36,11 +37,16 @@ const store = (state = initialStore, action) => {
                 ...state,
                 error: action.error
             }
-            case types.SEARCH_PRODUCT:
-                return{
-                    ...state,
-                    products:action.products
-                }
+        case types.SEARCH_PRODUCT:
+            return {
+                ...state,
+                products: action.products
+            }
+        case types.ADD_REVIEW:
+            return {
+                ...state,
+                review:action.review
+            }
         default:
             return state;
     }

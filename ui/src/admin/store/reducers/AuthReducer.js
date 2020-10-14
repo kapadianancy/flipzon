@@ -8,6 +8,7 @@ const initialStore = {
     registerError: null,
     updateError: null,
     forgotPasswordError: null,
+    resetPasswordError: null,
     message: null
 }
 
@@ -118,6 +119,25 @@ const state = (state = initialStore, action) => {
                 ...state,
                 loading: false,
                 forgotPasswordError: action.error
+            }
+        case types.INIT_RESET_PASSWORD:
+            return {
+                ...state,
+                loading: true,
+                resetPasswordError: null,
+                message: null
+            }
+        case types.RESET_PASSWORD_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                message: action.message
+            }
+        case types.RESET_PASSWORD_FAILED:
+            return {
+                ...state,
+                loading: false,
+                resetPasswordError: action.error
             }
         default:
             return state;

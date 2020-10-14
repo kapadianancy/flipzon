@@ -109,6 +109,46 @@ exports.addOrderItems = async (req, res) => {
     }
 }
 
+const sendMail = async function(email){
+    let status="";
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'nidhinancy0921@gmail.com',
+          pass: 'nidhi0921nancy'
+        }
+      });
+      
+      var randomstring     = '';
+      var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      var charactersLength = characters.length;
+      for ( var i = 0; i < 5; i++ ) {
+        randomstring += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+
+      const password=await gethash(randomstring);
+      const User = await main.User.update( {
+        "password" : password
+        } , {
+            where: {
+                email : email
+            }
+        });
+
+      var mailOptions = {
+        from: 'nidhinancy0921@gmail.com',
+        to: email,
+        subject: 'Forget Password From Flipzon',
+        text: 'New Password : '+randomstring
+      };
+      
+        let sendmail=await transporter.sendMail(mailOptions);
+
+        return sendmail;
+
+   
+}
+
 exports.confirmOrder = async (req, res) => {
     try {
         const orderid = await main.Order.findByPk(req.params.id);
@@ -128,6 +168,12 @@ exports.confirmOrder = async (req, res) => {
             }
         });
 
+        //send email to user for confirmation
+        //email--- subject-confirm order-00000-oid
+        //---------oredritems
+        //---------total price
+
+       
         res.status(200).send("Order Placed");
     }
     catch (error) {

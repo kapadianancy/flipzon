@@ -28,15 +28,24 @@ class Product extends Component {
         await this.props.getProducts(text);
     }
     
-    addToCart = async (pid, qty) => {
-        // localStorage.removeItem("device");
-    
-        let id;
-        if (this.props.token == "") {
-          if (localStorage.getItem("device") == null) {
-            console.log("device generate");
-            setPrefix("deviceId-");
-            id = nextId();
+    makeid() {
+        var result           = '';
+        var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < 6; i++ ) {
+           result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+        return result;
+     }
+     
+     addToCart = async (pid, qty) => {
+         // localStorage.removeItem("device");
+     
+         let id;
+         if (this.props.token == "") {
+           if (localStorage.getItem("device") == null) {
+          
+             id = this.makeid();
             localStorage.setItem("device", id);        
           }
           else
@@ -110,7 +119,7 @@ class Product extends Component {
                                 <div class="card-block px-2">
                                     <h4 class="card-title">{p.name}</h4>
                                     <p class="card-text">Description : {p.description}</p>
-                                    <p class="card-text">Price : {p.price}</p>
+                                    <p class="card-text">₹ Price : {p.price}</p>
                                     <div className="text-danger"><b>{x}</b></div>
                                     <NumericInput
                                         disabled={disable}
@@ -126,7 +135,7 @@ class Product extends Component {
                                     />
 
                                     <Button disabled={disable} id={p.id} style={style.cardBtn} onClick={() => this.addToCart(p.id, this.state.qty)}>Add To Cart</Button>
-                                    <Button style={style.cardBtn} onClick={() => this.clickHandler(p.id)}>View Deatails</Button>
+                                    <Button style={style.cardBtn} onClick={() => this.clickHandler(p.id)}>View Details</Button>
                                 </div>
                                 <div class="w-100"></div>
 

@@ -57,7 +57,7 @@ const ProductList = (props) => {
             }
         });
     }
-    return <Table striped responsive ordered hover size="sm">
+    return <Table striped responsive hover size="sm">
         <thead>
             <tr>
                 <th>#</th>
