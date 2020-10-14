@@ -34,17 +34,24 @@ class Product extends Component {
       stock: this.props.products.stock,
       main_image: this.props.products.main_image,
     });
-  }
-
-  addToCart = async (pid, qty) => {
-    // localStorage.removeItem("device");
-
-    let id;
-    if (this.props.token == "") {
-      if (localStorage.getItem("device") == null) {
-        console.log("device generate");
-        setPrefix("deviceId-");
-        id = nextId();
+  }makeid() {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < 6; i++ ) {
+       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+ }
+ 
+ addToCart = async (pid, qty) => {
+     // localStorage.removeItem("device");
+ 
+     let id;
+     if (this.props.token == "") {
+       if (localStorage.getItem("device") == null) {
+        
+         id = this.makeid();
         localStorage.setItem("device", id);        
       }
       else
