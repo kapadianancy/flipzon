@@ -16,6 +16,7 @@ import * as actions from '../../redux-store/Actions/ProductAction';
 import * as Orderactions from '../../redux-store/Actions/OrderAction';
 
 class Product extends Component {
+<<<<<<< HEAD
 
     state = {
         id: "",
@@ -28,6 +29,56 @@ class Product extends Component {
         show: false,
         feedback: "",
         rating: 1
+=======
+  state = {
+    id: "",
+    name: "",
+    price: "",
+    description: "",
+    stock: "",
+    main_image: "",
+    qty: 1,
+  };
+
+  async componentDidMount() {
+    await this.props.productDetails(this.props.match.params.pid);
+
+    this.setState({
+      id: this.props.products.id,
+      name: this.props.products.name,
+      description: this.props.products.description,
+      price: this.props.products.price,
+      stock: this.props.products.stock,
+      main_image: this.props.products.main_image,
+    });
+  }makeid() {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < 6; i++ ) {
+       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+ }
+ 
+ addToCart = async (pid, qty) => {
+     // localStorage.removeItem("device");
+ 
+     let id;
+     if (this.props.token == "") {
+       if (localStorage.getItem("device") == null) {
+        
+         id = this.makeid();
+        localStorage.setItem("device", id);        
+      }
+      else
+      {
+          id=localStorage.getItem("device");
+      }
+    } else {
+      id = this.props.userId;
+      // localStorage.removeItem("device");
+>>>>>>> nancyKapadia
     }
 
     async componentDidMount() {

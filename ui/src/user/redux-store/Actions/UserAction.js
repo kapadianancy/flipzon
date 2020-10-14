@@ -36,9 +36,17 @@ export const login = (user) => {
                 })
                 .then(response=>
                 {
+<<<<<<< HEAD
                     localStorage.removeItem("device");
                 }).catch(err=>
                     {
+=======
+                   
+                    localStorage.removeItem("device");
+                }).catch(err=>
+                    {
+                        
+>>>>>>> nancyKapadia
                         console.log("error in user id update");
                     })
             }
