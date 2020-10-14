@@ -44,13 +44,15 @@ class Header extends Component {
   }
 
   async componentDidMount() {
+    //alert("did");
     this.props.displaycategory();
-    if (this.props.token !== "") {
+    
       await this.props.viewCart();
       this.setState({
         cartCount: this.props.orderItems.length
       })
-    }
+      
+    
   }
 
   clickHandler = async (event) => {

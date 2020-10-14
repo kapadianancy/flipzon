@@ -43,7 +43,9 @@ class ViewOrderCart extends Component {
     // alert(oid);
     await this.props.removeOrderItem(oid);
     this.props.viewCart();
+    window.location.reload(true);
   };
+
 
   handleClose=()=>
   {
