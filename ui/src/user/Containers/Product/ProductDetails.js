@@ -160,7 +160,6 @@ class Product extends Component {
                                 <div style={{ marginTop: "25px" }}>
                                     {data}
                                 </div>
-
                             </div>
                             <div class="card-block px-2" style={{ padding: "20px", margin: "20px" }}>
                                 <h4 class="card-title" style={{ color: "#fb641b" }}>{this.state.name}</h4>
