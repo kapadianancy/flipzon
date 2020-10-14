@@ -2,9 +2,10 @@ const UserService = require("../services/UserService");
 const auth = require("../middlewares/auth");
 
 module.exports = (app) => {
+    // i/p: query [ page, limit, type (role) ]
     app.get("/admin/users", auth, async (req,res,next) => {
         try {
-            const result = await UserService.getUsers();
+            const result = await UserService.getUsers(req.query.limit, req.query.page, req.query.type);
             res.send(result);
         } catch (error) {
             next(error);

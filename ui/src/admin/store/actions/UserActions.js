@@ -1,17 +1,18 @@
 import * as types from '../Types'
 import axios from '../../../axios'
 
-export const fetchUsers = () => {
+export const fetchUsers = (page, limit, type) => {
     return async (dispatch, getState) => {
         dispatch({ type: types.INIT_FETCH_USERS });
         try {
             let token = getState().adminAuth.token;
-            let response = await axios.get("admin/users", {
+            let query = `?page=${page}&limit=${limit}&type=${type}`
+            let response = await axios.get("admin/users"+query, {
                 headers: {
                     "Authorization": token
                 }
             });
-            dispatch({ type: types.FETCH_USERS_SUCCESS, users: response.data });
+            dispatch({ type: types.FETCH_USERS_SUCCESS, users: response.data.users, total: response.data.total });
         } catch (error) {
             dispatch({ type: types.FETCH_USERS_FAILED, error: error.message });
         }

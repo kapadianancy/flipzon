@@ -3,6 +3,7 @@ import * as types from '../Types'
 const initialStore = {
     products: [],
     product: {},
+    total: null,
     loading: false,
     error: null
 };
@@ -13,13 +14,15 @@ const store = (state = initialStore, action) => {
             return {
                 ...state,
                 loading: true,
-                error: null
+                error: null,
+                total: null
             };
         case types.FETCH_PRODUCTS_SUCCESS:
             return {
                 ...state,
                 loading: false,
                 products: action.products,
+                total: action.total
             }
         case types.FETCH_PRODUCTS_FAILED:
             return {

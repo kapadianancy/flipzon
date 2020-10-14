@@ -1,16 +1,29 @@
 const User = require("../../models/User")
 const Order = require("../../models/Order")
 
-const getUsers = async () => {
+const getUsers = async (limit, page, type) => {
+    let options = {
+        where: {
+            isDeleted: false
+        },
+        attributes: ["id", "username", "email", "contact", "address", "roleId"]
+    }
+    let totalOptions = { isDeleted: false };
+    if(type) {
+        totalOptions.roleId = type
+        options.where.roleId = type;
+    }
+    if(page && limit) {
+        options.offset = 0 + (page-1) * limit;
+        options.limit = +limit;
+    }
     try {
-        let users = await User.findAll({
-            where: {
-                isDeleted: false,
-                roleId: 2
-            },
-            attributes: ["id", "username", "email", "contact", "address"]
-        });
-        return users;
+        let total = await User.count({ where: totalOptions})
+        if(limit) {
+            total = Math.ceil(total / +limit);
+        }
+        let users = await User.findAll(options);
+        return { total, users }
     } catch (error) {
         console.log(error);
         throw error;

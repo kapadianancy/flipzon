@@ -4,25 +4,18 @@ import Button from 'react-bootstrap/Button'
 import { Link } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
 
-const renderProducts = (products, deleteProduct, activeOld, perPage) => {
-    let productsArr = [];
-    let active = (activeOld-1)*perPage;
-    for(let i=active;i<(activeOld*perPage);i++) {
-        if(products[i]) {
-            productsArr.push(
-                <tr key={products[i].id}>
-                    <td>{i+1}</td>
-                    <td>{products[i].name}</td>
-                    <td>{products[i].Product_category.name}</td>
-                    <td>{products[i].price}</td>
-                    <td>{products[i].stock}</td>
-                    <td><Button as={Link} to={`/admin/products/edit/${products[i].id}`} variant="info">Edit</Button></td>
-                    <td><Button onClick={() => deleteProduct(products[i].id)} variant="danger">Delete</Button></td>
-                </tr>
-            )
-        }
-    }
-    return productsArr;
+const renderProducts = (products, deleteProduct, active) => {
+    return products.map( (product, i) => (
+        <tr key={product.id}>
+            <td>{i+1+active}</td>
+            <td>{product.name}</td>
+            <td>{product.Product_category.name}</td>
+            <td>{product.price}</td>
+            <td>{product.stock}</td>
+            <td><Button as={Link} to={`/admin/products/edit/${product.id}`} variant="info">Edit</Button></td>
+            <td><Button onClick={() => deleteProduct(product.id)} variant="danger">Delete</Button></td>
+        </tr>
+    ))
 }
 
 const ProductList = (props) => {
@@ -70,7 +63,7 @@ const ProductList = (props) => {
             </tr>
         </thead>
         <tbody>
-            { renderProducts(props.products, deleteAlert, props.active, props.perPage) }
+            { renderProducts(props.products, deleteAlert, props.active) }
         </tbody>
     </Table>
 }

@@ -15,6 +15,7 @@ var upload = multer({ storage: storage });
 var cpUpload = upload.fields([{ name: 'image', maxCount: 1 }, { name: 'images', maxCount: 10 }])
 
 module.exports = (app) => {
+    // i/p: query [ page, limit ]
     app.get("/admin/products", async (req, res, next) => {
         let products = await productService.fetchProducts(req.query.page, req.query.limit);
         res.send(products);

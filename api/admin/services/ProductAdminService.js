@@ -16,10 +16,19 @@ const fetchProducts = async (page, limit) => {
         ]
     }
     if(page && limit) {
-        options.offset = page-1;
+        options.offset = 0 + (page-1) * limit;
         options.limit = +limit;
     }
-    return await Product.findAll(options)
+    try {
+        let total = await Product.count({ where: { isDeleted: false }});
+        if(limit) {
+            total = Math.ceil(total / +limit);
+        }
+        let products = await Product.findAll(options);
+        return { total, products }
+    } catch(error) {
+        console.log(error.message);
+    }
 }
 const fetchSingleProduct = async(id) => {
     try {

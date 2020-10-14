@@ -11,9 +11,9 @@ import * as classes from './Products.module.css'
 import ProductList from '../components/Product/ProductList/ProductList';
 import { fetchProducts, deleteProduct, searchProducts } from '../store/actions/ProductActions'
 
-const renderPaginationItems = (total, active, limit, changeActive) => {
+const renderPaginationItems = (total, active, changeActive) => {
     let items = [];
-    for(let i=1;i<=Math.ceil(total/limit);i++) {
+    for(let i=1;i<=total;i++) {
         i===active 
         ? items.push(<Pagination.Item key={i} active>{i}</Pagination.Item>)
         : items.push(<Pagination.Item key={i} onClick={ () => changeActive(i)}>{i}</Pagination.Item>)
@@ -27,8 +27,8 @@ const Products = (props) => {
     const [searchText, setSearchText] = useState("");
 
     useEffect(() => {
-        props.fetchProducts();
-    }, [props.fetchProducts]);
+        props.fetchProducts(active, perPage);
+    }, [props.fetchProducts, active, perPage]);
 
     const searchProducts = () => {
         props.searchProducts(searchText);
@@ -37,8 +37,8 @@ const Products = (props) => {
         setActive(index);
     }
     let productData = <Spinner animation="border" />;
-    if(!props.loading && props.products.length > 0) {
-        productData = <ProductList key={1} deleteProduct={props.deleteProduct} active={active} perPage={perPage} products={props.products} />
+    if(!props.loading && props.products) {
+        productData = <ProductList deleteProduct={props.deleteProduct} active={(active-1) * perPage} products={props.products} />
     }
     return(
         <>
@@ -63,10 +63,10 @@ const Products = (props) => {
                     {
                         props.products ?
                         <Pagination className={classes.Pagination} >
-                            { renderPaginationItems(props.products.length, active, perPage, changeActive) }
+                            { renderPaginationItems(props.total, active, changeActive) }
                         </Pagination> : null
                     }
-                    <Form.Control as="select" value={perPage} custom className={classes.Select} onChange={ (e) => { setPerPage(e.target.value) } }>
+                    <Form.Control as="select" value={perPage} custom className={classes.Select} onChange={ (e) => { setActive(1);setPerPage(e.target.value) } }>
                         <option>2</option>
                         <option>5</option>
                         <option>10</option>
@@ -82,6 +82,7 @@ const Products = (props) => {
 const mapStateToProps = state => {
     return {
         products: state.adminProduct.products,
+        total: state.adminProduct.total,
         loading: state.adminProduct.loading,
         error: state.adminProduct.error
     }
@@ -89,7 +90,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchProducts: () => dispatch(fetchProducts()),
+        fetchProducts: (page, limit) => dispatch(fetchProducts(page, limit)),
         deleteProduct: (id) => dispatch(deleteProduct(id)),
         searchProducts: (text) => dispatch(searchProducts(text))
     }
