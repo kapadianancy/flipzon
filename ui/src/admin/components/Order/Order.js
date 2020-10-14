@@ -5,6 +5,8 @@ import { connect } from 'react-redux'
 import Modal from 'react-bootstrap/Modal'
 import Alert from 'react-bootstrap/Alert'
 import { fetchOrdersDetails,updateOrders } from '../../store/actions/OrderAction'
+import { Link } from 'react-router-dom';
+// import ReactToPrint from "react-to-print";
 
 class Order extends Component{
 	state = {
@@ -66,6 +68,23 @@ class Order extends Component{
             </tbody>
         )
     }
+    printOrder = (id) => {
+        const ordersHtml = '<html><head><title></title></head><body>'+
+        '<table class="module" role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;" data-muid="8b5181ed-0827-471c-972b-74c77e326e3d">'+
+        '<tbody>'+
+          '<tr>'+
+            '<td style="padding:30px 20px 18px 30px; line-height:22px; text-align:inherit;" height="100%" valign="top" bgcolor="" role="module-content"><div><div style="font-family: inherit; text-align: inherit"><span style="color: #0055ff; font-size: 24px">Order Summary</span></div><div></div></div></td>'+
+          '</tr>'+
+        '</tbody>'+
+      '</table></body></html>';
+
+        const oldPage = document.body.innerHTML;
+        document.body.innerHTML = ordersHtml;
+        // window.open();
+        window.print();
+        // window.close();
+        document.body.innerHTML = oldPage
+    }
     renderProductOrder = (orders, activeOld, perPage) => {
             let ordersArr = [];
             let active = (activeOld-1)*perPage;
@@ -86,6 +105,11 @@ class Order extends Component{
                              orders[i].status === "Canceled" ? <td><Alert variant="danger"> {orders[i].status} </Alert></td> : 
                             <td><Alert variant="info"> <Alert.Link onClick={() => this.updateHandler(orders[i].id,"Delivered")}>{orders[i].status}</Alert.Link></Alert></td>
                             }
+                            {/* <td>
+                            <ReactToPrint trigger={() => <a href="#">Print this out!</a>} content={() => this.printOrder} />
+                            <Order ref={el => (this.printOrder = el)} />
+                            </td> */}
+                            <td><Button variant="info" as={Link} to={"/admin/printorder/"+orders[i].id}>Print</Button></td>
                         </tr>
                     )
                 }
@@ -107,6 +131,7 @@ class Order extends Component{
                 <th>Order Date</th>
                 <th>Order</th>
                 <th>Status</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>

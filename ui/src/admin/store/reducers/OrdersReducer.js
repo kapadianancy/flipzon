@@ -4,6 +4,7 @@ const initialStore = {
     orders: [],
     ordersDetails: [],
     order:{},
+    orderBill:[],
     loading: false,
     error: ""
 };
@@ -26,7 +27,24 @@ const store = (state = initialStore, action) => {
                 ...state,
                 loading: false,
                 error:action.error
-            }    
+            }
+        case types.INIT_ORDER_BILL:
+            return {
+                ...state,
+                loading: true,
+            };
+        case types.FETCH_ORDER_BILL_SUCCESS:
+            return {
+                ...state,
+                orderBill: action.orderBill,
+                loading: false
+            }
+        case types.FETCH_ORDER_BILL_FAILED:
+            return {
+                ...state,
+                loading: false,
+                error:action.error
+            }        
         case types.INIT_FETCH_ORDERS:
             return {
                 ...state,

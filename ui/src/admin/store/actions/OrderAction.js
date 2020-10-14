@@ -25,6 +25,26 @@ export const fetchOrders = () => {
     };
 };
 
+export const fetchOrderBill = (id) => {
+    return async (dispatch) => {
+        dispatch({
+            type:types.INIT_ORDER_BILL
+        }) 
+        // let token = getState().adminAuth.token
+        await axios.get('admin/orderBill/'+id).then(response => {
+            dispatch({
+                type:types.FETCH_ORDER_BILL_SUCCESS,
+                orderBill:response.data
+            });
+        }).catch(error => {
+            dispatch({
+                type:types.FETCH_ORDER_BILL_FAILED,
+                error:error.message
+            });
+        })
+    };
+};
+
 export const fetchOrdersDetails = (id) => {
     return async (dispatch,getState) => {
         dispatch({

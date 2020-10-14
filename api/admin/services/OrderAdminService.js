@@ -3,8 +3,8 @@ const OrdersDetails = require("../../models/Order_details");
 const user = require("../../models/User");
 const product = require("../../models/Product");
 const productcategory = require("../../models/Product_category");
+const { sequelize } = require('../../db/db');
 var nodemailer = require('nodemailer');
-
 const getAllOrders = async (id) => {
     try{
         return await OrdersDetails.findAll({
@@ -19,6 +19,25 @@ const getAllOrders = async (id) => {
                 orderId:id
             }
         })
+    }catch(error) {
+        throw error;
+    }  
+}
+
+const getOrderBill = async (id) => {
+    try{
+        return await Orders.findAll({
+            include: [
+                {
+                    model: user ,as:"user"
+                },
+            ],
+            where: {
+                IsDeleted:0,
+                id:id
+            }
+        })
+        // return await sequelize.query("SELECT o.*,od.*,p.*,u.* FROM orders o,order_details od,products p,users u WHERE o.id = od.orderId and od.productId=p.id and o.userId = u.id and od.orderId = "+id);;
     }catch(error) {
         throw error;
     }  
@@ -175,5 +194,6 @@ const editOrders = async (id,status) => {
 module.exports = {
     getOrders,
     editOrders,
-    getAllOrders
+    getAllOrders,
+    getOrderBill
 }

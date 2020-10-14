@@ -94,7 +94,6 @@ class Dashboard extends Component{
         // console.log(tot_rev.jan[0][0].jan);
         await this.props.fetchProductTotal();
         let tots = await this.props.totals;
-        console.log(tot);
         this.setState({
             totalOrder:tot.totalOrder,
             totalConfirmdOrder:tot.totalConfirmdOrder,

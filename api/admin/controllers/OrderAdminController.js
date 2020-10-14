@@ -39,5 +39,16 @@ app.get("/admin/allorders/:id", async (req, res, next) => {
         next(error);      
     }
 
+})
+app.get("/admin/orderBill/:id", async (req, res, next) => {
+    try{
+        let orders = await ordersServices.getOrderBill(req.params.id);
+    
+        res.send(orders);
+    
+    }catch(error)
+    {
+        next(error);      
+    }
 })    
 };
