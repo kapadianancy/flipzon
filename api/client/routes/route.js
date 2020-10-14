@@ -41,6 +41,9 @@ router.put('/client/changePassword',auth,Authenticate.changePassword);
 //forget Password
 router.post('/client/forgetPassword',Authenticate.forgetPassword);
 
+//update Password
+router.post('/client/updatePassword',Authenticate.updatePassword);
+
 //placeOrder
 //router.post("/placeOrder",auth,Order.placeOrder);
 router.post("/client/checkOrder",Order.checkOrder);
@@ -74,5 +77,9 @@ router.get("/client/searchProduct/:pro",Product.searchProducts);
 router.post("/client/addReview",auth,Product.addReviews)
 
 router.put("/client/updateUserId/:uid",auth,Order.updateUserId);
+
+//Offers
+router.get('/client/offer-product',Product.getOfferProduct);
+
 
 module.exports = router;

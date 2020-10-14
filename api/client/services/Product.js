@@ -50,6 +50,25 @@ exports.getCategoryProduct = async (req, res) => {
 
 }
 
+exports.getOfferProduct = async (req, res) => {
+    try {
+        const p = await main.product.findAll({
+            where: {
+                isInOffer : 1
+            },
+            order: [
+                ['discount', 'DESC']
+            ],
+        });
+
+        res.status(200).send(p);
+    } catch (err) {
+        res.status(400).send(err);
+    }
+
+
+}
+
 
 exports.getProductById = async (req, res) => {
     try {

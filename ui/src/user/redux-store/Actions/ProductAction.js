@@ -35,6 +35,23 @@ export const categoryWiseProduct = (cid) => {
     };
 }
 
+export const offerWiseProduct = () => {
+    return async dispatch => {
+
+        await axiosInstance.get('client/offer-product/').then(response => {
+            dispatch({
+                type: types.DISPLAY_OFFER_PRODUCT,
+                products: response.data
+            });
+        }).catch(error => {
+            dispatch({
+                type: types.DISPLAY_OFFER_PRODUCT_FAILED,
+                error: error.message
+            });
+        })
+    };
+}
+
 export const orderedProducts = () => {
     return async dispatch => {
         await axiosInstance.get("/client/orderedProducts").then(response => {

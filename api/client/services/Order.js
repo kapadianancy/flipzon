@@ -1,3 +1,4 @@
+var nodemailer = require('nodemailer');
 
 const { sequelize } = require('../../db/db');
 const { product } = require('../../models/main');
@@ -15,7 +16,7 @@ exports.checkOrder = async (req, res) => {
                 isDeleted: 0
             }
         })
-        
+
         if (order) {
             oid = order.id;
             req.orderId = oid;
@@ -44,7 +45,7 @@ exports.placeOrder = async (req, res) => {
         oid = order.id;
         req.orderId = oid;
         await this.addOrderItems(req, res);
-       // res.status(201).send(order);
+        // res.status(201).send(order);
     }
     catch (error) {
         return res.status(400).send(error);
@@ -71,7 +72,7 @@ exports.addOrderItems = async (req, res) => {
         })
         let orderItem;
         if (temp.length > 0) {
-            
+
             orderItem = await main.Order_details.update(
                 {
                     quantity: temp[0].quantity + data.quantity,
@@ -101,7 +102,7 @@ exports.addOrderItems = async (req, res) => {
                 }
             });
         }
-       //console.log(orderItem);
+        //console.log(orderItem);
         res.status(201).send({ "orderItem": orderItem });
     }
     catch (error) {
@@ -109,44 +110,44 @@ exports.addOrderItems = async (req, res) => {
     }
 }
 
-const sendMail = async function(email){
-    let status="";
+const sendMail = async function (email) {
+    let status = "";
     var transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-          user: 'nidhinancy0921@gmail.com',
-          pass: 'nidhi0921nancy'
+            user: 'nidhinancy0921@gmail.com',
+            pass: 'nidhi0921nancy'
         }
-      });
-      
-      var randomstring     = '';
-      var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-      var charactersLength = characters.length;
-      for ( var i = 0; i < 5; i++ ) {
+    });
+
+    var randomstring = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < 5; i++) {
         randomstring += characters.charAt(Math.floor(Math.random() * charactersLength));
-      }
+    }
 
-      const password=await gethash(randomstring);
-      const User = await main.User.update( {
-        "password" : password
-        } , {
-            where: {
-                email : email
-            }
-        });
+    const password = await gethash(randomstring);
+    const User = await main.User.update({
+        "password": password
+    }, {
+        where: {
+            email: email
+        }
+    });
 
-      var mailOptions = {
+    var mailOptions = {
         from: 'nidhinancy0921@gmail.com',
         to: email,
         subject: 'Forget Password From Flipzon',
-        text: 'New Password : '+randomstring
-      };
-      
-        let sendmail=await transporter.sendMail(mailOptions);
+        text: 'New Password : ' + randomstring
+    };
 
-        return sendmail;
+    let sendmail = await transporter.sendMail(mailOptions);
 
-   
+    return sendmail;
+
+
 }
 
 exports.confirmOrder = async (req, res) => {
@@ -168,18 +169,47 @@ exports.confirmOrder = async (req, res) => {
             }
         });
 
+        const count = await main.Order_details.findAll({
+            where: {
+                orderId: orderid.id,
+                isDeleted: 0
+            }
+        })
+        let c = 0;
+        await count.forEach(e => {
+            c = c + 1;
+        })
         //send email to user for confirmation
-        //email--- subject-confirm order-00000-oid
-        //---------oredritems
-        //---------total price
+        if (Order) {
+            var transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: 'nidhinancy0921@gmail.com',
+                    pass: 'nidhi0921nancy'
+                }
+            });
+            const order_detail_link = 'http://localhost:3000/vieworderdetails/' + orderid.id;
+            const msg = '<html><body><b>Your Order id ' + orderid.id + ' is Confirmed ...</b><br/>Total Order Item :' + c + '<br /> <h2>Total Cost : ' + total_price + '</h2><a href="' + order_detail_link + '">View Order Details</a></body></html>';
 
-       
+            var mailOptions = {
+                from: 'nidhinancy0921@gmail.com',
+                to: req.validUser.email,
+                subject: 'Confirm order from Flipzon',
+                text: 'Order Confirm',
+                html: msg
+            };
+
+            await transporter.sendMail(mailOptions);
+
+        }
         res.status(200).send("Order Placed");
     }
     catch (error) {
         res.status(400).send(error);
     }
 }
+
+
 
 exports.cancelOrder = async (req, res) => {
     try {
@@ -340,9 +370,9 @@ exports.viewOrder = async (req, res) => {
 
 exports.viewOrderCart = async (req, res) => {
     try {
-        let uid=req.params.uid;
+        let uid = req.params.uid;
         //console.log("----uid-----"+req.params.uid);
-        const o = await sequelize.query("SELECT od.*,p.name,p.main_image,p.price FROM orders o,products p,order_details od where o.id=od.orderId and od.productId=p.id and o.status='Pending' and od.isDeleted=0 and o.userId='"+uid+"'");
+        const o = await sequelize.query("SELECT od.*,p.name,p.main_image,p.price FROM orders o,products p,order_details od where o.id=od.orderId and od.productId=p.id and o.status='Pending' and od.isDeleted=0 and o.userId='" + uid + "'");
 
         res.status(200).send(o[0]);
     } catch (err) {
@@ -360,17 +390,16 @@ exports.viewOrderDetails = async (req, res) => {
     }
 }
 
-exports.updateUserId=async(req,res)=>
-{
-    try{
-        const result = await main.Order.update({ userId:req.validUser.id }, {
+exports.updateUserId = async (req, res) => {
+    try {
+        const result = await main.Order.update({ userId: req.validUser.id }, {
             where: {
                 userId: req.params.uid
             }
         });
         res.status(200).send(result);
     }
-    catch(err){
+    catch (err) {
         res.status(400).send(err);
     }
 }

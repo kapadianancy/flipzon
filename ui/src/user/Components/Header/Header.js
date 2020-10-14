@@ -168,7 +168,7 @@ class Header extends Component {
             <Nav.Link as={Link} to="/" style={style.header}>
               Home
             </Nav.Link>
-            <Nav.Link as={Link} to="/" style={style.header}>
+            <Nav.Link as={Link} to="/offerproduct" style={style.header}>
               Offers
             </Nav.Link>
             <NavDropdown title="Category" style={style.header}>
