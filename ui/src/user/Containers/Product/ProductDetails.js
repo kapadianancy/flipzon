@@ -1,20 +1,4 @@
 import React, { Component } from "react";
-<<<<<<< HEAD
-import img from "../../../images/product.png";
-import { ListGroup, Button } from "react-bootstrap";
-import { connect } from "react-redux";
-import { withRouter } from "react-router";
-import NumericInput from "react-numeric-input";
-import nextId from "react-id-generator";
-import { setPrefix } from "react-id-generator";
-
-import Header from "../../Components/Header/Header";
-import Footer from "../../Components/Footer/Footer";
-import * as actions from "../../redux-store/Actions/ProductAction";
-import * as Orderactions from "../../redux-store/Actions/OrderAction";
-
-class Product extends Component {
-=======
 import img from '../../../images/product.png';
 import { ListGroup, Button } from 'react-bootstrap';
 import { connect } from 'react-redux';
@@ -32,7 +16,6 @@ import * as actions from '../../redux-store/Actions/ProductAction';
 import * as Orderactions from '../../redux-store/Actions/OrderAction';
 
 class Product extends Component {
-<<<<<<< HEAD
 
     state = {
         id: "",
@@ -45,78 +28,6 @@ class Product extends Component {
         show: false,
         feedback: "",
         rating: 1
-=======
->>>>>>> 652711b7a37b0e4aec2e1f4b92d08b4a3037040d
-  state = {
-    id: "",
-    name: "",
-    price: "",
-    description: "",
-    stock: "",
-    main_image: "",
-    qty: 1,
-  };
-
-  async componentDidMount() {
-    await this.props.productDetails(this.props.match.params.pid);
-
-    this.setState({
-      id: this.props.products.id,
-      name: this.props.products.name,
-      description: this.props.products.description,
-      price: this.props.products.price,
-      stock: this.props.products.stock,
-      main_image: this.props.products.main_image,
-    });
-<<<<<<< HEAD
-  }
-
-  addToCart = async (pid, qty) => {
-    // localStorage.removeItem("device");
-
-    let id;
-    if (this.props.token == "") {
-      if (localStorage.getItem("device") == null) {
-        console.log("device generate");
-        setPrefix("deviceId-");
-        id = nextId();
-=======
-  }makeid() {
-    var result           = '';
-    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var charactersLength = characters.length;
-    for ( var i = 0; i < 6; i++ ) {
-       result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
- }
- 
- addToCart = async (pid, qty) => {
-     // localStorage.removeItem("device");
- 
-     let id;
-     if (this.props.token == "") {
-       if (localStorage.getItem("device") == null) {
-        
-         id = this.makeid();
->>>>>>> 652711b7a37b0e4aec2e1f4b92d08b4a3037040d
-        localStorage.setItem("device", id);        
-      }
-      else
-      {
-          id=localStorage.getItem("device");
-      }
-    } else {
-      id = this.props.userId;
-      // localStorage.removeItem("device");
-<<<<<<< HEAD
-    }
-    //alert("id===="+id);
-    await this.props.addToCart(pid, qty, id);
-    if (this.props.error !== "") {
-      this.props.history.push("/error/" + this.props.error);
-=======
->>>>>>> nancyKapadia
     }
 
     async componentDidMount() {
@@ -156,11 +67,10 @@ class Product extends Component {
         if (this.props.error !== "") {
             this.props.history.push("/error/" + this.props.error);
         }
-        else
-        {
+        else {
             this.props.history.push("/viewordercart");
         }
-        
+
     };
 
     handleShow = async () => {
@@ -246,10 +156,10 @@ class Product extends Component {
                         <div class="card flex-row flex-wrap">
                             <div class="card-header border-0">
                                 <img src={`http://localhost:8080${this.state.main_image}`} alt="image" height="150px" />
+
                                 <div style={{ marginTop: "25px" }}>
                                     {data}
                                 </div>
-
                             </div>
                             <div class="card-block px-2" style={{ padding: "20px", margin: "20px" }}>
                                 <h4 class="card-title" style={{ color: "#fb641b" }}>{this.state.name}</h4>
@@ -288,8 +198,11 @@ class Product extends Component {
                                             <div class="card flex-row flex-wrap">
                                                 <div class="card-header">
                                                     <img src={`http://localhost:8080${this.state.main_image}`} alt="image" height="50px" width="50px" />
+
+
                                                 </div>
                                                 <div class="px-2">
+
                                                     <h4 class="card-title">{this.state.name}</h4>
                                                     <p class="card-text"><b>Price :  </b>{this.state.price}</p>
                                                 </div>
@@ -344,7 +257,6 @@ class Product extends Component {
                 <Footer />
             </>
         );
->>>>>>> 652711b7a37b0e4aec2e1f4b92d08b4a3037040d
     }
 };
 const mapStateToProp = (state) => {

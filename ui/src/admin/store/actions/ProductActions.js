@@ -118,3 +118,16 @@ export const deleteProductImage = (ids) => {
         }
     }
 }
+
+export const editProductOffer = (id,discount,offer) => {
+    return async(dispatch) => {
+        dispatch({ type: types.INIT_EDIT_OFFER });
+        try {
+            // let token = getState().adminAuth.token;
+            const result = await axios.put(`admin/productOffer/${id}/${discount}/${offer}`);
+            dispatch({ type: types.EDIT_OFFER_SUCCESS, product: result.data });
+        } catch (error) {
+            dispatch({ type: types.EDIT_OFFER_FAILED, error: error.message });
+        }
+    }
+}

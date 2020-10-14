@@ -36,17 +36,11 @@ export const login = (user) => {
                 })
                 .then(response=>
                 {
-<<<<<<< HEAD
-                    localStorage.removeItem("device");
-                }).catch(err=>
-                    {
-=======
                    
                     localStorage.removeItem("device");
                 }).catch(err=>
                     {
                         
->>>>>>> nancyKapadia
                         console.log("error in user id update");
                     })
             }
@@ -82,6 +76,22 @@ export const forgetpassword = (email) => {
     };
 };
 
+export const updatepassword = (passwords) => {
+    return async dispatch => {
+         await axiosInstance.post('/client/updatepassword',passwords)
+         .then(response => {
+            dispatch({
+                type: types.CHANGE_PASSWORD,
+                message : response.data
+            });
+        }).catch(error => {
+            dispatch({
+                type: types.CHANGE_PASSWORD_FAILED,
+                error: error.message
+            });
+        })
+    };
+};
 
 export const logout = () => {
 

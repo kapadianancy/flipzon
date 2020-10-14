@@ -6,12 +6,16 @@ function sayHelloTo() {
 
 const getProduct_Category = async () => {
     try{
-        // return await sequelize.query("select distinct parent FROM product_categories where isDeleted=0 ORDER BY parent and Group By name,image");
+        // return await sequelize.query("SELECT DISTINCT parent,name FROM product_categories");
+        // attributes: [
+        //     [sequelize.fn('DISTINCT', sequelize.col('parent')) ,'parent'],
+        // ],
         return await Product_category.findAll({
             where: {
                 IsDeleted:0
             }
         })
+        
     }catch(error) {
         throw error;    
     }  

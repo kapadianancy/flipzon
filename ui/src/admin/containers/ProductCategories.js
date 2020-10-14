@@ -38,7 +38,7 @@ const ProductCategorie = (props) => {
     let productCategories = "Loading";
     if(props.product_categories.length > 0) {
         productCategories = [
-            <ProductCategoriesList key={1} product_categories={props.product_categories} active={active} perPage={perPage}/>,
+            <ProductCategoriesList key={1} product_categories={props.product_categories} active={active} perPage={perPage} len={props.product_categories.length}/>,
             <Pagination key={2} >
                 { renderPaginationItems(props.product_categories.length, active, perPage, changeActive) }
             </Pagination>

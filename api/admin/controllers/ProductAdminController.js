@@ -82,6 +82,15 @@ module.exports = (app) => {
         }
     })
 
+    app.put("/admin/productOffer/:id/:discount/:offer", async (req, res, next) => {
+        try {
+            let response = await productService.editProductOffer(req.params.id,req.params.discount, req.params.offer);
+            res.send(response);
+        } catch (error) {
+            next(error);
+        }
+    })
+
     app.post("/admin/products/images", auth, async (req, res, next) => {
         try {
             if(!req.body.ids || req.body.ids.length == 0) {

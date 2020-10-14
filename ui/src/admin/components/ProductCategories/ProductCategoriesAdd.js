@@ -72,7 +72,7 @@ class ProductCategoriesAdd extends Component{
     }
    
     submitDataHandler = () => {
-        console.log("Called Val");
+
         let errors = this.state.errors;
         let a=0,a1=0,a2=0;
         if (!this.state.name) {
