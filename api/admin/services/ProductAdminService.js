@@ -28,7 +28,7 @@ const fetchSingleProduct = async(id) => {
                 id,
                 isDeleted: false
             },
-            attributes: [ "id", "name", "main_image", "stock", "price", "categoryId", "description" ]
+            attributes: [ "id", "name", "main_image", "stock", "price", "categoryId", "description", "isInOffer", "discount", "videoLink" ]
         });
         if(!product) throw { statusCode: 404, message: "Product not found" }
         let images = await ProductImages.findAll({
@@ -88,6 +88,9 @@ const addProduct = async (data, images) => {
         if(!data.price) {
             errorObj.message = "Product Price is required";
         }
+        if(data.isInOffer === "true" && (+data.discount) <= 0) {
+            errorObj.message = "Discount is not valid";
+        }
         if(errorObj.message) throw errorObj;
 
         var product = await Product.create({
@@ -96,7 +99,11 @@ const addProduct = async (data, images) => {
             stock: data.stock,
             price: data.price,
             description: data.description,
-            categoryId: data.categoryId
+            categoryId: data.categoryId,
+            isInOffer: data.isInOffer === "true" ? true : false,
+            discount: data.isInOffer === "true" ? data.discount : 0,
+            videoLink: data.videoLink ? data.videoLink : "",
+
         });
         product = product.get({ row: true })
 
@@ -122,6 +129,9 @@ const editProduct = async (id, data, images) => {
         if(!product) {
             errorObj.statusCode = 404
             errorObj.message = "Product not found";
+        }
+        if(data.isInOffer === "true" && (+data.discount) <= 0) {
+            errorObj.message = "Discount is not valid";
         }
         if(errorObj.message) throw errorObj
 
@@ -167,12 +177,12 @@ const deleteProduct = async (id) => {
         throw error;
     }
 }
-const deleteProductImage = async (id) => {
+const deleteProductImage = async (ids) => {
     try {
         let errorObj = { statusCode:400 }
-        var image = await ProductImages.findOne({
+        var image = await ProductImages.findAll({
             where: {
-                id,
+                id: ids,
                 isDeleted: false
             }
         });
@@ -184,10 +194,11 @@ const deleteProductImage = async (id) => {
         await ProductImages.update({
             "isDeleted": true
         }, {
-            where: { id }
+            where: { id: ids }
         });
         return { message: "Image Deleted" };
     } catch (error) {
+        console.log(error);
         throw error;
     }
 }

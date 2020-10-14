@@ -105,3 +105,24 @@ export const updateProfile = (data) => {
         }
     }   
 }
+
+export const checkLink = async (iv, data) => {
+    try {
+        await axios.get(`admin/checkLink?iv=${iv}&data=${data}`);
+    } catch (error) {
+        throw error
+    }
+}
+
+export const resetPassword = (iv, data, password) => {
+    return async(dispatch) => {
+        dispatch({ type: types.INIT_RESET_PASSWORD });
+        try {
+            let result = await axios.post(`/admin/resetPassword?iv=${iv}&data=${data}`, { password });
+            dispatch({ type: types.RESET_PASSWORD_SUCCESS, message: result.data.message });
+        } catch (error) {
+            console.log(error);
+            dispatch({ type: types.RESET_PASSWORD_FAILED, error: error.message });
+        }
+    }
+}
