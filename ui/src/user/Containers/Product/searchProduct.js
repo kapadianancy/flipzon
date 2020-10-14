@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import img from '../../../images/product.png';
-import { ListGroup, Button, Row, Form } from 'react-bootstrap';
+import { ListGroup, Button, Row, Form,Card,Badge } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import NumericInput from 'react-numeric-input';
 import nextId from "react-id-generator";
@@ -82,13 +82,13 @@ class Product extends Component {
     render() {
         const style = {
             cardBtn: {
-                alignSelf: 'center',
+                alignSelf: "center",
                 backgroundColor: "#fb641b",
                 borderColor: "#fb641b",
-                margin: '10px',
+                margin: "10px",
                 color: "white",
-                width: '170px'
-            }
+                display: "inline-block",
+              },
         }
         let data = [];
         if (this.props.products.length == 0) {
@@ -110,38 +110,70 @@ class Product extends Component {
                 }
 
                 data.push(
-                    <Form>
-                        <ListGroup.Item>
-                            <div class="card flex-row flex-wrap">
-                                <div class="card-header border-0">
-                                    <img src={`http://localhost:8080${p.main_image}`} height="150px" width="200px" alt="image" />
-                                </div>
-                                <div class="card-block px-2">
-                                    <h4 class="card-title">{p.name}</h4>
-                                    <p class="card-text">Description : {p.description}</p>
-                                    <p class="card-text">₹ Price : {p.price}</p>
-                                    <div className="text-danger"><b>{x}</b></div>
-                                    <NumericInput
-                                        disabled={disable}
-                                        className="form-control"
-                                        defaultValue={1}
-                                        min={1}
-                                        max={p.stock}
-                                        step={1}
-                                        precision={0}
-                                        size={5}
-                                        mobile
-                                        onChange={(event) => this.handleChange(event)}
-                                    />
+                    <Card
+            style={{ display: "inline-block", width: "30%", margin: "10px" }}
+          >
+            <Form>
+              <div
+                class="card flex-row flex-wrap"
+                style={{ justifyContent: "center", height: "376px" }}
+              >
+                <div class="card-header border-0">
+                  <img
+                    src={`http://localhost:8080${p.main_image}`}
+                    height="150px"
+                    width="100%"
+                    alt="image"
+                  />
+                </div>
+                <div class="card-block px-2">
+                  <h4 class="card-title">{p.name}</h4>
 
-                                    <Button disabled={disable} id={p.id} style={style.cardBtn} onClick={() => this.addToCart(p.id, this.state.qty)}>Add To Cart</Button>
-                                    <Button style={style.cardBtn} onClick={() => this.clickHandler(p.id)}>View Details</Button>
-                                </div>
-                                <div class="w-100"></div>
+                  {p.discount ? (
+                    <Card.Text>
+                      Price-&#x20B9;{p.price-(p.price * p.discount) / 100}{" "}
+                      <Badge pill variant="success">
+                        Disc-{p.discount}%
+                      </Badge>
+                    </Card.Text>
+                  ) : (
+                    <Card.Text>Price-&#x20B9;{p.price} </Card.Text>
+                  )}
+                  <div className="text-danger">
+                    <b>{x}</b>
+                  </div>
+                  <NumericInput
+                    disabled={disable}
+                    className="form-control"
+                    defaultValue={1}
+                    min={1}
+                    max={p.stock}
+                    step={1}
+                    precision={0}
+                    size={5}
+                    mobile
+                    onChange={(event) => this.handleChange(event)}
+                  />
 
-                            </div>
-                        </ListGroup.Item>
-                    </Form>
+                  <Button
+                    disabled={disable}
+                    id={p.id}
+                    style={style.cardBtn}
+                    onClick={() => this.addToCart(p.id, this.state.qty)}
+                  >
+                    Add To Cart
+                  </Button>
+                  <Button
+                    style={style.cardBtn}
+                    onClick={() => this.clickHandler(p.id)}
+                  >
+                    View Details
+                  </Button>
+                </div>
+                <div class="w-100"></div>
+              </div>
+            </Form>
+          </Card>
                 );
                 return data;
             })
@@ -150,15 +182,10 @@ class Product extends Component {
         return (
             <>
                 <Header />
-
-                <ListGroup style={{ width: "80%", margin: "20px auto" }}>
-
-                    {data}
-
-
-                </ListGroup>
-
-                <Footer />
+        <div style={{ margin: "30px 30px" }}>
+          <Row style={{ justifyContent: "center" }}>{data}</Row>
+        </div>
+        <Footer />
             </>
         );
     }
