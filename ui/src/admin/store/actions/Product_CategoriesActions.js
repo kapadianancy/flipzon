@@ -25,13 +25,38 @@ export const fetchProductCategories = () => {
     };
 };
 
-export const AddProductCategories = (post) => {
+export const searchCategories = (search) => {
+    return async (dispatch,getState) => {
+        dispatch({
+            type:types.INIT_SEARCH
+        }) 
+        let token = getState().adminAuth.token
+        await axios.get('/admin/categoriesSearch/'+search,{
+            headers: {
+                "Authorization": token
+            }
+        }).then(response => {
+            dispatch({
+                type:types.FETCH_SEARCH_SUCCESS,
+                product_categories:response.data
+            });
+        }).catch(error => {
+            dispatch({
+                type:types.FETCH_SEARCH_FAILED,
+                error:error.message
+            });
+        })
+    };
+};
+
+export const AddProductCategories = (id,post) => {
     return async (dispatch,getState) => {
         dispatch({
             type:types.INIT_ADD_PRODUCT_CATEGORIES
         }) 
         let token = getState().adminAuth.token
-        await axios.post('admin/product_categories',post,{
+        console.log('admin/product_categories/'+id);
+        await axios.post('admin/product_categories/'+id,post,{
             headers: {
                 "Authorization": token
             }

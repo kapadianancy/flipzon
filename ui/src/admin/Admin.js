@@ -5,6 +5,7 @@ import Products from './containers/Products'
 import ProductCategories from './containers/ProductCategories'
 import ProductCategoriesAdd from './components/ProductCategories/ProductCategoriesAdd'
 import ProductCategoriesEdit from './components/ProductCategories/ProductCategoriesEdit'
+import PrintOrder from './containers/PrintOrder'
 import Dashboard from './containers/Dashboard'
 import ProductFormController from './containers/ProductFormController'
 import Order from "./containers/Orders";
@@ -42,6 +43,7 @@ const Admin = (props) => {
                     <Route path="/admin/products" exact component={Products} />
                     <Route path="/admin/ProductCategoriesAdd" exact component={ProductCategoriesAdd} />
                     <Route path="/admin/ProductCategoriesEdit/:id" exact component={ProductCategoriesEdit} />
+                    <Route path="/admin/printorder/:id" exact component={PrintOrder} />
                     <Route path="/admin/productcategories" exact component={ProductCategories} />
                     <Route path="/admin/order" exact component={Order} />
                     <Route path="/admin/profile" exact component={Profile} />

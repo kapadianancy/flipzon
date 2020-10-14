@@ -202,6 +202,22 @@ const deleteProductImage = async (ids) => {
         throw error;
     }
 }
+const editProductOffer = async (id, discount,offer) => {
+    try {
+        let errorObj = { statusCode:400 }
+        
+        if(errorObj.message) throw errorObj
+
+        let product = await Product.update({discount:discount,isInOffer:offer}, {
+            where: { categoryId:id }
+        });
+        return {
+            message: "Product Updated"
+        }
+    } catch (error) {
+        throw error;
+    }
+}
 module.exports = {
     fetchProducts,
     searchProducts,
@@ -209,5 +225,6 @@ module.exports = {
     addProduct,
     editProduct,
     deleteProduct,
-    deleteProductImage
+    deleteProductImage,
+    editProductOffer
 }

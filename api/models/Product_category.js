@@ -40,6 +40,5 @@ Product_category.hasMany(Product_category, {
     onDelete: "CASCADE",
     onUpdate: "NO ACTION"
 })
-
-
+    
 module.exports=Product_category;

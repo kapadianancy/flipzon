@@ -122,6 +122,23 @@ const store = (state = initialStore, action) => {
                 loading: false,
                 error: action.error
             }
+        case types.INIT_EDIT_OFFER:
+            return {
+                ...state,
+                loading: true,
+                error: null
+            }
+        case types.EDIT_OFFER_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+            }
+        case types.EDIT_OFFER_FAILED:
+            return {
+                ...state,
+                loading: false,
+                error: action.error
+            }    
         default:
             return state;
     }

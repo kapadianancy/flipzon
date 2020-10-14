@@ -20,31 +20,8 @@ describe("register necessary roles", () => {
       .post("/admin/role")
       .send({ name: "user" })
       .end( (err, res) => {
-          if(err) { console.log(err.message); }
           res.should.have.status(200);
           done();
-      })
-  });
-});
-describe("admin authentications", () => {
-  it("it should register an admin user", (done) => {
-    chai.request(app)
-      .post("/admin/register")
-      .send({ username: 'Amy Trella', email: 'amy.trella@gmail.com', password: "trella1234"})
-      .end( (err, res) => {
-        if(err) console.log(err.message);
-        res.should.have.status(200);
-        done();
-      })
-  });
-  it("it should not register an admin with same username/email", (done) => {
-    chai.request(app)
-      .post("/admin/register")
-      .send({ username: 'Amy Trella', email: 'amy.trella@gmail.com', password: "trella1234"})
-      .end( (err, res) => {
-        if(err) console.log(err.message);
-        res.should.have.status(422);
-        done();
       })
   });
   it("it should login an admin user", (done) => {
@@ -59,102 +36,175 @@ describe("admin authentications", () => {
         done();
       })
   });
-  it("it should not login an admin user with invalid credentials", (done) => {
+});
+describe("register an user", () => {
+  it("it should register an user", (done) => {
     chai.request(app)
-      .post("/admin/login")
-      .send({ email: "amy.trella@gmail.com", password: "trella234" })
+      .post("/admin/register")
+      .send({ username: 'Amy Trella', email: 'amy.trella@gmail.com', password: "trella1234"})
       .end( (err, res) => {
-        if(err) console.log(err.message);
-        res.should.have.status(401);
-        done();
-      })
-  });
-  it("it should return user profile", (done) => {
-    chai.request(app)
-      .get("/admin/me")
-      .set("Authorization", token)
-      .then( res => {
         res.should.have.status(200);
-        res.body.should.have.property("username");
-      })
-      .catch( err => {
-        console.log(err.message)
-      });
-      done();
-      // .end( (err, res) => {
-      //   if(err) console.log(err.message);
-      //   done();
-      // })
-  });
-  it("it should not return user profile without auth token", (done) => {
-    chai.request(app)
-      .get("/admin/me")
-      .then( res => {
-        res.should.have.status(401);
-      })
-      .catch( err => {
-        console.log(err.message)
-      })
-      done();
-  });
-  it("it should update profile of user", (done) => {
-    chai.request(app)
-      .post("/admin/updateProfile")
-      .set("Authorization", token)
-      .send({ username: "Steve Jobs", password: "steve1234" })
-      .end( (err, res) => {
-        if(err) console.log(err.message);
-        res.should.have.status(200);
-        res.body.should.have.property("message");
         done();
       })
   })
 });
-describe("product management", () => {
-  it("it should add category", (done) => {
+describe('/GET product Category', () => {
+  it('it should GET all the Category', (done) => {
     chai.request(app)
-      .post("/admin/product_categories")
-      .set("Authorization", token)
-      .type('form')
-      .field("name", "temp")
-      .attach("image", "C:/Users/BHAVIK/Downloads/christina-wocintechchat-com-SqmaKDvcIso-unsplash.jpg", "test.jpg")
-      // .send({ "name":"temp" })
-      .then( res => {
-        res.should.have.status(200);
-      })
-      .catch( err => {
-        console.log(err.message);
-      });
-      done();
-  })
-  it("it should add product", (done) => {
+        .get('/admin/product_categories')
+        .set("Authorization", token)
+        .end((err, res) => {
+              res.should.have.status(200);
+              res.body.should.be.a('array');
+              res.body.length.should.be.eql(0);
+          done();
+        });
+  });
+});
+describe('/POST product Category', () => {
+    it('it should  POST a product Category', (done) => {
+        let prod = {
+            id:'1',
+            name:'myNew',
+            image:'/public/images/image-1601618643157-655485201.png',
+            isDeleted:0,
+            created_at: "2020-09-19T06:14:02.786Z",
+            updated_at: "2020-09-19T06:14:02.786Z"
+        }
+      chai.request(app)
+          .post('/admin/product_categories')
+          .set("Authorization", token)
+          .send(prod)
+          .end((err, res) => {
+                res.should.have.status(200);
+                res.body.should.be.a('object');
+            done();
+          });
+    });
+    it('it should Not POST a product Category Name is Required', (done) => {
+        let prod = {
+            id:'1',
+            image:'/public/images/image-1601618643157-655485201.png',
+            isDeleted:0,
+            created_at: "2020-09-19T06:14:02.786Z",
+            updated_at: "2020-09-19T06:14:02.786Z"
+        }
+      chai.request(app)
+          .post('/admin/product_categories')
+          .set("Authorization", token)
+          .send(prod)
+          .end((err, res) => {
+                res.should.have.status(500);
+                res.body.should.have.property("name");
+                res.body.should.be.a('object');
+            done();
+          });
+    });
+    it('it should Not POST a product Category image is Required', (done) => {
+        let prod = {
+            id:'1',
+            name:'myNew',
+            isDeleted:0,
+            created_at: "2020-09-19T06:14:02.786Z",
+            updated_at: "2020-09-19T06:14:02.786Z"
+        }
+      chai.request(app)
+          .post('/admin/product_categories')
+          .set("Authorization", token)
+          .send(prod)
+          .end((err, res) => {
+                res.should.have.status(500);
+                res.body.should.have.property("image");
+                res.body.should.be.a('object');
+            done();
+          });
+    });
+  });
+describe('/PUT product Category',() => {
+  it('it should  PUT a product Category', (done) => {
+      let prod = {
+          id:'1',
+          name:'myNew123',
+          image:'/public/images/image-1601618643157-655485201.png',
+          isDeleted:1,
+          created_at: "2020-09-19T06:14:02.786Z",
+          updated_at: "2020-09-19T06:14:02.786Z"
+      }
     chai.request(app)
-      .post("/admin/products")
-      .set("Authorization", token)
-      .type("form")
-      .field("name", "temp product")
-      .field("price", 1500)
-      .field("stock", 10)
-      .field("categoryId", 1)
-      .field("description", "asdfasdfasdsf")
-      .attach("image", "C:/Users/BHAVIK/Downloads/christina-wocintechchat-com-SqmaKDvcIso-unsplash.jpg", "test.jpg")
-      .then( res => {
-        res.should.have.status(200);
-      })
-      .catch( err => {
-        console.log(err.message)
-      });
-      done();
-  })
-  it("it should return list of products", (done) => {
+        .put('/admin/product_categories/1')
+        .set("Authorization", token)
+        .send(prod)
+        .end((err, res) => {
+              res.should.have.status(200);
+              res.body.should.be.a('object');
+          done();
+        });
+  });
+});
+describe('/Delete product Category',() => {
+  it('it should  Delete a product Category', (done) => {
+      let prod = {
+          id:'1',
+          name:'myNew123',
+          image:'/public/images/image-1601618643157-655485201.png',
+          isDeleted:1,
+          created_at: "2020-09-19T06:14:02.786Z",
+          updated_at: "2020-09-19T06:14:02.786Z"
+      }
     chai.request(app)
-      .get("/admin/products")
-      .set("Authorization", token)
-      .end( (err, res) => {
-        if(err) console.error(err.message);
-        console.log(res);
-        //res.should.have.status(200);
-        done();
-      });
-  })
-})
+        .put('/admin/categories/1')
+        .set("Authorization", token)
+        .send(prod)
+        .end((err, res) => {
+              res.should.have.status(200);
+              res.body.should.be.a('object');
+          done();
+        });
+    });
+});
+
+describe('/GET product wise Category count', () => {
+    it('it should GET product wise Category count', (done) => {
+      chai.request(app)
+          .get('/admin/dashboardProduct')
+          .set("Authorization", token)
+          .end((err, res) => {
+                res.should.have.status(200);
+            done();
+          });
+    });
+  });
+
+describe('/GET All Orders Details', () => {
+  it('it should GET all the Orders Details', (done) => {
+    chai.request(app)
+        .get('/admin/allorders/1')
+        .set("Authorization", token)
+        .end((err, res) => {
+              res.should.have.status(200);
+          done();
+        });
+  });
+});
+describe('/PUT Order Status Update',() => {
+  it('it should PUT a Order Status', (done) => {
+      let orders = {
+            "id": 1,
+            "userId": 1,
+            "orderDate": "2020-09-25T00:00:00.000Z",
+            "totalPrice": 19999,
+            "status": "Completed Delivery",
+            "isDeleted": false,
+            "createdAt": null,
+            "updatedAt": "2020-09-28T09:13:17.000Z",
+      }
+    chai.request(app)
+        .put('/admin/orders/1')
+        .set("Authorization", token)
+        .send(orders)
+        .end((err, res) => {
+              res.should.have.status(200);
+          done();
+        });
+  });
+});

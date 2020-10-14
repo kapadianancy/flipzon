@@ -3,8 +3,9 @@ const chatHttp = require("chai-http");
 const app = require("../app")
 let should = chai.should();
 chai.use(chatHttp);
-let token = null;
 
+<<<<<<< HEAD
+=======
 it("it should login an admin user", (done) => {
     chai.request(app)
       .post("/admin/login")
@@ -28,11 +29,11 @@ it("it should login an admin user", (done) => {
   //     })
   // });
   
+>>>>>>> 68bf4c97a4e13e89215312a08b3c7aa27ab41676
 describe('/GET product wise Category count', () => {
     it('it should GET product wise Category count', (done) => {
       chai.request(app)
           .get('/admin/dashboardProduct')
-          .set("Authorization", token)
           .end((err, res) => {
                 res.should.have.status(200);
             done();

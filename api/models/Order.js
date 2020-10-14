@@ -33,11 +33,11 @@ const Order =db.sequelize.define("Order", {
         },
 });
 
-//relationship
-// Order.belongsTo(User,{
-//     foreignKey:"userId",
-//     onDelete:"cascade",
-//     as:"user"
-// });
+// relationship
+Order.belongsTo(User,{
+    foreignKey:"userId",
+    onDelete:"cascade",
+    as:"user"
+});
 
 module.exports = Order;

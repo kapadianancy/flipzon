@@ -3,8 +3,8 @@ const OrdersDetails = require("../../models/Order_details");
 const user = require("../../models/User");
 const product = require("../../models/Product");
 const productcategory = require("../../models/Product_category");
+const { sequelize } = require('../../db/db');
 var nodemailer = require('nodemailer');
-
 const getAllOrders = async (id) => {
     try{
         return await OrdersDetails.findAll({
@@ -19,6 +19,25 @@ const getAllOrders = async (id) => {
                 orderId:id
             }
         })
+    }catch(error) {
+        throw error;
+    }  
+}
+
+const getOrderBill = async (id) => {
+    try{
+        return await Orders.findAll({
+            include: [
+                {
+                    model: user ,as:"user"
+                },
+            ],
+            where: {
+                IsDeleted:0,
+                id:id
+            }
+        })
+        // return await sequelize.query("SELECT o.*,od.*,p.*,u.* FROM orders o,order_details od,products p,users u WHERE o.id = od.orderId and od.productId=p.id and o.userId = u.id and od.orderId = "+id);;
     }catch(error) {
         throw error;
     }  
@@ -40,7 +59,7 @@ const getOrders = async () => {
     }  
 }
   
-const editOrders = async (id) => {
+const editOrders = async (id,status) => {
     try {
         let errorObj = { 
             statusCode:200 
@@ -51,10 +70,10 @@ const editOrders = async (id) => {
             errorObj.message = "Orders not found";
         }
         if(errorObj.message) throw errorObj
-        orders = await Orders.update({status:"Completed Delivery"}, {
+        orders = await Orders.update({status:status}, {
             where: { id : id }
         });
-        
+        // console.log("orders = "+orders);
         if(orders)
         {
             let d = await Orders.findByPk(id,{
@@ -67,6 +86,7 @@ const editOrders = async (id) => {
                     IsDeleted:0
                 }
             });
+        
             let d1 = await OrdersDetails.findAll({
                 include: [{
                     model:product,as:"product",
@@ -79,12 +99,13 @@ const editOrders = async (id) => {
                     orderId:id
                 }
             })
-
+            if(d.status === 'Delivered')
+            {
             var transporter = nodemailer.createTransport({
                 service: 'gmail',
                 auth: {
                 user: 'dp297609@gmail.com',
-                pass: 'dhaval2552'
+                pass: 'dhaval1216'
                 }
             });
             var html1 = "<br/>";
@@ -122,13 +143,13 @@ const editOrders = async (id) => {
             "					</tr>	\n" +
             "					\n" +
             "					<tr style=\"line-height:60px\">\n" +
-            "<td style=\"background-color:white;color:black;padding-left:9px\">Total Cost:-</td>\n" +
-            "<td style=\"background-color:white;color:black;padding-left:9px;font-size:19px\">"+d.totalPrice+"<span> ₹ /-</span></td>\n" +
+            "                   <td style=\"background-color:white;color:black;padding-left:9px\">Total Cost:-</td>\n" +
+            "                   <td style=\"background-color:white;color:black;padding-left:9px;\">"+d.totalPrice+"<span> ₹ /-</span></td>\n" +
             "					</tr>\n" +
             "				</tbody>\n" +
             "			</table>\n" +
             "					\n" +
-            "					<p>Please contact us via email <a href=\"mailto:dp297609@website.com\" target=\"_blank\">dp297609@website.com</a> or phone  (007) 123 456 7890.</p>\n" +
+            "					<p>Please contact us via email <a href=\"mailto:dp297609@website.com\" target=\"_blank\">flipzon@website.com</a> or phone  (007) 123 456 7890.</p>\n" +
             "					<p>Connect with us on social media: \n" +
             "				<a href=\"https://www.facebook.com\" target=\"_blank\" data-saferedirecturl=\"https://www.google.com/url?q=https://www.facebook.com&amp;source=gmail&amp;ust=1597124127911000&amp;usg=AFQjCNGI49Hpn5uDYTvqIof-bOwo6sz_Bg\"><img src=\"https://mail.google.com/mail/u/0?ui=2&amp;ik=b974c79857&amp;attid=0.1.2&amp;permmsgid=msg-f:1635663097844123044&amp;th=16b30aebdf36c5a4&amp;view=fimg&amp;sz=s0-l75-ft&amp;attbid=ANGjdJ-xJ0RQ_O5HKXKagaohsDTVz_XGa3Yvq5IVGVejyFm0cq6xaEhJoH5Msml2Ecb0aab4u7VmgkVCDf5RDbony_UKUA1yBDaPn0uie_JtpSVyseFEjGvzx5Xzvl0&amp;disp=emb\" class=\"m_5592298769751509350imgclass CToWUd\" style=\"vertical-align:bottom;height:20px;width:20px\" data-image-whitelisted=\"\" width=\"20px\" height=\"20px\"></a>&nbsp;&nbsp;\n" +
             "				<a href=\"https://www.instagram.com\" target=\"_blank\" data-saferedirecturl=\"https://www.google.com/url?q=https://www.instagram.com&amp;source=gmail&amp;ust=1597124127911000&amp;usg=AFQjCNEs6YOqHxeSA1j6gFtWk9HVFCHDeg\"><img src=\"https://mail.google.com/mail/u/0?ui=2&amp;ik=b974c79857&amp;attid=0.1.3&amp;permmsgid=msg-f:1635663097844123044&amp;th=16b30aebdf36c5a4&amp;view=fimg&amp;sz=s0-l75-ft&amp;attbid=ANGjdJ8ieOtP5p4TcZn1vVnyq-Km5Qn75hqwR5kUzXqEjKScvBCCSR7FGLmbRHYpkX5d0lzBBpJRa8PvKsJHG8MS2jrZSzsl4gWNKs-WHsbPqWOqn_dvulAuQcPjGNg&amp;disp=emb\" class=\"m_5592298769751509350imgclass CToWUd\" style=\"vertical-align:bottom;height:20px;width:20px\" data-image-whitelisted=\"\" width=\"20px\" height=\"20px\"></a>&nbsp;&nbsp; \n" +
@@ -139,7 +160,7 @@ const editOrders = async (id) => {
             "					<p style=\"margin:0px\">Flipzon</p>\n" +
             "					<p style=\"margin:0px\">LaNet Pvt Ltd</p>\n" +
             "					<p style=\"margin:0px\">Email: <a href=\"mailto:dp297609@gmail.com\" target=\"_blank\">dp297609@gmail.com</a></p>\n" +
-            "					<p style=\"margin:0px\">Web: <a href=\"mailto:flipzon@website.com\" target=\"_blank\">dp297609@website.com</a></p>\n" +
+            "					<p style=\"margin:0px\">Web: <a href=\"mailto:flipzon@website.com\" target=\"_blank\">flipzon@website.com</a></p>\n" +
             "					<p style=\"margin:0px\">Add:    405/406 Luxuria Business Hub,</p>\n" +
             "					<p style=\"margin:0px\"> Near VR mall, Surat - Dumas Rd, </p>\n" +
             "					<p style=\"margin:0px\">Surat, Gujarat 395007</p><div class=\"yj6qo\"></div><div class=\"adL\">\n" +
@@ -160,7 +181,7 @@ const editOrders = async (id) => {
                 console.log('Email sent: ' + info.response);
                 }
             });
-
+            }
         }
 
         return await Orders.findByPk(id);
@@ -173,5 +194,6 @@ const editOrders = async (id) => {
 module.exports = {
     getOrders,
     editOrders,
-    getAllOrders
+    getAllOrders,
+    getOrderBill
 }

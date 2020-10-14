@@ -55,7 +55,6 @@ const store = (state = initialStore, action) => {
         case types.UPDATE_PRODUCT_CATEGORIES_SUCCESS:
             return {
                 ...state,
-                product_categories: action.product_categories,
                 loading: false
             }
         case types.UPDATE_PRODUCT_CATEGORIES_FAILED:
@@ -105,6 +104,24 @@ const store = (state = initialStore, action) => {
                 loading: false,
                 error: action.error
             }
+        //Fetch Search Data
+        case types.INIT_SEARCH:
+            return {
+                ...state,
+                loading: true,
+            };
+        case types.FETCH_SEARCH_SUCCESS:
+            return {
+                ...state,
+                product_categories: action.product_categories,
+                loading: false
+            }
+        case types.FETCH_SEARCH_FAILED:
+            return {
+                ...state,
+                loading: false,
+                error:action.error
+            }                
         default:
             return state;
     }
