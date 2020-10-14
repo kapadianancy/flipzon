@@ -6,10 +6,11 @@ import Col from 'react-bootstrap/Col'
 import Image from 'react-bootstrap/Image'
 import Spinner from 'react-bootstrap/Spinner'
 import * as classes from './ProductForm.module.css'
-import SunEditor, { buttonList} from 'suneditor-react';
+import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 
 const ProductForm = (props) => {
+    const [ids, setIds] = useState(new Set([]));
     const [description, setDescription] = useState("");
     const [product, setProduct] = useState({
         name: "",
@@ -66,7 +67,17 @@ const ProductForm = (props) => {
 
         setProduct(oldProduct);
     }
-
+    const imageCheckboxChange = (imgId) => {
+        if(ids.has(imgId)) {
+            let newIds = new Set([...ids])
+            newIds.delete(imgId);
+            setIds(newIds);
+        } else {
+            let newIds = new Set([...ids])
+            newIds.add(imgId);
+            setIds(newIds);
+        }
+    }
     const validate = async (e) => {
         e.preventDefault();
         let errors = { ...formErrors, isFormValid: true };
@@ -124,6 +135,10 @@ const ProductForm = (props) => {
         } else {
             await props.addProduct(formData);
         }
+    }
+    const deleteImages = async () => {
+        await props.deleteProductImages(ids);
+        ids.clear();
     }
     return (
         <Form>
@@ -259,9 +274,11 @@ const ProductForm = (props) => {
                                         {
                                             props.product.images.map( image => (
                                                 <Col key={image.id} sm="4">
-                                                    <div className={classes.iContainer} onClick={()=> props.deleteProductImage(image.id)}>
+                                                    <div className={classes.iContainer} onClick={() => imageCheckboxChange(image.id)} >
                                                         <Image src={`http://localhost:8080/${image.image}`} />
-                                                        <div className={classes.after}>x</div>
+                                                        { 
+                                                            ids.has(image.id) && <div className={classes.after}>&#10004;</div>
+                                                        }
                                                     </div>
                                                 </Col>
                                             ))
@@ -269,6 +286,7 @@ const ProductForm = (props) => {
                                     </Row>
                                 : null
                             }
+                            <Button onClick={deleteImages} disabled={ ids.size === 0 || props.loading } className="my-2 float-right" variant="danger" type="button">Delete All</Button>
                         </Col>
                     </Form.Group>
                 </Col>

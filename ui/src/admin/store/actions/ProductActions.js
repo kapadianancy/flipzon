@@ -100,17 +100,19 @@ export const deleteProduct = (id) => {
     }
 }
 
-export const deleteProductImage = (id) => {
+export const deleteProductImage = (ids) => {
     return async(dispatch, getState) => {
         dispatch({ type: types.INIT_DELETE_PRODUCT_IMAGE });
         try {
             let token = getState().adminAuth.token;
-            await axios.delete(`admin/products/images/${id}`, {
+            await axios.post(`admin/products/images`,{
+                    ids: [...ids]
+                }, {
                 headers: {
-                    "Authorization": token
+                    "Authorization": token,
                 }
             });
-            dispatch({ type: types.DELETE_PRODUCT_IMAGE_SUCCESS, image_id: id });
+            dispatch({ type: types.DELETE_PRODUCT_IMAGE_SUCCESS, image_ids: ids });
         } catch(error) {
             dispatch({ type: types.DELETE_PRODUCT_IMAGE_FAILED, error: error.message });
         }

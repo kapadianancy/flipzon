@@ -177,12 +177,12 @@ const deleteProduct = async (id) => {
         throw error;
     }
 }
-const deleteProductImage = async (id) => {
+const deleteProductImage = async (ids) => {
     try {
         let errorObj = { statusCode:400 }
-        var image = await ProductImages.findOne({
+        var image = await ProductImages.findAll({
             where: {
-                id,
+                id: ids,
                 isDeleted: false
             }
         });
@@ -194,10 +194,11 @@ const deleteProductImage = async (id) => {
         await ProductImages.update({
             "isDeleted": true
         }, {
-            where: { id }
+            where: { id: ids }
         });
         return { message: "Image Deleted" };
     } catch (error) {
+        console.log(error);
         throw error;
     }
 }
