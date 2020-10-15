@@ -38,14 +38,15 @@ class Product extends Component {
     // {
     //     await this.props.getProducts(this.props.match.params.cid);
     //     this.setState({
+    //         ...this.state,
     //         products:this.props.products
     //     })
     // }
 
   //   async componentWillUpdate() {
-    
   //       await this.props.getProducts(this.props.match.params.cid);
   //       this.setState({
+  //           ...this.state,
   //           products:this.props.products
   //       })
     

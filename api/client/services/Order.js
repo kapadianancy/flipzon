@@ -61,7 +61,7 @@ exports.addOrderItems = async (req, res) => {
         if (!p) {
             return res.status(401).send("Product Not Found")
         }
-        const price = p.price;
+        const price = (p.price)-(p.price * p.discount /100);
 
         const temp = await main.Order_details.findAll({
             where: {
@@ -372,7 +372,7 @@ exports.viewOrderCart = async (req, res) => {
     try {
         let uid = req.params.uid;
         //console.log("----uid-----"+req.params.uid);
-        const o = await sequelize.query("SELECT od.*,p.name,p.main_image,p.price FROM orders o,products p,order_details od where o.id=od.orderId and od.productId=p.id and o.status='Pending' and od.isDeleted=0 and o.userId='" + uid + "'");
+        const o = await sequelize.query("SELECT od.*,p.name,p.main_image,od.price FROM orders o,products p,order_details od where o.id=od.orderId and od.productId=p.id and o.status='Pending' and od.isDeleted=0 and o.userId='" + uid + "'");
 
         res.status(200).send(o[0]);
     } catch (err) {
@@ -382,7 +382,7 @@ exports.viewOrderCart = async (req, res) => {
 
 exports.viewOrderDetails = async (req, res) => {
     try {
-        const o = await sequelize.query("SELECT od.*,p.name,p.main_image,p.price FROM orders o,products p,order_details od where o.id=od.orderId and od.productId=p.id and o.id=" + req.params.oid + " and od.isDeleted=0");
+        const o = await sequelize.query("SELECT od.*,p.name,p.main_image,od.price FROM orders o,products p,order_details od where o.id=od.orderId and od.productId=p.id and o.id=" + req.params.oid + " and od.isDeleted=0");
 
         res.status(200).send(o[0]);
     } catch (err) {

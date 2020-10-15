@@ -144,12 +144,22 @@ class Product extends Component {
       disable = true;
       error = "Out Of Stock";
     }
+    if (this.props.products.videoLink !== "") {
+      data.push(
+        <iframe src={this.props.products.videoLink}
+          frameborder='0'
+          allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+          allowfullscreen
+          title='video'
+        />
+      )
+    }
     this.props.images.map((p) => {
       data.push(
         <img
           src={`http://localhost:8080${p.image}`}
           alt="image"
-          width="150px"
+          width="100px"
           height="100px"
           style={{ margin: "0px 5px" }}
         />
@@ -166,9 +176,9 @@ class Product extends Component {
 
     let rdata = [];
     this.state.reviews.map((r) => {
-      
-      const date=new Date(Date.parse(r.createdAt)).toString().split("G");
-      
+
+      const date = new Date(Date.parse(r.createdAt)).toString().split("G");
+
       rdata.push(
         <Card
           style={{
@@ -187,7 +197,7 @@ class Product extends Component {
               <br />
               <b>{r.review}</b>
 
-        <p style={{color:"gray",fontSize:"14px"}}> Flipkart cutomer- {date[0]}</p>
+              <p style={{ color: "gray", fontSize: "14px" }}> Flipkart cutomer- {date[0]}</p>
             </Card.Text>
           </Card.Body>
         </Card>
@@ -200,7 +210,7 @@ class Product extends Component {
         <Header />
         <ListGroup style={{ width: "80%", margin: "20px auto" }}>
           <ListGroup.Item id="1" style={{ minHeight: "800px" }}>
-            <div class="card flex-row flex-wrap">
+            <div class="card flex-row flex-wrap" style={{ minHeight: "1100px" }}>
               <div
                 class="card-header border-0"
                 style={{ height: "355px", width: "40%" }}

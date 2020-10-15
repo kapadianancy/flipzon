@@ -58,6 +58,7 @@ class ViewOrder extends Component {
             let btn = null;
             let details=null;
             this.props.orders.map(o => {
+                const date=new Date(Date.parse(o.orderDate)).toString().split("G");
                 let status = "";
                 if (o.status == "Confirm") {
                     status = "btn btn-success btn-circle btn-md";
@@ -84,7 +85,7 @@ class ViewOrder extends Component {
                 data.push(
 
                     <tr>
-                        <td>{o.orderDate}</td>
+                        <td>{date[0]}</td>
                         <td>{o.totalPrice}</td>
 
                         <td>
