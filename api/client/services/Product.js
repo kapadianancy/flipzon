@@ -82,6 +82,22 @@ exports.getProductById = async (req, res) => {
   }
 };
 
+exports.getSpecificationByProductId = async (req, res) => {
+  try {
+    let pid = req.params.pid;
+    const p = await main.Specification.findAll({
+      where: {
+        productId: pid,
+        isDeleted : 0
+      },
+    });
+
+    res.status(200).send({ product: p});
+  } catch (err) {
+    res.status(400).send(err);
+  }
+};
+
 exports.searchProducts = async (req, res) => {
   try {
     let strong = req.query.strong ? true : false;

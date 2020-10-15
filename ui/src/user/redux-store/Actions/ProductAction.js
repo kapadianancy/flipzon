@@ -35,6 +35,22 @@ export const categoryWiseProduct = (cid) => {
     };
 }
 
+export const getSpecificationByProduct = (pid) => {
+    return async dispatch => {
+
+        await axiosInstance.get('client/getSpecificationByProductId/'+pid).then(response => {
+            dispatch({
+                type: types.DISPLAY_PRODUCT_SPECIFICATION,
+                specification: response.data.product
+            });
+        }).catch(error => {
+            dispatch({
+                error: error.message
+            });
+        })
+    };
+}
+
 export const offerWiseProduct = () => {
     return async dispatch => {
 

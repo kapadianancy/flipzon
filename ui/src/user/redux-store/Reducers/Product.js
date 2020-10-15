@@ -5,6 +5,7 @@ const initialStore = {
   images: [],
   error: "",
   review: [],
+  specification: []
 };
 
 const store = (state = initialStore, action) => {
@@ -34,6 +35,11 @@ const store = (state = initialStore, action) => {
         ...state,
         products: action.products,
       };
+    case types.DISPLAY_PRODUCT_SPECIFICATION:
+      return {
+        ...state,
+        specification: action.specification,
+      };
     case types.DISPLAY_SINGLE_PRODUCT:
       return {
         ...state,
@@ -53,12 +59,12 @@ const store = (state = initialStore, action) => {
     case types.ADD_REVIEW:
       return {
         ...state,
-       // review: action.review,
+        // review: action.review,
       };
     case types.GET_REVIEWS:
-      return{
-          ...state,
-          review:action.review
+      return {
+        ...state,
+        review: action.review
       }
     default:
       return state;

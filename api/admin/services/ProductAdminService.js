@@ -268,5 +268,5 @@ module.exports = {
     editProduct,
     deleteProduct,
     deleteProductImage,
-    editProductOffer
+    //editProductOffer
 }

@@ -34,11 +34,13 @@ class Product extends Component {
     feedback: "",
     rating: 1,
     reviews: [],
+    specification: []
   };
 
   async componentDidMount() {
     await this.props.productDetails(this.props.match.params.pid);
     await this.props.getReviews(this.props.match.params.pid);
+    await this.props.getSpecificationByProduct(this.props.match.params.pid)
 
     this.setState({
       id: this.props.products.id,
@@ -49,6 +51,7 @@ class Product extends Component {
       stock: this.props.products.stock,
       main_image: this.props.products.main_image,
       reviews: this.props.reviews,
+      specification: this.props.specification
     });
   }
 
@@ -136,8 +139,14 @@ class Product extends Component {
         display: "inline-block",
         width: "40%",
       },
+      tableTD: {
+        border: "1px gray solid",
+        padding: "10px",
+        margin: "10px"
+      }
     };
     let data = [];
+    let specification = [];
     let disable = false;
     let error = "";
     if (this.props.products.stock == 0) {
@@ -153,6 +162,19 @@ class Product extends Component {
           title='video'
         />
       )
+    }
+    if (this.props.specification.length !== 0) {
+      this.props.specification.map(s => {
+        specification.push(
+          <tr><td style={style.tableTD}>{s.title}</td>
+            <td style={style.tableTD}>{s.details}</td></tr>
+        )
+        return specification
+      })
+
+    }
+    else {
+      specification.push(<tr><td><b>-</b></td></tr>)
     }
     this.props.images.map((p) => {
       data.push(
@@ -284,11 +306,18 @@ class Product extends Component {
                 />
                 <hr />
                 <p class="card-text">
-                  <b> Product Specification :</b>
+                  <b> Product Description :</b>
                   <div
                     id="table-div"
                     dangerouslySetInnerHTML={{ __html: this.state.description }}
                   ></div>
+                </p>
+                <p class="card-text">
+                  <b> Product Specification :</b>
+
+                  <table width="100%">
+                    {specification}
+                  </table>
                 </p>
                 <div className="text-danger">
                   <b>{error}</b>
@@ -387,6 +416,7 @@ const mapStateToProp = (state) => {
     token: state.User.token,
     userId: state.User.userId,
     reviews: state.Product.review,
+    specification: state.Product.specification
   };
 };
 
@@ -396,6 +426,7 @@ const mapStateToAction = (dispatch) => {
     addToCart: (pid, qty, id) => dispatch(Orderactions.addToCart(pid, qty, id)),
     addReview: (review) => dispatch(actions.addReview(review)),
     getReviews: (pid) => dispatch(actions.getReviews(pid)),
+    getSpecificationByProduct: (pid) => dispatch(actions.getSpecificationByProduct(pid))
   };
 };
 

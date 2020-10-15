@@ -17,31 +17,31 @@ class Product extends Component {
     qty: 1,
   };
 
-  // async componentWillMount()
-  // {
-  //  await this.props.getProducts(this.props.match.params.cid);
+  // async componentWillMount() {
+  //   await this.props.getProducts(this.props.match.params.cid);
   //   this.setState({
-  //       products:this.props.products
+  //     ...this.state,
+  //     products: this.props.products
   //   })
   // }
 
 
   async componentDidMount() {
-   
+
     await this.props.getProducts(this.props.match.params.cid);
     this.setState({
-        ...this.state,
-        products:this.props.products
+      ...this.state,
+      products: this.props.products
     })
- }
-    // async componentDidUpdate()
-    // {
-    //     await this.props.getProducts(this.props.match.params.cid);
-    //     this.setState({
-    //         ...this.state,
-    //         products:this.props.products
-    //     })
-    // }
+  }
+  // async componentDidUpdate()
+  // {
+  //     await this.props.getProducts(this.props.match.params.cid);
+  //     this.setState({
+  //         ...this.state,
+  //         products:this.props.products
+  //     })
+  // }
 
   //   async componentWillUpdate() {
   //       await this.props.getProducts(this.props.match.params.cid);
@@ -49,7 +49,7 @@ class Product extends Component {
   //           ...this.state,
   //           products:this.props.products
   //       })
-    
+
   // }
 
   makeid() {
@@ -153,8 +153,8 @@ class Product extends Component {
                       </Badge>
                     </Card.Text>
                   ) : (
-                    <Card.Text>Price-&#x20B9;{p.price} </Card.Text>
-                  )}
+                      <Card.Text>Price-&#x20B9;{p.price} </Card.Text>
+                    )}
                   <div className="text-danger">
                     <b>{x}</b>
                   </div>
