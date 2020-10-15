@@ -3,25 +3,18 @@ import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import { confirmAlert } from 'react-confirm-alert';
 
-const renderUsers = (users, showOrders, deleteUser, activeOld, perPage) => {
-    let usersArr = [];
-    let active = (activeOld-1)*perPage;
-    for(let i=active;i<(activeOld*perPage);i++) {
-        if(users[i]) {
-            usersArr.push(
-                <tr key={users[i].id}>
-                    <td>{i+1}</td>
-                    <td>{users[i].username}</td>
-                    <td>{users[i].email}</td>
-                    <td>{users[i].contact}</td>
-                    <td>{users[i].address}</td>
-                    <td><Button onClick={ () => showOrders(users[i].id) } variant="info">View Orders</Button></td>
-                    <td><Button onClick={ () => deleteUser(users[i].id) } variant="danger">Delete</Button></td>
-                </tr>
-            )
-        }
-    }
-    return usersArr;
+const renderUsers = (users, showOrders, deleteUser, active) => {
+    return users.map( (user, i) => (
+        <tr key={user.id}>
+            <td>{i+active+1}</td>
+            <td>{user.username}</td>
+            <td>{user.email}</td>
+            <td>{user.contact}</td>
+            <td>{user.address}</td>
+            <td><Button onClick={ () => showOrders(user.id) } variant="info">View Orders</Button></td>
+            <td><Button onClick={ () => deleteUser(user.id) } variant="danger">Delete</Button></td>
+        </tr>
+    ))
 }
 
 const UsersList = (props) => {
@@ -69,7 +62,7 @@ const UsersList = (props) => {
             </tr>
         </thead>
         <tbody>
-            { renderUsers(props.users, props.showOrders, deleteAlert, props.active, props.perPage) }
+            { renderUsers(props.users, props.showOrders, deleteAlert, props.active) }
         </tbody>
     </Table>
 }

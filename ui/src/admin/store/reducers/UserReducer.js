@@ -2,6 +2,7 @@ import * as types from '../Types'
 
 const initialState = {
     users: null,
+    totalUsers: null,
     loading: false,
     error: null,
     userOrders: null,
@@ -16,13 +17,15 @@ const reducer = (state=initialState, action) => {
                 ...state,
                 loading: true,
                 error: null,
-                users: null
+                users: null,
+                totalUsers: null
             }
         case types.FETCH_USERS_SUCCESS:
             return {
                 ...state,
                 loading: false,
-                users: action.users
+                users: action.users,
+                totalUsers: action.total
             }
         case types.FETCH_USERS_FAILED:
             return {
