@@ -47,6 +47,9 @@ module.exports = (app) => {
     })
     
     app.post("/admin/products", auth, cpUpload, async (req, res, next) => {
+        if(req.body.specifications) {
+            req.body.specifications = JSON.parse(req.body.specifications);
+        }
         if(!req.files.image) {
             return next({
                 statusCode: 400,
@@ -68,6 +71,9 @@ module.exports = (app) => {
     })
     
     app.put("/admin/products/:id", auth, cpUpload, async (req, res, next) => {
+        if(req.body.specifications) {
+            req.body.specifications = JSON.parse(req.body.specifications);
+        }
         if(req.files.image) {
             req.body = {
                 ...req.body,
