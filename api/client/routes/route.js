@@ -81,5 +81,7 @@ router.put("/client/updateUserId/:uid",auth,Order.updateUserId);
 //Offers
 router.get('/client/offer-product',Product.getOfferProduct);
 
+router.get('/client/reviews/:pid',Product.reviews);
+
 
 module.exports = router;

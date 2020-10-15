@@ -42,9 +42,7 @@ export const viewCart = () => {
                 orderItems:response.data
             });
         }).catch(error => {
-            dispatch({
-                error: error.message
-            });
+           console.log(error);
         })
     };
 };

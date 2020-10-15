@@ -121,3 +121,17 @@ export const addReview = (review) => {
         })
     };
 };
+
+export const getReviews = (pid) => {
+    return async dispatch => {
+        await axiosInstance.get("/client/reviews/"+pid).then(response => {
+            console.log(response.data);
+            dispatch({
+                type: types.GET_REVIEWS,
+                review:response.data
+            });
+        }).catch(error => {
+           console.log(error);
+        })
+    };
+};

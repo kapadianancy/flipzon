@@ -9,12 +9,14 @@ import { Form, FormGroup, Label, Input } from "reactstrap";
 import ReactStars from "react-rating-stars-component";
 import nextId from "react-id-generator";
 import { setPrefix } from "react-id-generator";
-import { Badge } from "react-bootstrap";
+import { Badge, Card } from "react-bootstrap";
+
 
 import Header from "../../Components/Header/Header";
 import Footer from "../../Components/Footer/Footer";
 import * as actions from "../../redux-store/Actions/ProductAction";
 import * as Orderactions from "../../redux-store/Actions/OrderAction";
+import star from "../../../images/star.png";
 
 import "./product.css";
 
@@ -31,10 +33,12 @@ class Product extends Component {
     show: false,
     feedback: "",
     rating: 1,
+    reviews: [],
   };
 
   async componentDidMount() {
     await this.props.productDetails(this.props.match.params.pid);
+    await this.props.getReviews(this.props.match.params.pid);
 
     this.setState({
       id: this.props.products.id,
@@ -44,6 +48,7 @@ class Product extends Component {
       discount: this.props.products.discount,
       stock: this.props.products.stock,
       main_image: this.props.products.main_image,
+      reviews: this.props.reviews,
     });
   }
 
@@ -113,6 +118,10 @@ class Product extends Component {
       this.props.history.push("/error/" + this.props.error);
     }
     this.setState({ show: false });
+    await this.props.getReviews(this.state.id);
+    this.setState({
+      reviews: this.props.reviews,
+    });
   };
 
   render() {
@@ -122,10 +131,10 @@ class Product extends Component {
         backgroundColor: "#fb641b",
         borderColor: "#fb641b",
         margin: "10px",
-        marginTop:"30px",
+        marginTop: "30px",
         color: "white",
-        display:"inline-block",
-        width:"40%"
+        display: "inline-block",
+        width: "40%",
       },
     };
     let data = [];
@@ -148,11 +157,49 @@ class Product extends Component {
       return data;
     });
 
+    let rating;
+    let sum = 0;
+    this.state.reviews.map((r) => {
+      sum += r.rating;
+    });
+    rating = sum / this.state.reviews.length;
+
+    let rdata = [];
+    this.state.reviews.map((r) => {
+      
+      const date=new Date(Date.parse(r.createdAt)).toString().split("G");
+      
+      rdata.push(
+        <Card
+          style={{
+            width: "50%",
+            padding: "10px",
+            display: "block",
+            width: "100%",
+          }}
+        >
+          <Card.Body>
+            <Card.Text>
+              <Badge pill variant="success">
+                {r.rating + " "}
+                <img src={star} height="10px" width="10px" />
+              </Badge>
+              <br />
+              <b>{r.review}</b>
+
+        <p style={{color:"gray",fontSize:"14px"}}> Flipkart cutomer- {date[0]}</p>
+            </Card.Text>
+          </Card.Body>
+        </Card>
+      );
+      return rdata;
+    });
+
     return (
       <>
         <Header />
         <ListGroup style={{ width: "80%", margin: "20px auto" }}>
-          <ListGroup.Item id="1">
+          <ListGroup.Item id="1" style={{ minHeight: "800px" }}>
             <div class="card flex-row flex-wrap">
               <div
                 class="card-header border-0"
@@ -165,24 +212,28 @@ class Product extends Component {
                   width="100%"
                 />
                 <div style={{ marginTop: "25px" }}>{data}</div>
-                <div style={{width:"100%"}}>
-                <Button
-                  disabled={disable}
-                  id={this.state.id}
-                  style={style.cardBtn}
-                  onClick={() => this.addToCart(this.state.id, this.state.qty)}
-                >
-                  Add To Cart
-                </Button>
-                <Button style={style.cardBtn} onClick={() => this.handleShow()}>
-                  Give Feedback
-                </Button>
+                <div style={{ width: "100%" }}>
+                  <Button
+                    disabled={disable}
+                    id={this.state.id}
+                    style={style.cardBtn}
+                    onClick={() =>
+                      this.addToCart(this.state.id, this.state.qty)
+                    }
+                  >
+                    Add To Cart
+                  </Button>
+                  <Button
+                    style={style.cardBtn}
+                    onClick={() => this.handleShow()}
+                  >
+                    Give Review
+                  </Button>
                 </div>
-
               </div>
               <div
                 class="card-block px-2"
-                style={{ padding: "20px", margin: "20px", textAlign: "left",width:"50%" }}
+                style={{ marginLeft: "20px", textAlign: "left", width: "50%" }}
               >
                 <h1
                   class="card-title"
@@ -196,27 +247,19 @@ class Product extends Component {
                     in offer
                   </Badge>
                 ) : null}
-                {/* <p class="card-text">
-                  <b>Price : </b> ₹ {this.state.price}
-                </p>
-
                 <p class="card-text">
-                  <b>Discount : </b> ₹ {this.state.discount}
-                </p> */}
-                <p class="card-text">
-                  <b>Payabale amount  </b>{" "}
+                  <b>Payabale amount </b>{" "}
                   <h4>
                     ₹{" "}
                     {this.state.price -
                       (this.state.price * this.state.discount) / 100}
                   </h4>
-                  <strike>₹ {this.state.price}{" "}</strike> 
-                  <br/>
-                  <span style={{color:"green",fontWeight:"bold"}}>
-                   {this.state.discount}% off
+                  <strike>₹ {this.state.price} </strike>
+                  <br />
+                  <span style={{ color: "green", fontWeight: "bold" }}>
+                    {this.state.discount}% off
                   </span>
                 </p>
-
                 <NumericInput
                   disabled={disable}
                   className="form-control"
@@ -229,8 +272,7 @@ class Product extends Component {
                   mobile
                   onChange={(event) => this.handleChange(event)}
                 />
-                
-                <hr/>
+                <hr />
                 <p class="card-text">
                   <b> Product Specification :</b>
                   <div
@@ -241,76 +283,85 @@ class Product extends Component {
                 <div className="text-danger">
                   <b>{error}</b>
                 </div>
-              
-                <Modal show={this.state.show}>
-                  <Modal.Header>
-                    <Modal.Title style={{ color: "#fb641b" }}>
-                      Your Review
-                    </Modal.Title>
-                  </Modal.Header>
-                  <Modal.Body>
-                    <Form>
-                      <div class="card flex-row flex-wrap">
-                        <div class="card-header">
-                          <img
-                            src={`http://localhost:8080${this.state.main_image}`}
-                            alt="image"
-                            height="50px"
-                            width="50px"
-                          />
-                        </div>
-                        <div class="px-2">
-                          <h4 class="card-title">{this.state.name}</h4>
-                          <p class="card-text">
-                            <b>Price : </b>
-                            {this.state.price}
-                          </p>
-                        </div>
-                      </div>
-                      <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                        <Label for="rating" className="mr-sm-2">
-                          Rating
-                        </Label>
-
-                        <ReactStars
-                          count={5}
-                          value={this.state.rating}
-                          onChange={(event) => this.onStarClick(event)}
-                          size={24}
-                          activeColor="#ffd700"
-                          fullIcon={<i className="fa fa-star"></i>}
-                        />
-                      </FormGroup>
-                      <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                        <Label for="feedback" className="mr-sm-2">
-                          Review
-                        </Label>
-                        <Input
-                          type="text"
-                          name="feedback"
-                          id="feedback"
-                          value={this.state.feedback}
-                          onChange={this.handleChanged.bind(this)}
-                          placeholder="Enter Your review"
-                        />
-                      </FormGroup>
-                    </Form>
-                  </Modal.Body>
-                  <Modal.Footer>
-                    <Button
-                      variant="secondary"
-                      onClick={() => this.handleClose()}
-                    >
-                      Cancel
-                    </Button>
-                    <Button variant="primary" onClick={() => this.addReview()}>
-                      Add Reviews
-                    </Button>
-                  </Modal.Footer>
-                </Modal>
               </div>
-              <div class="w-100"></div>
+
+              <div class="w-100" style={{ textAlign: "left", margin: "10px" }}>
+                <hr />
+                <h4 style={{ display: "inline-block", color: "#fb641b" }}>
+                  Reviews and Ratings &nbsp;
+                  {this.state.reviews.length != 0 ? (
+                    <Badge pill variant="success">
+                      {rating + " "}
+                      <img src={star} height="20px" width="20px" />
+                    </Badge>
+                  ) : null}
+                </h4>
+                {rdata}
+              </div>
             </div>
+            <Modal show={this.state.show}>
+              <Modal.Header>
+                <Modal.Title style={{ color: "#fb641b" }}>
+                  Your Review
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Form>
+                  <div class="card flex-row flex-wrap">
+                    <div class="card-header">
+                      <img
+                        src={`http://localhost:8080${this.state.main_image}`}
+                        alt="image"
+                        height="50px"
+                        width="50px"
+                      />
+                    </div>
+                    <div class="px-2">
+                      <h4 class="card-title">{this.state.name}</h4>
+                      <p class="card-text">
+                        <b>Price : </b>
+                        {this.state.price}
+                      </p>
+                    </div>
+                  </div>
+                  <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                    <Label for="rating" className="mr-sm-2">
+                      Rating
+                    </Label>
+
+                    <ReactStars
+                      count={5}
+                      value={this.state.rating}
+                      onChange={(event) => this.onStarClick(event)}
+                      size={24}
+                      activeColor="#ffd700"
+                      fullIcon={<i className="fa fa-star"></i>}
+                    />
+                  </FormGroup>
+                  <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                    <Label for="feedback" className="mr-sm-2">
+                      Review
+                    </Label>
+                    <Input
+                      type="text"
+                      name="feedback"
+                      id="feedback"
+                      value={this.state.feedback}
+                      onChange={this.handleChanged.bind(this)}
+                      placeholder="Enter Your review"
+                    />
+                  </FormGroup>
+                </Form>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={() => this.handleClose()}>
+                  Cancel
+                </Button>
+                <Button variant="primary" onClick={() => this.addReview()}>
+                  Add Reviews
+                </Button>
+              </Modal.Footer>
+            </Modal>
           </ListGroup.Item>
         </ListGroup>
         <Footer />
@@ -325,6 +376,7 @@ const mapStateToProp = (state) => {
     error: state.Order.error,
     token: state.User.token,
     userId: state.User.userId,
+    reviews: state.Product.review,
   };
 };
 
@@ -333,6 +385,7 @@ const mapStateToAction = (dispatch) => {
     productDetails: (pid) => dispatch(actions.productDetails(pid)),
     addToCart: (pid, qty, id) => dispatch(Orderactions.addToCart(pid, qty, id)),
     addReview: (review) => dispatch(actions.addReview(review)),
+    getReviews: (pid) => dispatch(actions.getReviews(pid)),
   };
 };
 
