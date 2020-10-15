@@ -13,12 +13,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use("/", clientRoute);
 require("./admin/controllers/index")(app);
 
-// app.use((err, req, res, next) => {
-//     if(err) {
-//       res.setHeader('Content-type', 'application/json');
-//       res.statusCode = err.statusCode;
-//       res.end(JSON.stringify({message: err.message}));
-//     }
-// });
+app.use((err, req, res, next) => {
+    if(err) {
+      res.setHeader('Content-type', 'application/json');
+      res.statusCode = err.statusCode;
+      res.end(JSON.stringify({message: err.message}));
+    }
+});
 
 module.exports = app

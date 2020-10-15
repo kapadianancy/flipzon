@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import Pagination from 'react-bootstrap/Pagination'
 import Spinner from 'react-bootstrap/Spinner'
 import Form from 'react-bootstrap/Form'
-import Modal from 'react-bootstrap/Modal'
 
 import * as classes from './Products.module.css'
 import ProductList from '../components/Product/ProductList/ProductList';
@@ -26,7 +25,6 @@ const Products = (props) => {
     const [perPage, setPerPage] = useState(5)
     const [active, setActive] = useState(1)
     const [searchText, setSearchText] = useState("");
-    const [showDelete, setShowDelete] = useState(true);
     
     useEffect(() => {
         props.fetchProducts(active, perPage);
@@ -44,20 +42,6 @@ const Products = (props) => {
     }
     return(
         <>
-            { showDelete && 
-                <Modal show={true} onHide={() =>{}} centered size="sm">
-                    <Card bg="Light" text='dark' >
-                        <Card.Body>
-                            <Card.Title><b>Are you sure!</b></Card.Title>
-                            <Card.Text>
-                                Do you want to delete this product?
-                            </Card.Text>
-                            <Button variant="danger" className="mr-1">Delete</Button>
-                            <Button variant="secondary">Cancel</Button>
-                        </Card.Body>
-                    </Card>
-                </Modal>
-            }
             <Card>
                 <Card.Header className={classes.Header}>
                     <div className={classes.Title}>

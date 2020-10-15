@@ -58,7 +58,7 @@ const ForgotPassword = (props) => {
                 { errors.emailError }
             </Form.Control.Feedback>
             <Form.Text className="text-muted">
-                New password will be shared on your email address.
+                We will share a link with your EmailID to reset password.
             </Form.Text>
         </Form.Group>
 
@@ -67,7 +67,7 @@ const ForgotPassword = (props) => {
         {
             props.loading ?
             <Spinner animation="border" /> :
-            <Button variant="primary" type="submit">Login</Button>
+            <Button variant="primary" type="submit">Submit</Button>
         }
         <div className="d-flex justify-content-center">
             <a href="#" onClick={() => props.goToLogin()}>Login here.</a>
