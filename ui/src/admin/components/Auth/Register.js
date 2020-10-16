@@ -130,7 +130,7 @@ const Register = (props) => {
             <Button variant="success" type="submit">Register</Button>
         }
         <div className="d-flex justify-content-center">
-            <a href="#" onClick={() => props.goToLogin()}>Already have an account? Login here.</a>
+            <Button variant="link" onClick={props.goToLogin}>Already have an account? Login here.</Button>
         </div>
     </Form>
 }

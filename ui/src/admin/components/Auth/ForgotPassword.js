@@ -70,7 +70,7 @@ const ForgotPassword = (props) => {
             <Button variant="primary" type="submit">Submit</Button>
         }
         <div className="d-flex justify-content-center">
-            <a href="#" onClick={() => props.goToLogin()}>Login here.</a>
+            <Button variant="link" onClick={props.goToLogin}>Login here.</Button>
         </div>
     </Form>
 }

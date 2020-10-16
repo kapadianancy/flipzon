@@ -78,9 +78,6 @@ const Login = (props) => {
                 { errors.passwordError }
             </Form.Control.Feedback>
         </Form.Group>
-        {/* <Form.Group controlId="formBasicCheckbox">
-            <Form.Check type="checkbox" label="Check me out" />
-        </Form.Group> */}
 
         { props.error ? <p className="text-danger">{props.error}</p> : null }
         {
@@ -89,10 +86,10 @@ const Login = (props) => {
             <Button variant="primary" type="submit">Login</Button>
         }
         <div className="d-flex justify-content-center">
-            <a href="#" onClick={() => props.goToRegister()}>Don't have an account? Register here.</a>
+            <Button variant="link" onClick={props.goToRegister}>Don't have an account? Register here.</Button>
         </div>
         <div className="d-flex justify-content-center">
-            <a href="#" onClick={() => props.goToForgotPassword()}>Forgot your Password? click here.</a>
+            <Button variant="link" onClick={props.goToForgotPassword}>Forgot your Password? click here.</Button>
         </div>
     </Form>
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import Pagination from 'react-bootstrap/Pagination'
 import Spinner from 'react-bootstrap/Spinner'
 import Form from 'react-bootstrap/Form'
+import { useReactToPrint } from 'react-to-print'
 
 import * as classes from './Products.module.css'
 import ProductList from '../components/Product/ProductList/ProductList';
@@ -25,10 +26,10 @@ const Products = (props) => {
     const [perPage, setPerPage] = useState(5)
     const [active, setActive] = useState(1)
     const [searchText, setSearchText] = useState("");
-    
+    const { fetchProducts } = props;
     useEffect(() => {
-        props.fetchProducts(active, perPage);
-    }, [props.fetchProducts, active, perPage]);
+        fetchProducts(active, perPage);
+    }, [fetchProducts, active, perPage]);
 
     const searchProducts = () => {
         props.searchProducts(searchText);
@@ -36,10 +37,16 @@ const Products = (props) => {
     const changeActive = (index) => {
         setActive(index);
     }
+    const printBlockRef = useRef();
+    const handlePrint = useReactToPrint({
+        content: () => printBlockRef.current,
+    });
+    
     let productData = <Spinner animation="border" />;
     if(!props.loading && props.products) {
-        productData = <ProductList deleteProduct={props.deleteProduct} active={(active-1) * perPage} products={props.products} />
+        productData = <ProductList deleteProduct={props.deleteProduct} printBlockRef={printBlockRef} active={(active-1) * perPage} products={props.products} />
     }
+
     return(
         <>
             <Card>
@@ -53,6 +60,7 @@ const Products = (props) => {
                             <Button variant="outline-success" onClick={() => searchProducts()}>Search</Button>
                             <Button variant="outline-secondary" onClick={ () => props.fetchProducts()}>Show All</Button>
                             <Button as={Link} to={`${props.match.path}/add`} variant="outline-primary">Add New</Button>
+                            <Button onClick={handlePrint} variant="outline-info">Print</Button>
                         </div>
                     </div>
                 </Card.Header>

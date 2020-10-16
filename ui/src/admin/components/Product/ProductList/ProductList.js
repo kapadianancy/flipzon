@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import { Link } from 'react-router-dom';
@@ -18,6 +18,19 @@ const renderProducts = (products, deleteProduct, active) => {
         </tr>
     ))
 }
+const renderPrintProducts = (products, active) => {
+    return products.map( (product, i) => (
+        <tr key={product.id}>
+            <td>{i+1+active}</td>
+            <td>{product.name}</td>
+            <td>{product.Product_category.name}</td>
+            <td>{product.price}</td>
+            <td>{product.stock}</td>
+            <td>{product.isInOffer}</td>
+            <td>{product.discount}</td>
+        </tr>
+    ))
+}
 
 const ProductList = (props) => {
     const [deleteProduct, setDeleteProduct] = useState({ show: false, id: null });
@@ -31,7 +44,25 @@ const ProductList = (props) => {
     }
 
     return <>
-            <Modal show={deleteProduct.show} onHide={() => confirm(false) } centered size="sm">
+                <div style={{ display: "none" }}>
+                    <Table striped responsive hover ref={props.printBlockRef} size="sm">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                                <th>InOffer</th>
+                                <th>Discount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            { renderPrintProducts(props.products, props.active) }
+                        </tbody>
+                    </Table>
+                </div>
+                <Modal show={deleteProduct.show} onHide={() => confirm(false) } centered size="sm">
                 <Card bg="Light" text='dark' >
                     <Card.Body>
                         <Card.Title><b>Are you sure!</b></Card.Title>

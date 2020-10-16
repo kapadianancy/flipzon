@@ -30,6 +30,7 @@
     "react-scripts": "3.4.3",
     "react-star-rating-component": "^1.4.1",
     "react-strap": "0.0.1",
+    "react-to-print": "^2.10.0",
     "reactjs-popup": "^2.0.4",
     "reactstrap": "^8.6.0",
     "redux": "^4.0.5",
