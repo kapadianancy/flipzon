@@ -3,6 +3,7 @@ import * as types from '../ActionTypes'
 const initialStore = {
     total:{},
     totals:{},
+    tot:{},
     loading: false,
     error: "",
     revtotal:{}
@@ -60,7 +61,24 @@ const store = (state = initialStore, action) => {
                 ...state,
                 loading: false,
                 error:action.error
-            }                          
+            }
+        case types.INIT_MONTHLY_PRODUCT:
+            return {
+                ...state,
+                loading: true,
+            };
+        case types.FETCH_MONTHLY_PRODUCT_SUCCESS:
+            return {
+                ...state,
+                tot: action.tot,
+                loading: false
+            }
+        case types.FETCH_MONTHLY_PRODUCT_FAILED:
+            return {
+                ...state,
+                loading: false,
+                error:action.error
+            }                              
         default:
             return state;
     }

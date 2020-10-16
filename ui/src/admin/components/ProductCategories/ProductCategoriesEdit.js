@@ -23,8 +23,9 @@ class ProductCategoriesEdit extends Component{
 
     componentDidMount = async () =>
     {
+        await this.props.fetchProductCategories();
         await this.props.SingleProductCategories(this.props.match.params.id);
-        let prod_category = await this.props.product_categorie
+        let prod_category = await this.props.prod_category
             
         this.setState({
             id:prod_category[0].id,
@@ -141,7 +142,7 @@ class ProductCategoriesEdit extends Component{
                         <Form.Label>Parent Category:</Form.Label>
                         <select name="category"  className="form-control" value={this.state.category || ''} onChange={this.handleChange}>
                             {
-                                this.props.product_categories.map( cat => <option key={cat.id} value={cat.id}>{cat.name}</option>)
+                                this.props.product_categorie.map( cat => <option key={cat.id} value={cat.id}>{cat.name}</option>)
                             }
                         </select>
                     </Form.Group> 
@@ -168,8 +169,8 @@ class ProductCategoriesEdit extends Component{
 
 //export default ProductCategoriesList;
 const mapStateToProps = (state) => ({
-    product_categorie: state.adminProductCategories.product_categorie,
-    product_categories: state.adminProductCategories.product_categories
+    prod_category: state.adminProductCategories.product_categorie,
+    product_categorie: state.adminProductCategories.product_categories
 });
 
 const mapDispatchToProps = dispatch => {

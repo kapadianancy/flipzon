@@ -5,12 +5,14 @@ import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
 import * as classes from './Products.module.css'
 import { Link } from 'react-router-dom';
+import Spinner from 'react-bootstrap/Spinner'
 import Pagination from 'react-bootstrap/Pagination'
+import Form from 'react-bootstrap/Form'
 import ProductCategoriesList from '../components/ProductCategories/ProductCategoriesList';
 import { fetchProductCategories,searchCategories } from '../store/actions/Product_CategoriesActions'
-const renderPaginationItems = (total, active, limit, changeActive) => {
+const renderPaginationItems = (total, active, changeActive) => {
     let items = [];
-    for(let i=1;i<=Math.ceil(total/limit);i++) {
+    for(let i=1;i<=total;i++) {
         i===active 
         ? items.push(<Pagination.Item key={i} active>{i}</Pagination.Item>)
         : items.push(<Pagination.Item key={i} onClick={ () => changeActive(i)}>{i}</Pagination.Item>)
@@ -18,16 +20,13 @@ const renderPaginationItems = (total, active, limit, changeActive) => {
     return items
 }
 const ProductCategorie = (props) => {
-    const perPage = 4;
-    const [active, setActive] = useState(1);
+    const [perPage, setPerPage] = useState(5)
+    const [active, setActive] = useState(1)
     const [searchText, setSearchText] = useState("");
-
-    useEffect( () => {
-        if(props.product_categories.length === 0)
-        {
-            props.fetchProductCategories()
-        }
-    }, [props])
+    
+    useEffect(() => {
+        props.fetchProductCategories(active, perPage);
+    }, [props.fetchProductCategories, active, perPage]);
 
     const searchCategories = () => {
         props.searchCategories(searchText);
@@ -35,14 +34,10 @@ const ProductCategorie = (props) => {
     const changeActive = (index) => {
         setActive(index);
     }
-    let productCategories = "Loading";
-    if(props.product_categories.length > 0) {
-        productCategories = [
-            <ProductCategoriesList key={1} product_categories={props.product_categories} active={active} perPage={perPage} len={props.product_categories.length}/>,
-            <Pagination key={2} >
-                { renderPaginationItems(props.product_categories.length, active, perPage, changeActive) }
-            </Pagination>
-        ]
+    
+    let productCategories = <Spinner animation="border" />;
+    if(!props.loading && props.product_categories) {
+        productCategories = <ProductCategoriesList product_categories={props.product_categories} active={(active-1)*perPage}/>
     }
     return(
         <Card>
@@ -63,19 +58,35 @@ const ProductCategorie = (props) => {
             <Card.Body>
                 {productCategories}
             </Card.Body>
+            <Card.Footer className={classes.Footer}>
+                    {
+                        props.product_categories ?
+                        <Pagination className={classes.Pagination} >
+                            { renderPaginationItems(props.total, active, changeActive) }
+                        </Pagination> : null
+                    }
+                    <Form.Control as="select" value={perPage} custom className={classes.Select} onChange={ (e) => { setActive(1);setPerPage(e.target.value) } }>
+                        <option>2</option>
+                        <option>5</option>
+                        <option>10</option>
+                        <option>20</option>
+                        <option>30</option>
+                    </Form.Control>
+                </Card.Footer>
         </Card>
     )
 }
 
 const mapStateToProps = state => {
     return {
-        product_categories: state.adminProductCategories.product_categories
+        product_categories: state.adminProductCategories.product_categories,
+        total: state.adminProductCategories.total,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchProductCategories: () => dispatch(fetchProductCategories()),
+        fetchProductCategories: (page,limit) => dispatch(fetchProductCategories(page,limit)),
         searchCategories: (text) => dispatch(searchCategories(text))
     }
 }

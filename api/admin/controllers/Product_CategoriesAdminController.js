@@ -16,18 +16,43 @@ module.exports = (app) => {
 
   // return list of Product_Category
 app.get("/admin/product_categories", async (req, res, next) => {
-    let product_categories = await Product_Categories_Services.getProduct_Category();
-    res.send(product_categories);
+    try {
+
+        let product_categories = await Product_Categories_Services.getProduct_Category(req.query.page, req.query.limit);
+        res.send(product_categories);
+    }
+    catch(error) {
+        next(error);
+    }
     })
 app.get("/admin/categoriesSearch/:search",auth, async (req, res, next) => {
-    let product_categories = await Product_Categories_Services.getProduct_CategorySearch(req.params.search);
-    console.log(req.params.search);
-    res.send(product_categories);
+    try {
+        let product_categories = await Product_Categories_Services.getProduct_CategorySearch(req.params.search);
+        res.send(product_categories);
+    }
+    catch(error) {
+        next(error);
+    }
     })    
   // return single Product_Category
 app.get("/admin/product_categories/:id", auth, async (req, res, next) => {
-    let product_categories = await Product_Categories_Services.getSingleProduct_Category(req.params.id);
-    res.send(product_categories);
+    try {
+        let product_categories = await Product_Categories_Services.getSingleProduct_Category(req.params.id);
+        res.send(product_categories);
+    }
+    catch(error) {
+        next(error);
+    }
+    })
+// return parent Product_Category 
+app.get("/admin/product_categoriesParent/:id", async (req, res, next) => {
+    try {
+        let product_categories = await Product_Categories_Services.getProduct_CategoryParent(req.params.id);
+        res.send(product_categories);
+    }
+    catch(error) {
+        next(error);
+    }
     })
 // add  Product_Category
 app.post("/admin/product_categories/:id", upload.single('image'),async (req, res, next) => {

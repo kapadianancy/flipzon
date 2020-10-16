@@ -1,21 +1,50 @@
 const Product_category = require("../../models/Product_category");
 const { sequelize } = require('../../db/db');
-function sayHelloTo() {
-    return `Hi,!`;
-  }
 
-const getProduct_Category = async () => {
+const getProduct_Category = async (page,limit) => {
     try{
-        // return await sequelize.query("SELECT DISTINCT parent,name FROM product_categories");
+        // return await sequelize.query("SELECT MIN(x.id),x.parent,x.name,x.image FROM `product_categories` x JOIN (SELECT p.parent,MIN(name) AS names,MIN(image) img FROM product_categories p GROUP BY p.parent) y ON y.parent = x.parent AND y.names = x.name AND y.img = x.image GROUP BY x.name,x.parent,x.image ORDER BY parent");
         // attributes: [
         //     [sequelize.fn('DISTINCT', sequelize.col('parent')) ,'parent'],
         // ],
-        return await Product_category.findAll({
+        // return await Product_category.findAll({
+        //     where: {
+        //         IsDeleted:0
+        //     }
+        // })
+        let data = { 
             where: {
                 IsDeleted:0
             }
-        })
+        }
+        if(limit && page) {
+            data.offset = 0 + (page-1) * limit;
+            data.limit = +limit;
+        }
+        try {
+            let total = await Product_category.count({ where: { isDeleted: false }});
+            if(limit) {
+                total = Math.ceil(total / +limit);
+            }
+            let product_categories= await Product_category.findAll(data);
+            // console.log(total, product_categories)
+            return { total,product_categories }
+        } catch(error) {
+            console.log(error.message);
+        }
         
+    }catch(error) {
+        throw error;    
+    }  
+}
+const getProduct_CategoryParent = async (id) => {
+    try{
+        return await Product_category.findAll({
+            where: {
+                IsDeleted:0,
+                parent:id
+            }
+        })
     }catch(error) {
         throw error;    
     }  
@@ -153,5 +182,5 @@ module.exports = {
     deleteProduct_Category,
     edit_DeleteProduct_Category,
     getProduct_CategorySearch,
-    sayHelloTo
+    getProduct_CategoryParent
 }

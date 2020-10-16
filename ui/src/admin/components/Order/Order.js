@@ -109,7 +109,7 @@ class Order extends Component{
                             <ReactToPrint trigger={() => <a href="#">Print this out!</a>} content={() => this.printOrder} />
                             <Order ref={el => (this.printOrder = el)} />
                             </td> */}
-                            <td><Button variant="info" as={Link} to={"/admin/printorder/"+orders[i].id}>Print</Button></td>
+                            <td><Button variant="info" as={Link} to={"/admin/printorder/"+orders[i].id}>Print Bill</Button></td>
                         </tr>
                     )
                 }

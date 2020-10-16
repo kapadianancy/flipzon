@@ -2,9 +2,11 @@ import * as types from '../ActionTypes'
 
 const initialStore = {
     product_categories: [],
+    categories: [],
     product_categorie:{},
     loading: false,
-    error: ""
+    error: "",
+    total: null
 };
 
 const store = (state = initialStore, action) => {
@@ -14,12 +16,14 @@ const store = (state = initialStore, action) => {
             return {
                 ...state,
                 loading: true,
+                total: null
             };
         case types.FETCH_PRODUCT_CATEGORIES_SUCCESS:
             return {
                 ...state,
                 product_categories: action.product_categories,
-                loading: false
+                loading: false,
+                total:action.total
             }
         case types.FETCH_PRODUCT_CATEGORIES_FAILED:
             return {
@@ -117,6 +121,24 @@ const store = (state = initialStore, action) => {
                 loading: false
             }
         case types.FETCH_SEARCH_FAILED:
+            return {
+                ...state,
+                loading: false,
+                error:action.error
+            }         
+            //Fetch parent Data
+        case types.INIT_PARENT_CATEGORY:
+            return {
+                ...state,
+                loading: true,
+            };
+        case types.FETCH_PARENT_CATEGORY_SUCCESS:
+            return {
+                ...state,
+                categories: action.categories,
+                loading: false
+            }
+        case types.FETCH_PARENT_CATEGORY_FAILED:
             return {
                 ...state,
                 loading: false,

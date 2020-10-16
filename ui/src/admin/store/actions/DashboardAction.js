@@ -25,6 +25,30 @@ export const fetchTotal = () => {
     };
 };
 
+export const fetchMonthlyProduct = () => {
+    return async (dispatch,getState) => {
+        dispatch({
+            type:types.INIT_MONTHLY_PRODUCT
+        }) 
+        let token = getState().adminAuth.token
+        await axios.get('admin/dashboardMonthlyProduct',{
+            headers: {
+                "Authorization": token
+            }
+        }).then(response => {
+            dispatch({
+                type:types.FETCH_MONTHLY_PRODUCT_SUCCESS,
+                tot:response.data
+            });
+        }).catch(error => {
+            dispatch({
+                type:types.FETCH_MONTHLY_PRODUCT_FAILED,
+                error:error.message
+            });
+        })
+    };
+};
+
 export const fetchProductTotal = () => {
     return async (dispatch,getState) => {
         dispatch({

@@ -13,11 +13,16 @@ class ProductCategoriesAdd extends Component{
         name:"",
         image:"",
         category:"",
+        cate:"",
         errors: {
             name: '',
             image:'',
             category:''
         }
+    }
+    componentDidMount = async () => {
+        await this.props.fetchProductCategories();
+        //let a = await this.props.product_categorie;
     }
     handleChange = (event) => {
         event.preventDefault();
@@ -164,7 +169,7 @@ class ProductCategoriesAdd extends Component{
                             <option value="Select">---select---</option>
                             <option value="MainCategory">Main Category</option>
                             {
-                                this.props.product_categories.map( category => <option key={category.id} value={category.id}>{category.name}</option>)
+                                this.props.product_categorie.map( category => <option key={category.id} value={category.id}>{category.name}</option>)
                             }
                         </Form.Control>
                         <Form.Control.Feedback type="invalid">
@@ -196,7 +201,7 @@ class ProductCategoriesAdd extends Component{
 
 const mapStateToProps = (state) => ({
     err:state.adminProductCategories.error,
-    product_categories: state.adminProductCategories.product_categories
+    product_categorie: state.adminProductCategories.product_categories
 });
 
 const mapDispatchToProps = dispatch => {

@@ -20,6 +20,16 @@ app.get("/admin/dashboardProduct", auth, async (req, res, next) => {
         throw error;
     }  
 })
+
+app.get("/admin/dashboardMonthlyProduct", async (req, res, next) => {
+    try{
+        let total = await totalDataServices.getMonthlyProductCount();
+        await res.send(total);
+    }catch (error) {
+        throw error;
+    }  
+})
+
 app.get("/admin/dashboardProductRevenue", async (req, res, next) => {
     try{
         let total = await totalDataServices.getRevenueCount();

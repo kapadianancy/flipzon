@@ -42,6 +42,31 @@ const getRevenueCount = async () => {
     } 
 } 
 
+const getMonthlyProductCount = async () => {
+    try{
+       var jan = await sequelize.query("Select count(od.productId) as jan from orders o,order_details od where o.id = od.orderId and o.IsDeleted=0 and monthname(o.orderDate)='January'");
+       var feb = await sequelize.query("Select count(od.productId) as feb from orders o,order_details od where o.id = od.orderId and o.IsDeleted=0 and monthname(o.orderDate)='February'");
+       var march = await sequelize.query("Select count(od.productId) as march from orders o,order_details od where o.id = od.orderId and o.IsDeleted=0 and monthname(o.orderDate)='March'");
+       var april = await sequelize.query("Select count(od.productId) as april from orders o,order_details od where o.id = od.orderId and o.IsDeleted=0 and monthname(o.orderDate)='April'");
+       var may = await sequelize.query("Select count(od.productId) as may from orders o,order_details od where o.id = od.orderId and o.IsDeleted=0 and monthname(o.orderDate)='May'");
+       var june = await sequelize.query("Select count(od.productId) as june from orders o,order_details od where o.id = od.orderId and o.IsDeleted=0 and monthname(o.orderDate)='June'");
+       var july = await sequelize.query("Select count(od.productId) as july from orders o,order_details od where o.id = od.orderId and o.IsDeleted=0 and monthname(o.orderDate)='July'");
+       var aug = await sequelize.query("Select count(od.productId) as aug from orders o,order_details od where o.id = od.orderId and o.IsDeleted=0 and monthname(o.orderDate)='August'");
+       var sep = await sequelize.query("Select count(od.productId) as sep from orders o,order_details od where o.id = od.orderId and o.IsDeleted=0 and monthname(o.orderDate)='September'");
+       var oct = await sequelize.query("Select count(od.productId) as oct from orders o,order_details od where o.id = od.orderId and o.IsDeleted=0 and monthname(o.orderDate)='October'");
+       var nov = await sequelize.query("Select count(od.productId) as nov from orders o,order_details od where o.id = od.orderId and o.IsDeleted=0 and monthname(o.orderDate)='November'");
+       var dec = await sequelize.query("Select count(od.productId) as dece from orders o,order_details od where o.id = od.orderId and o.IsDeleted=0 and monthname(o.orderDate)='December'");
+       
+    //    let cp= 
+        return await {
+            jan, feb, march, april, may,june,
+            july, aug, sep, oct, nov, dec
+           };
+    }catch(error) {
+        throw error;
+    } 
+} 
+
 const getCount = async () => {
     try{
         let totalProduct = await product.count({
@@ -85,5 +110,6 @@ const getCount = async () => {
 module.exports = {
     getCount,
     getProdCount,
-    getRevenueCount
+    getRevenueCount,
+    getMonthlyProductCount
 }

@@ -3,17 +3,29 @@ import { connect } from 'react-redux'
 import Card from 'react-bootstrap/Card'
 import CardDeck from 'react-bootstrap/CardDeck'
 // import ProgressBar from 'react-bootstrap/ProgressBar'
-import { fetchTotal,fetchProductTotal,fetchRevenueTotal } from '../../store/actions/DashboardAction'
-import { Pie , Line } from "react-chartjs-2";
+import { fetchTotal,fetchProductTotal,fetchRevenueTotal,fetchMonthlyProduct } from '../../store/actions/DashboardAction'
+import { Pie , Line,Bar } from "react-chartjs-2";
 import Spinner from 'react-bootstrap/Spinner'
 import './Dashboard.css';
 
 class Dashboard extends Component{
+    barState = {
+        labels: ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'Aug', 'Sep','Oct','Nov','Dec'],
+        datasets: [
+          {
+            label: 'Monthly Product',
+            backgroundColor: 'rgba(75,192,192,1)',
+            borderColor: 'rgba(0,0,0,1)',
+            borderWidth: 2,
+            data: []
+          }
+        ]
+      }
     data = {
         labels: ['Jan', 'Feb', 'March', 'April', 'May', 'June', 'July', 'Aug', 'Sep','Oct','Nov','Dec'],
         datasets: [
           {
-            label: 'My First dataset',
+            label: 'Monthly Revenue',
             fill: false,
             lineTension: 0.1,
             backgroundColor: 'rgba(75,192,192,0.4)',
@@ -76,6 +88,7 @@ class Dashboard extends Component{
         let rev = this.data.datasets[0].data;
         await this.props.fetchRevenueTotal();
         let tot_rev = await this.props.revtotal;
+
         rev.push(tot_rev.jan[0][0].jan);
         rev.push(tot_rev.feb[0][0].feb);
         rev.push(tot_rev.march[0][0].march);
@@ -88,6 +101,24 @@ class Dashboard extends Component{
         rev.push(tot_rev.oct[0][0].oct);
         rev.push(tot_rev.nov[0][0].nov);
         rev.push(tot_rev.dec[0][0].dece);
+
+    
+        let d2 = this.barState.datasets[0].data;
+        await this.props.fetchMonthlyProduct();
+        let tot_prod = await this.props.tot;
+        console.log(this.props.tot);        
+        d2.push(tot_prod.jan[0][0].jan);
+        d2.push(tot_prod.feb[0][0].feb);
+        d2.push(tot_prod.march[0][0].march);
+        d2.push(tot_prod.april[0][0].april);
+        d2.push(tot_prod.may[0][0].may);
+        d2.push(tot_prod.june[0][0].june);
+        d2.push(tot_prod.july[0][0].july);
+        d2.push(tot_prod.aug[0][0].aug);
+        d2.push(tot_prod.sep[0][0].sep);
+        d2.push(tot_prod.oct[0][0].oct);
+        d2.push(tot_prod.nov[0][0].nov);
+        d2.push(tot_prod.dec[0][0].dece);
         
         // console.log(tot_rev);
         // console.log(tot_rev.jan[0]);
@@ -170,9 +201,9 @@ class Dashboard extends Component{
                 </CardDeck>
             </Card.Body>
         </Card>
-        <Card key={"index2"} style={{ width: '42rem',float:'left',height:'360px' }}>
+        <Card key={"index2"} style={{ width: '42rem',float:'left',height:'370px' }}>
             <Card.Body>
-                <Card.Title>Monthly Product Analysis</Card.Title>
+                <Card.Title>Monthly Revenue Analysis</Card.Title>
                 <Line ref="chart" data={this.data} />
              </Card.Body>
         
@@ -197,6 +228,50 @@ class Dashboard extends Component{
                 </CardDeck>
             </Card.Body>
         </Card>
+        <Card key={"index7"} style={{ width: '42rem',float:'left',height:'388px' }}>
+            <Card.Body>
+                <Card.Title>Order Statistics</Card.Title>
+                <CardDeck>
+                    <Card bg={'Light'.toLowerCase()} key={"5"} text={'Light'.toLowerCase() === 'light' ? 'dark' : 'white'} className="mb-2" style={{ width: '18rem' }}>
+                        <Card.Body>
+                        <Card.Title>Completed Orders</Card.Title>
+                            <Card.Text>
+                                {this.state.totalCompletedOrder}
+                            </Card.Text>
+                        </Card.Body>
+                    </Card>
+                    <Card bg={'Light'.toLowerCase()} key={"6"} text={'Light'.toLowerCase() === 'light' ? 'dark' : 'white'} className="mb-2" style={{ width: '18rem' }}>
+                        <Card.Body>
+                        <Card.Title>Confirm Orders</Card.Title>
+                            <Card.Text>
+                                {this.state.totalConfirmdOrder}
+                            </Card.Text>
+                        </Card.Body>
+                    </Card>
+                </CardDeck>
+             </Card.Body>
+        
+            {/*<Card style={{ width: '42rem', borderWidth:0}} key={"index3"}> */}
+                <Card.Body style={{paddingBottom:'90px'}}>
+                <Card.Title>Categories wise Products</Card.Title>
+                <ul key={"u1"} className="list-group" style={{maxHeight: '170px',overflow:'scroll'}}>
+                    {this.renderCategoryProduct()}    
+                </ul>
+                </Card.Body>
+            {/* </Card> */}
+        </Card>
+        <Card key={"index6"} style={{height:"388px"}}>
+            <Card.Body>
+                <Card.Title>Monthly Product Analysis</Card.Title>
+                <CardDeck>
+                    <Card style={{borderWidth:0}}>
+                        <Card.Body>
+                            <Bar data={this.barState} options={{ responsive: true }} />
+                        </Card.Body>    
+                    </Card>
+                </CardDeck>
+            </Card.Body>
+        </Card>
 
         </div>
         // )
@@ -211,6 +286,7 @@ class Dashboard extends Component{
 const mapStateToProps = (state) => ({
     total: state.adminTotalReducer.total,
     totals: state.adminTotalReducer.totals,
+    tot: state.adminTotalReducer.tot,
     revtotal: state.adminTotalReducer.revtotal,
     loading :state.adminTotalReducer.loading
 });
@@ -219,7 +295,8 @@ const mapDispatchToProps = dispatch => {
     return{
         fetchTotal: () => dispatch(fetchTotal()),
         fetchProductTotal: () => dispatch(fetchProductTotal()),
-        fetchRevenueTotal: () => dispatch(fetchRevenueTotal())
+        fetchRevenueTotal: () => dispatch(fetchRevenueTotal()),
+        fetchMonthlyProduct:() =>dispatch(fetchMonthlyProduct())
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

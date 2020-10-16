@@ -108,65 +108,127 @@ const editOrders = async (id,status) => {
                 pass: 'dhaval1216'
                 }
             });
-            var html1 = "<br/>";
-            html1 +="==============================";
-            html1 +="<h3></b></h3><b>Details:-</b><br />";
-            for (let i = 0; i < d1.length; i++) {
-                html1 += "<b>["+(i+1)+"]Product Name:-</b>"+d1[i].product.name+"<br/>" + "<b>qty:-</b>"+d1[i].quantity+",<br/>" + "<b>price(1 piece):-</b>"+d1[i].price+" ₹ /-"+",<br/>";
+            
+            
+var html1 = "<br/>";
+var html = "<br/>";
+            for (let i = 0; i < d1.length; i++) { 
+                html1+=`<div style="background-color:transparent;overflow:hidden;">
+                        <div class="m_-2609377885415545659block-grid" style="min-width:320px;max-width:640px;word-wrap:break-word;word-break:break-word;Margin:0 auto;width:100%;background-color:#f8f8f9;">
+                            <div style="border-collapse:collapse;display:table;width:100%;background-color:#f8f8f9;">
+                                <div class="m_-2609377885415545659col" style="min-width:320px;max-width:640px;display:table-cell;vertical-align:top;width:640px;">
+                                    <div style="width:100%!important;">
+                                        <div style="border-top:0px solid transparent;border-left:0px solid transparent;border-bottom:0px solid transparent;border-right:0px solid transparent;padding-top:5px;padding-bottom:5px;padding-right:0px;padding-left:0px;">
+                                            <p>${i+1}). <b>${d1[i].product.name}</b></p>
+                                            <p>Rs. ${d1[i].product.price} /-</p>
+                                            <p>${d1[i].product.description}</p>
+                                            <p>${d1[i].product.discount}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`
             }
-            html1+="</br>"
-            var html="<html><body><table><tr><td class=\"Bu bAn\"><div class=\"\"><div id=\":2l\" class=\"ii gt\"><div id=\":2k\" class=\"a3s aXjCH msg5592298769751509350\">"+
-            "<div><img src=\"https://mail.google.com/mail/u/0?ui=2&amp;ik=b974c79857&amp;attid=0.1.1&amp;permmsgid=msg-f:1635663097844123044&amp;th=16b30aebdf36c5a4&amp;view=fimg&amp;sz=s0-l75-ft&amp;attbid=ANGjdJ-4mlEvjpjqbuuXPsTEWERcyBGn9jbJbcW4saWDQbKooSB7BKn1QLonoaBqOxomuUBQekwqRrqKSjxAgygHjPFMsjYiDDeSzHP0oKUwMY3_3564zIShbLPgQj8&amp;disp=emb\" alt=\"dp- flipzone\" data-image-whitelisted=\"\" class=\"CToWUd\" width=\"100px\" height=\"30px\">\n" +
-            "			<p>Dear "+ d.user.username +" ,</p>\n" +
-            "			<table border=\"2\" align=\"center\">\n" +
-            "				<thead>\n" +
-            "					<tr style=\"background-color:#db2d2e;color:white\" align=\"center\">\n" +
-            "						<th colspan=\"2\" style=\"padding:13px;font-size:18px;margin-left:500px;padding-left:199px;padding-right:199px\">Total Bill  </th>\n" +
-            "						\n" +
-            "					</tr>\n" +
-            "				</thead>\n" +
-            "				<tbody>\n" +
-            "						\n" +
-            "					<tr  style=\"line-height:41px;color:black;font-size:15px\">\n" +
-            "						<td colspan=\"2\" style=\"padding-left:9px\">"+
-            "                                               <span>"+html1+"</span>\n"+                          
-            "					</td>\n" +
-            "					</tr>\n" +
-            "					<tr style=\"line-height:41px;color:black;font-size:15px\">\n" +
-            "						<td style=\"padding-left:9px\">Order Date:-</td>\n" +
-            "						<td style=\"padding-left:9px\"><span>"+d.orderDate+"</span></td>\n" +
-            "\n" +
-            "					<tr style=\"line-height:41px\">\n" +
-            "						<td style=\"padding-left:9px\"></td>\n" +
-            "						<td style=\"padding-left:9px\">\n" +
-            "					</td>\n" +
-            "					</tr>	\n" +
-            "					\n" +
-            "					<tr style=\"line-height:60px\">\n" +
-            "                   <td style=\"background-color:white;color:black;padding-left:9px\">Total Cost:-</td>\n" +
-            "                   <td style=\"background-color:white;color:black;padding-left:9px;\">"+d.totalPrice+"<span> ₹ /-</span></td>\n" +
-            "					</tr>\n" +
-            "				</tbody>\n" +
-            "			</table>\n" +
-            "					\n" +
-            "					<p>Please contact us via email <a href=\"mailto:dp297609@website.com\" target=\"_blank\">flipzon@website.com</a> or phone  (007) 123 456 7890.</p>\n" +
-            "					<p>Connect with us on social media: \n" +
-            "				<a href=\"https://www.facebook.com\" target=\"_blank\" data-saferedirecturl=\"https://www.google.com/url?q=https://www.facebook.com&amp;source=gmail&amp;ust=1597124127911000&amp;usg=AFQjCNGI49Hpn5uDYTvqIof-bOwo6sz_Bg\"><img src=\"https://mail.google.com/mail/u/0?ui=2&amp;ik=b974c79857&amp;attid=0.1.2&amp;permmsgid=msg-f:1635663097844123044&amp;th=16b30aebdf36c5a4&amp;view=fimg&amp;sz=s0-l75-ft&amp;attbid=ANGjdJ-xJ0RQ_O5HKXKagaohsDTVz_XGa3Yvq5IVGVejyFm0cq6xaEhJoH5Msml2Ecb0aab4u7VmgkVCDf5RDbony_UKUA1yBDaPn0uie_JtpSVyseFEjGvzx5Xzvl0&amp;disp=emb\" class=\"m_5592298769751509350imgclass CToWUd\" style=\"vertical-align:bottom;height:20px;width:20px\" data-image-whitelisted=\"\" width=\"20px\" height=\"20px\"></a>&nbsp;&nbsp;\n" +
-            "				<a href=\"https://www.instagram.com\" target=\"_blank\" data-saferedirecturl=\"https://www.google.com/url?q=https://www.instagram.com&amp;source=gmail&amp;ust=1597124127911000&amp;usg=AFQjCNEs6YOqHxeSA1j6gFtWk9HVFCHDeg\"><img src=\"https://mail.google.com/mail/u/0?ui=2&amp;ik=b974c79857&amp;attid=0.1.3&amp;permmsgid=msg-f:1635663097844123044&amp;th=16b30aebdf36c5a4&amp;view=fimg&amp;sz=s0-l75-ft&amp;attbid=ANGjdJ8ieOtP5p4TcZn1vVnyq-Km5Qn75hqwR5kUzXqEjKScvBCCSR7FGLmbRHYpkX5d0lzBBpJRa8PvKsJHG8MS2jrZSzsl4gWNKs-WHsbPqWOqn_dvulAuQcPjGNg&amp;disp=emb\" class=\"m_5592298769751509350imgclass CToWUd\" style=\"vertical-align:bottom;height:20px;width:20px\" data-image-whitelisted=\"\" width=\"20px\" height=\"20px\"></a>&nbsp;&nbsp; \n" +
-            "				<a href=\"https://www.youtube.com\" target=\"_blank\" data-saferedirecturl=\"https://www.google.com/url?q=https://www.youtube.com&amp;source=gmail&amp;ust=1597124127911000&amp;usg=AFQjCNGPhRLjAf1VMtb7iSJ12An1YHU0pw\"><img src=\"https://mail.google.com/mail/u/0?ui=2&amp;ik=b974c79857&amp;attid=0.1.4&amp;permmsgid=msg-f:1635663097844123044&amp;th=16b30aebdf36c5a4&amp;view=fimg&amp;sz=s0-l75-ft&amp;attbid=ANGjdJ9GFLgljJILEzv3FJ0rLeuX7JKlIf9CTqKNiVnPRMIyTePmOOBOic9eyxzixT06bLRUPEZUtweSZ3yNV0o7tCfMWbVyDmhEDpLIQ33IecHG_f1Nuvl_NIspgT8&amp;disp=emb\" class=\"m_5592298769751509350imgclass CToWUd\" style=\"vertical-align:bottom;height:20px;width:20px\" data-image-whitelisted=\"\" width=\"20px\" height=\"20px\"></a>\n" +
-            "				</p>\n" +
-            "					<p>With regards,</p>\n" +
-            "					<p style=\"margin:0px\">Founder&amp; CEO</p>\n" +
-            "					<p style=\"margin:0px\">Flipzon</p>\n" +
-            "					<p style=\"margin:0px\">LaNet Pvt Ltd</p>\n" +
-            "					<p style=\"margin:0px\">Email: <a href=\"mailto:dp297609@gmail.com\" target=\"_blank\">dp297609@gmail.com</a></p>\n" +
-            "					<p style=\"margin:0px\">Web: <a href=\"mailto:flipzon@website.com\" target=\"_blank\">flipzon@website.com</a></p>\n" +
-            "					<p style=\"margin:0px\">Add:    405/406 Luxuria Business Hub,</p>\n" +
-            "					<p style=\"margin:0px\"> Near VR mall, Surat - Dumas Rd, </p>\n" +
-            "					<p style=\"margin:0px\">Surat, Gujarat 395007</p><div class=\"yj6qo\"></div><div class=\"adL\">\n" +
-            "				</div></div>"
-            + "</div>"
-            + "</div></div></div></div><div class=\"gA gt acV\"><div class=\"gB xu\"><table id=\":2u\" role=\"presentation\" class=\"cf gz ac0\" cellpadding=\"0\"><tbody><tr></tr></table></body></html>";
+                html += `<html><body>
+<div style="margin:0;padding:0;background-color:#f8f8f9;">
+    <table bgcolor="#f8f8f9" cellpadding="0" cellspacing="0" style="table-layout:fixed;vertical-align:top;min-width:320px;border-spacing:0;border-collapse:collapse;background-color:#f8f8f9;width:100%;" valign="top" width="100%">
+        <tbody>
+            <tr style="vertical-align:top;" valign="top">
+                <td style="word-break:break-word;vertical-align:top;" valign="top">
+                    <div style="background-color:#1aa19c;overflow:hidden;">
+                        <div class="m_-2609377885415545659block-grid" style="min-width:320px;max-width:640px;word-wrap:break-word;word-break:break-word;Margin:0 auto;width:100%;background-color:#1aa19c;">
+                            <div style="border-collapse:collapse;display:table;width:100%;background-color:#1aa19c;">
+                                <div class="m_-2609377885415545659col" style="min-width:320px;max-width:640px;display:table-cell;vertical-align:top;width:640px;">
+                                    <div style="width:100%!important;">
+                                        <div style="border-top:0px solid transparent;border-left:0px solid transparent;border-bottom:0px solid transparent;border-right:0px solid transparent;padding-top:0px;padding-bottom:0px;padding-right:0px;padding-left:0px;"><br></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="background-color:#fff;overflow:hidden;">
+                        <div class="m_-2609377885415545659block-grid" style="min-width:320px;max-width:640px;word-wrap:break-word;word-break:break-word;Margin:0 auto;width:100%;background-color:#fff;">
+                            <div style="border-collapse:collapse;display:table;width:100%;background-color:#fff;">
+                                <div class="m_-2609377885415545659col" style="min-width:320px;max-width:640px;display:table-cell;vertical-align:top;width:640px;">
+                                    <div style="width:100%!important;">
+                                        <div style="border-top:0px solid transparent;border-left:0px solid transparent;border-bottom:0px solid transparent;border-right:0px solid transparent;padding-top:0px;padding-bottom:0px;padding-right:0px;padding-left:0px;">
+                                            <div align="center" style="padding-right:0px;padding-left:0px;">
+                                                <div style="font-size:1px;line-height:22px;"><br></div><span style="text-decoration:none;height:auto;border:0;width:100%;max-width:149px;display:block;font-size:29px;font-weight:600;color:#2b2b2b;border-bottom:4px solid orangered;">Flipzon</span>
+                                                <div style="font-size:1px;line-height:25px;"><br></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><span style="font-size: 18px;"><strong>Item Delivered</strong></span></div>
+                            <span style="font-size: 18px;"><span style="color: #000000; font-family: 'Times New Roman'; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;">
+                            <strong>on ${(new Date(d.orderDate)).toLocaleString()}</strong></span><strong>&nbsp;</strong></span>
+                        </div>
+                    </div>
+                    ${html1}
+                    <div style="background-color:transparent;overflow:hidden;">
+                        <div class="m_-2609377885415545659block-grid" style="min-width: 320px; max-width: 640px; overflow-wrap: break-word; word-break: break-word; margin: 0px auto; width: 100%; background-color: rgb(255, 255, 255); text-align: left;">
+                            <div style="border-collapse:collapse;display:table;width:100%;background-color:#fff;"><span style="font-size: 18px; text-shadow: rgba(136, 136, 136, 0.8) 3px 3px 2px;">Delivery Address</span></div>
+                            <p>${d.user.username}</p>
+                            <p>${d.user.address}</p>
+                            <p>${d.user.contact}</p>
+                            <p>${d.user.email}</p>
+                            <p><br></p>
+                            <p><span style="font-size: 18px; text-shadow: rgba(136, 136, 136, 0.8) 3px 3px 2px;">Payment Summary</span></p>
+                            <p>Sub Total <span style="float:right;">Rs. ${d.totalPrice} /- </span>&nbsp;</p>
+                            <hr><span style="font-size: 18px; text-shadow: rgba(136, 136, 136, 0.8) 3px 3px 2px;">Bag Total&nbsp;</span> <span style='color: rgb(0, 0, 0); font-family: "Times New Roman"; font-size: 18px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: Right;'>Rs. ${d.totalPrice} /- &nbsp;</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="word-break:break-word;vertical-align:top;"><br></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div style="background-color:transparent;overflow:hidden;">
+    <div class="m_-2609377885415545659block-grid" style="min-width:320px;max-width:640px;word-wrap:break-word;word-break:break-word;Margin:0 auto;width:100%;background-color:#2b303a;">
+        <div style="border-collapse:collapse;display:table;width:100%;background-color:#2b303a;">
+            <div class="m_-2609377885415545659col" style="min-width:320px;max-width:640px;display:table-cell;vertical-align:top;width:640px;">
+                <div style="width:100%!important;">
+                    <div style="border-top:0px solid transparent;border-left:0px solid transparent;border-bottom:0px solid transparent;border-right:0px solid transparent;padding-top:0px;padding-bottom:0px;padding-right:0px;padding-left:0px;">
+                        <table border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed;vertical-align:top;border-spacing:0;border-collapse:collapse;min-width:100%;" valign="top" width="100%">
+                            <tbody>
+                                <tr style="vertical-align:top;" valign="top">
+                                    <td style="word-break:break-word;vertical-align:top;min-width:100%;padding-top:0px;padding-right:0px;padding-bottom:0px;padding-left:0px;" valign="top">
+                                        <table align="center" border="0" cellpadding="0" cellspacing="0" style="table-layout:fixed;vertical-align:top;border-spacing:0;border-collapse:collapse;border-top:4px solid #1aa19c;width:100%;" valign="top" width="100%">
+                                            <tbody>
+                                                <tr style="vertical-align:top;" valign="top">
+                                                    <td style="word-break:break-word;vertical-align:top;" valign="top"><br></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div align="center" style="padding-right:0px;padding-left:0px;"><br></div>
+                        <div align="center" style="padding-right:0px;padding-left:0px;">
+                            <div style="font-size:1px;line-height:22px;"><br></div><span style="text-decoration:none;height:auto;border:0;width:100%;max-width:149px;display:block;font-size:29px;font-weight:600;color:#f94600;border-bottom:4px solid #fffbf9;">Flipzon</span>
+                        </div>
+                    </div>
+                    <div style="color:#555555;font-family:Montserrat,Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif;line-height:1.5;padding-top:15px;padding-right:40px;padding-bottom:10px;padding-left:40px;">
+                        <div style="line-height:1.5;font-size:12px;font-family:Montserrat,Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif;color:#555555;">
+                            <p style="font-size:12px;line-height:1.5;word-break:break-word;text-align:left;font-family:Montserrat,Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif;margin:0;"><span style="color:#95979c;font-size:12px;">Flipzon is the product developed by great team resides somewhere on earth. Flipzon is combination of all the great functionalities of Flipkart and Amazon, so it&apos;s named this way. Buy as much you want without paying anything, also we wont deliver anything to you. That&apos;s our policy, you don&apos;t pay anything, we won&apos;t deliver anything.</span></p>
+                        </div>
+                    </div>
+                    <div style="color:#555555;font-family:Montserrat,Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif;line-height:1.2;padding-top:20px;padding-right:40px;padding-bottom:30px;padding-left:40px;">
+                        <div style="line-height:1.2;font-size:12px;font-family:Montserrat,Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif;color:#555555;">
+                            <p style="font-size:12px;line-height:1.2;word-break:break-word;text-align:left;font-family:Montserrat,Trebuchet MS,Lucida Grande,Lucida Sans Unicode,Lucida Sans,Tahoma,sans-serif;margin:0;"><span style="color:#95979c;font-size:12px;">Flipzon Copyright &copy; 2020</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div></body>
+</html>`;
             var mailOptions = {
                 from: 'dp297609@gmail.com',
                 to: d.user.email,

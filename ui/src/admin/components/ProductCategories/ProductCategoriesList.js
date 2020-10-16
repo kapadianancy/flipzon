@@ -1,13 +1,15 @@
 import React , {Component} from 'react';
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
+import FormLabel from 'react-bootstrap/FormLabel'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom';
 import './ProductList.module.css'
-import Spinner from 'react-bootstrap/Spinner'
+// import Spinner from 'react-bootstrap/Spinner'
 import Modal from 'react-bootstrap/Modal'
 import { Form} from 'react-bootstrap'
-import { RemoveProductCategories,SingleProductCategories } from '../../store/actions/Product_CategoriesActions'
+import ListGroup from 'react-bootstrap/ListGroup'
+import { RemoveProductCategories,SingleProductCategories,fetchParentCategories } from '../../store/actions/Product_CategoriesActions'
 import { editProductOffer } from '../../store/actions/ProductActions';
 class ProductCategoriesList extends Component{
     state = {
@@ -15,8 +17,11 @@ class ProductCategoriesList extends Component{
         id:"",
         show:false,
         show1:false,
+        show2:false,
         id1:"",
+        id2:"",
         offer:"",
+        parent:"",
         errors:{
             offer:""
         }
@@ -37,6 +42,9 @@ class ProductCategoriesList extends Component{
     };
     handleHide1 = () => {
 		this.setState({ show1: false });
+    };
+    handleHide2 = () => {
+		this.setState({ show2: false });
 	};
     handleShow = (id) => { 
         this.setState({id:id,show: true })
@@ -44,28 +52,60 @@ class ProductCategoriesList extends Component{
     handleShow1 = (id) => { 
         this.setState({id1:id,show1: true })
     };
-    
-    renderProductCategories = (product_categories, activeOld, perPage,len) => {
-        let product_categoriesArr = [];
-        let active = (activeOld-1)*perPage;
-        for(let i=active;i<(activeOld*perPage);i++) {
-            if(product_categories[i]) {
-                product_categoriesArr.push(
-                    <tr key={product_categories[i].id}>
-                        <td>{i+1}</td>
-                        <td>
-                            {product_categories[i].name}
-                        </td>
-                        <td><img src={"http://localhost:8080"+((product_categories[i].image).replace('/public',''))} alt="description" width="50px"/></td>
-                        <td><Button variant="info" onClick={() => this.updateHandler(product_categories[i].id)} as={Link} to={`/admin/ProductCategoriesEdit/${product_categories[i].id}`}>Edit</Button></td>
-                        <td><Button variant="danger" onClick={() => this.handleShow(product_categories[i].id)}>Delete</Button></td>
-                        {/* <td><Button variant="info" onClick={() => this.handleShow1(product_categories[i].id)}>Add</Button></td>
-                        <td><Button variant="danger" onClick={() => this.handleRemoveOffer(product_categories[i].id)}>Remove</Button></td> */}
-                    </tr>
-                )
+    handleShowCategories = async (id,name) => {
+        await this.props.fetchParentCategories(id);
+        this.setState({id2:id,parent:name,show2: true })
+    }
+    handleParent = (categories) => {
+        let arr = [];
+        let len = categories.length;
+        let data = "";
+        for (let index = 0; index < len; index++) {
+            if(len > 1)
+            {
+                if(index===0)
+                {
+                    data+=<ListGroup.Item>{"Sub Categories of : "+categories[index].name}</ListGroup.Item>
+                }
+                else
+                {
+                    data+=<ListGroup.Item>{categories[index].name}</ListGroup.Item>     
+                }
             }
+            else
+            {
+                data+=<ListGroup.Item>{"There Is No Sub Categories of : "+categories[index].name}</ListGroup.Item>     
+            }
+            arr.push(data);
         }
-        return product_categoriesArr;
+        // return arr;
+        if(len===0)
+        {
+            return <ListGroup.Item>No Sub Categories</ListGroup.Item>
+        }
+        else
+        {
+            return categories.map((categories,index)=><div key={index+1}>
+                {(categories.id !== categories.parent) ?<ListGroup.Item>{categories.name}</ListGroup.Item> :
+                 (len === 1 && categories.id === categories.parent) ? <ListGroup.Item>No Sub Categories</ListGroup.Item> : ""} </div>         
+            ) 
+        }
+    }
+
+    renderProductCategories = (product_categories, active) => {
+        if(product_categories){
+        return product_categories.map((product_categories, index) => 
+            <tr key={"index"+index+1}>
+                <td>{index+1+active}</td>
+                <td><FormLabel onClick={() => this.handleShowCategories(product_categories.id,product_categories.name)}>{product_categories.name}</FormLabel></td>
+                <td><img src={"http://localhost:8080"+((product_categories.image).replace('/public',''))} alt="description" width="50px"/></td>
+                <td><Button variant="info" onClick={() => this.updateHandler(product_categories.id)} as={Link} to={`/admin/ProductCategoriesEdit/${product_categories.id}`}>Edit</Button></td>
+                <td><Button variant="danger" onClick={() => this.handleShow(product_categories.id)}>Delete</Button></td>
+                {/* <td><Button variant="info" onClick={() => this.handleShow1(product_categories.id)}>Add</Button></td>
+                <td><Button variant="danger" onClick={() => this.handleRemoveOffer(product_categories.id)}>Remove</Button></td>  */}
+            </tr>
+        )
+        }
     }
     handleChange = (event) => {
         event.preventDefault();
@@ -79,7 +119,6 @@ class ProductCategoriesList extends Component{
     submitHandler =async() => {
         let errors = this.state.errors;
         let a=0;
-        console.log(this.state.offer);
         // if (this.state.offer.length === 0) {
         //     a=1;
         //     errors.offer = 'Offer Required';
@@ -98,7 +137,7 @@ class ProductCategoriesList extends Component{
     handleRemoveOffer =async(id) => {
         await this.props.editProductOffer(id,0,false);
     }
-
+   
     render(){
         const {errors} = this.state;
         // let items = [];
@@ -117,7 +156,7 @@ class ProductCategoriesList extends Component{
             </tr>
         </thead>
         <tbody>
-            { this.props.loading ? <Spinner animation="border" /> : this.renderProductCategories(this.props.product_categories, this.props.active, this.props.perPage, this.props.len) }
+            { (this.props.product_categories)?this.renderProductCategories(this.props.product_categories, this.props.active):""}
         </tbody>
         
     </Table>
@@ -149,6 +188,16 @@ class ProductCategoriesList extends Component{
             </tr>
             </thead>
         </table>
+        </Modal.Body>
+      </Modal>
+      <Modal show={this.state.show2} onHide={this.handleHide2}
+                dialogClassName="modal-90w"
+                aria-labelledby="example-custom-modal-styling-title" centered>
+        <Modal.Body style={{padding:'0px'}} closeButton>
+            <ListGroup>
+                {(this.state.parent)?<ListGroup.Item><b>{"Sub Categories of : "+this.state.parent}</b></ListGroup.Item>:""}
+                {this.handleParent(this.props.categories)}
+            </ListGroup>
         </Modal.Body>
       </Modal>
       <Modal show={this.state.show1} centered>
@@ -187,12 +236,15 @@ class ProductCategoriesList extends Component{
     }
 }
 const mapStateToProps = (state) => ({
-    loading: state.adminProductCategories.loading
+    loading: state.adminProductCategories.loading,
+    categories:state.adminProductCategories.categories
+
 });
 const mapDispatchToProps = dispatch => {
     return {
         RemoveProductCategories: (id) => dispatch(RemoveProductCategories(id)),
         SingleProductCategories: (id) => dispatch(SingleProductCategories(id)),
+        fetchParentCategories:(id) => dispatch(fetchParentCategories(id)),
         editProductOffer:(id,discount,offer) => dispatch(editProductOffer(id,discount,offer))
     }
 }
