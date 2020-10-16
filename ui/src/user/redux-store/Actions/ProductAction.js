@@ -57,7 +57,7 @@ export const offerWiseProduct = () => {
         await axiosInstance.get('client/offer-product/').then(response => {
             dispatch({
                 type: types.DISPLAY_OFFER_PRODUCT,
-                products: response.data
+                offer_products: response.data
             });
         }).catch(error => {
             dispatch({
