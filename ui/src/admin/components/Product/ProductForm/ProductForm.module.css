@@ -65,3 +65,37 @@
 /* .iContainer:hover img {
     opacity: 0.3;
 } */
+.tabs {
+    display: flex;
+    list-style: none;
+    padding-left: 0px;
+}
+.tabs li {
+    margin: 0px 2px;
+    transition: all 0.3s ease;
+}
+.tabs li:hover {
+    cursor: pointer;
+    background-color: #009889;
+    color: white !important;
+}
+.tabActive {
+    width: 33.3333%;
+    text-align: center;
+    background-color: #009889;
+    color: white !important;
+    padding-top: 10px;
+    border-radius: 8px;
+}
+.tabNotActive {
+    width: 33.3333%;
+    text-align: center;
+    background-color: lightgray;
+    color: black !important;
+    padding-top: 10px;
+    border-radius: 8px;
+}
+.content {
+    min-height: 350px;
+    transition: all .4s ease;
+}

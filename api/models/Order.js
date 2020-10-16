@@ -9,7 +9,7 @@ const Order =db.sequelize.define("Order", {
             autoIncrement:true
         },
         userId:{
-            type:DataTypes.TEXT,
+            type:DataTypes.INTEGER,
         },
         orderDate:
         {
