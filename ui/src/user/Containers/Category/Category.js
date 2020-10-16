@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import CategoryComponent from '../../Components/Category/Category';
 
-import { fetchProductCategories } from '../../redux-store/Actions/ProductAction';
+import * as actions from '../../redux-store/Actions/ProductCategoryAction'
 
 import Footer from '../../Components/Footer/Footer';
 import Header from '../../Components/Header/Header';
@@ -17,7 +17,7 @@ class Category extends Component {
 
 
     componentDidMount() {
-        this.props.fetchProductCategories();
+        this.props.fetchSubCategories();
     }
 
     render() {
@@ -37,13 +37,13 @@ class Category extends Component {
 
 const mapStateToProps = state => {
     return {
-        categories: state.ProductCategory.product_categories
+        categories: state.ProductCategory.subCategories
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchProductCategories: () => dispatch(fetchProductCategories())
+        fetchSubCategories: () => dispatch(actions.fetchSubCategories())
     }
 }
 

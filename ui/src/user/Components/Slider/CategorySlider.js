@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import { Card, Button, Carousel, CardDeck, CardGroup } from 'react-bootstrap';
 import { connect } from "react-redux";
-import * as actions from "../../redux-store/Actions/ProductAction";
+import * as actions from "../../redux-store/Actions/ProductCategoryAction";
 import { withRouter } from 'react-router';
-import Product from '../../../images/product.png';
-import Product1 from '../../../images/product-2.jpg';
+
 
 class CategorySlider extends Component {
 
     componentDidMount() {
-        this.props.fetchProductCategories();
+        this.props.fetchSubCategory();
     }
 
     clickHandler = (cid) => {
@@ -82,13 +81,14 @@ class CategorySlider extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        Categories: state.ProductCategory.product_categories,
+        Categories: state.ProductCategory.subCategories
     };
 };
 
 const mapStateToAction = (dispatch) => {
     return {
-        fetchProductCategories: () => dispatch(actions.fetchProductCategories()),
+        //fetchProductCategories: () => dispatch(actions.fetchProductCategories()),
+        fetchSubCategory:()=>dispatch(actions.fetchSubCategories())
     };
 };
 

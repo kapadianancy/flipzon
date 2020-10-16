@@ -83,7 +83,7 @@ const searchProducts = async(wordsArr, strong) => {
         });
         return products;
     } catch(error) {
-        console.log(error);
+        console.log("error while searching"+error.message);
         throw error
     }
 }
@@ -268,5 +268,5 @@ module.exports = {
     editProduct,
     deleteProduct,
     deleteProductImage,
-    //editProductOffer
+    // editProductOffer
 }
