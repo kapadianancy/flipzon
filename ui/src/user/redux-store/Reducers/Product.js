@@ -5,7 +5,11 @@ const initialStore = {
   images: [],
   error: "",
   review: [],
+<<<<<<< HEAD
   specification: []
+=======
+  catProducts:[]
+>>>>>>> nancyKapadia
 };
 
 const store = (state = initialStore, action) => {
@@ -13,7 +17,7 @@ const store = (state = initialStore, action) => {
     case types.CATEGORY_PRODUCT:
       return {
         ...state,
-        products: action.products,
+        catProducts: action.products,
       };
     case types.CATEGORY_PRODUCT_FAILED:
       return {

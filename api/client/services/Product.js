@@ -1,5 +1,6 @@
 const main = require("../../models/main");
 const Sequelize = require("sequelize");
+const { sequelize } = require("../../db/db");
 const Op = Sequelize.Op;
 const $or = Op.or;
 
@@ -11,6 +12,17 @@ exports.getAllCategory = async (req, res) => {
       },
     });
     res.status(200).send(c);
+  } catch (err) {
+    return res.status(400).send(err);
+  }
+};
+
+exports.getAllSubCategory = async (req, res) => {
+  try {
+    const c = await sequelize.query(
+      "select * from product_categories where parent!=id"
+    );
+    res.status(200).send(c[0]);
   } catch (err) {
     return res.status(400).send(err);
   }
@@ -149,6 +161,16 @@ exports.reviews = async (req, res) => {
       },
     });
     res.status(200).send(p);
+  } catch (error) {
+    res.status(400).send(error);
+  }
+};
+
+exports.categoryMenu = async (req, res) => {
+  try {
+    const cid = req.params.cid;
+    const cat = await sequelize.query("select * from product_categories where id!="+cid+" and parent="+cid);
+    res.status(200).send(cat[0]);
   } catch (error) {
     res.status(400).send(error);
   }

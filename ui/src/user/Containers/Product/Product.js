@@ -17,6 +17,7 @@ class Product extends Component {
     qty: 1,
   };
 
+<<<<<<< HEAD
   // async componentWillMount() {
   //   await this.props.getProducts(this.props.match.params.cid);
   //   this.setState({
@@ -42,6 +43,26 @@ class Product extends Component {
   //         products:this.props.products
   //     })
   // }
+=======
+  async componentDidMount()
+  {
+    //alert("did");
+   await this.props.getProducts(this.props.match.params.cid);
+    // this.setState({
+    //     products:this.props.products
+    // })
+  }
+
+  async componentDidUpdate(){
+   // alert("update"+this.props.match.params.cid);
+    await this.props.getProducts(this.props.match.params.cid);
+    // this.setState({
+    //     products:this.props.products
+    // })
+  }
+
+    
+>>>>>>> nancyKapadia
 
   //   async componentWillUpdate() {
   //       await this.props.getProducts(this.props.match.params.cid);
@@ -108,7 +129,7 @@ class Product extends Component {
       },
     };
     let data = [];
-    if (this.state.products.length == 0) {
+    if (this.props.products.length == 0) {
       data.push(
         <div
           style={{ margin: "auto", marginBottom: "100px", marginTop: "50px" }}
@@ -117,7 +138,7 @@ class Product extends Component {
         </div>
       );
     } else {
-      this.state.products.map((p) => {
+      this.props.products.map((p) => {
         let disable = false;
         let x;
         if (p.stock === 0) {
@@ -208,7 +229,7 @@ class Product extends Component {
 }
 const mapStateToProp = (state) => {
   return {
-    products: state.Product.products,
+    products: state.Product.catProducts,
     error: state.Order.error,
     token: state.User.token,
     userId: state.User.userId,

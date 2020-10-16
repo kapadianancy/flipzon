@@ -265,7 +265,7 @@ class Product extends Component {
               </div>
               <div
                 class="card-block px-2"
-                style={{ marginLeft: "20px", textAlign: "left", width: "50%" }}
+                style={{ marginLeft: "20px", textAlign: "left", width: "50%",minHeight:"600px" }}
               >
                 <h1
                   class="card-title"
@@ -286,11 +286,12 @@ class Product extends Component {
                     {this.state.price -
                       (this.state.price * this.state.discount) / 100}
                   </h4>
-                  <strike>₹ {this.state.price} </strike>
+                  {this.state.discount!=0?
+                  (<><strike>₹ {this.state.price} </strike>
                   <br />
                   <span style={{ color: "green", fontWeight: "bold" }}>
                     {this.state.discount}% off
-                  </span>
+                  </span></>):null}
                 </p>
                 <NumericInput
                   disabled={disable}
@@ -324,7 +325,8 @@ class Product extends Component {
                 </div>
               </div>
 
-              <div class="w-100" style={{ textAlign: "left", margin: "10px" }}>
+{this.state.reviews.length!=0 ? 
+              (<div class="w-100" style={{ textAlign: "left", margin: "10px" }}>
                 <hr />
                 <h4 style={{ display: "inline-block", color: "#fb641b" }}>
                   Reviews and Ratings &nbsp;
@@ -336,7 +338,7 @@ class Product extends Component {
                   ) : null}
                 </h4>
                 {rdata}
-              </div>
+              </div>) :null}
             </div>
             <Modal show={this.state.show}>
               <Modal.Header>

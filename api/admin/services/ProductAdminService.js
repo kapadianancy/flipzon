@@ -268,5 +268,9 @@ module.exports = {
     editProduct,
     deleteProduct,
     deleteProductImage,
+<<<<<<< HEAD
     // editProductOffer
+=======
+    //editProductOffer
+>>>>>>> nancyKapadia
 }
