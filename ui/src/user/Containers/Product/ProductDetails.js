@@ -265,7 +265,7 @@ class Product extends Component {
               </div>
               <div
                 class="card-block px-2"
-                style={{ marginLeft: "20px", textAlign: "left", width: "50%",minHeight:"600px" }}
+                style={{ marginLeft: "20px", textAlign: "left", width: "50%",minHeight:"700px" }}
               >
                 <h1
                   class="card-title"

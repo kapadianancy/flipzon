@@ -17,33 +17,7 @@ class Product extends Component {
     qty: 1,
   };
 
-<<<<<<< HEAD
-  // async componentWillMount() {
-  //   await this.props.getProducts(this.props.match.params.cid);
-  //   this.setState({
-  //     ...this.state,
-  //     products: this.props.products
-  //   })
-  // }
-
-
-  async componentDidMount() {
-
-    await this.props.getProducts(this.props.match.params.cid);
-    this.setState({
-      ...this.state,
-      products: this.props.products
-    })
-  }
-  // async componentDidUpdate()
-  // {
-  //     await this.props.getProducts(this.props.match.params.cid);
-  //     this.setState({
-  //         ...this.state,
-  //         products:this.props.products
-  //     })
-  // }
-=======
+ 
   async componentDidMount()
   {
     //alert("did");
@@ -60,18 +34,6 @@ class Product extends Component {
     //     products:this.props.products
     // })
   }
-
-    
->>>>>>> nancyKapadia
-
-  //   async componentWillUpdate() {
-  //       await this.props.getProducts(this.props.match.params.cid);
-  //       this.setState({
-  //           ...this.state,
-  //           products:this.props.products
-  //       })
-
-  // }
 
   makeid() {
     var result = "";

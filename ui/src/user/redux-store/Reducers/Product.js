@@ -5,11 +5,10 @@ const initialStore = {
   images: [],
   error: "",
   review: [],
-<<<<<<< HEAD
-  specification: []
-=======
+  specification: [],
+
   catProducts:[]
->>>>>>> nancyKapadia
+
 };
 
 const store = (state = initialStore, action) => {
