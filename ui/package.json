@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@cogent-labs/react-rating-component": "^1.1.0",
+    "@szhsin/react-menu": "^0.10.8",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
@@ -20,6 +21,7 @@
     "react-confirm-alert": "^2.6.2",
     "react-dom": "^16.13.1",
     "react-id-generator": "^3.0.1",
+    "react-multilevel-dropdown": "^1.0.5",
     "react-numeric-input": "^2.2.3",
     "react-rating-component": "^1.0.0",
     "react-rating-stars-component": "^2.2.0",

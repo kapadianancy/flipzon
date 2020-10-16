@@ -51,3 +51,6 @@ export const SEARCH_PRODUCT="SEARCH_PRODUCT"
 
 export const ADD_REVIEW="ADD_REVIEW"
 export const GET_REVIEWS="GET_REVIEWS"
+
+export const SUB_CATEGORY="SUB_CATEGORY"
+export const MENU_SUB_CAT="MENU_SUB_CAT"

@@ -20,6 +20,8 @@ router.get('/client/logout',auth,Authenticate.logout);
 //category
 router.get('/client/category',Product.getAllCategory);
 
+router.get('/client/subcategory',Product.getAllSubCategory);
+
 //category wise product
 router.get('/client/category-product/:cid',Product.getCategoryProduct);
 
@@ -82,6 +84,8 @@ router.put("/client/updateUserId/:uid",auth,Order.updateUserId);
 router.get('/client/offer-product',Product.getOfferProduct);
 
 router.get('/client/reviews/:pid',Product.reviews);
+
+router.get('/client/categoryMenu/:cid',Product.categoryMenu)
 
 
 module.exports = router;

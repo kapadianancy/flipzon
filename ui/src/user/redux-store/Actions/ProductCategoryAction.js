@@ -18,6 +18,40 @@ export const fetchProductCategories = () => {
     };
 };
 
+export const fetchSubCategories = () => {
+    return async dispatch => {
+      
+        await axiosInstance.get('client/subcategory').then(response => {
+            dispatch({
+                type: types.SUB_CATEGORY,
+                subCategories: response.data
+            });
+        }).catch(error => {
+            dispatch({
+                type: types.FETCH_PRODUCT_CATEGORIES_FAILED,
+                error: error.message
+            });
+        })
+    };
+};
+
+export const fetchMenuSubCat = (id) => {
+    return async dispatch => {
+      
+        await axiosInstance.get('client/categoryMenu/'+id).then(response => {
+            dispatch({
+                type: types.MENU_SUB_CAT,
+                menuSubCat: response.data
+            });
+        }).catch(error => {
+            dispatch({
+                type: types.FETCH_PRODUCT_CATEGORIES_FAILED,
+                error: error.message
+            });
+        })
+    };
+};
+
 export const categoryWiseProduct=(cid)=>
 {
     return async dispatch => {
