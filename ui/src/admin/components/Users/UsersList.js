@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
-import { confirmAlert } from 'react-confirm-alert';
+import Modal from 'react-bootstrap/Modal'
+import Card from 'react-bootstrap/Card'
 
 const renderUsers = (users, showOrders, deleteUser, active) => {
     return users.map( (user, i) => (
@@ -18,53 +19,46 @@ const renderUsers = (users, showOrders, deleteUser, active) => {
 }
 
 const UsersList = (props) => {
-    const deleteAlert = (id) => { 
-        confirmAlert({
-            customUI: ({ onClose }) => {
-                return (
-                    <table>
-                        <thead>
-                        <tr>    
-                            <td>
-                                <h1>Are you sure?</h1>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <p>You want to delete?</p>
-                            </td>
-                        </tr>
-                        <tr> 
-                            <td>
-                            <Button onClick={() => { props.deleteUser(id)
-                                onClose(); }}> Yes, Delete it! </Button>
-                            </td>
-                            <td>
-                                <Button onClick={onClose}>Cancel</Button>
-                            </td>
-                        </tr>
-                        </thead>
-                    </table>
-                );
-            }
-        });
+    const [deleteUser, setDeleteUser] = useState({ show: false, id: null });
+
+    const deleteModal = (id) => {
+        setDeleteUser({ show: true, id: id });
     }
-    return <Table responsive striped bordered hover size="sm">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Contact</th>
-                <th>Address</th>
-                <th>View Orders</th>
-                <th>Delete User</th>
-            </tr>
-        </thead>
-        <tbody>
-            { renderUsers(props.users, props.showOrders, deleteAlert, props.active) }
-        </tbody>
-    </Table>
+    const confirm = (doDelete) => {
+        if(doDelete) props.deleteUser(deleteUser.id);
+        setDeleteUser({ show: false, id: null });
+    }
+
+    return <>
+        <Modal show={deleteUser.show} onHide={() => confirm(false) } centered size="sm">
+            <Card bg="Light" text='dark' >
+                <Card.Body>
+                    <Card.Title><b>Are you sure!</b></Card.Title>
+                    <Card.Text>
+                        Do you want to delete this user?
+                    </Card.Text>
+                    <Button variant="danger" className="mr-1" onClick={() => confirm(true) }>Delete</Button>
+                    <Button variant="secondary" onClick={() => confirm(false) }>Cancel</Button>
+                </Card.Body>
+            </Card>
+        </Modal>
+        <Table responsive striped bordered hover size="sm">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Contact</th>
+                    <th>Address</th>
+                    <th>View Orders</th>
+                    <th>Delete User</th>
+                </tr>
+            </thead>
+            <tbody>
+                { renderUsers(props.users, props.showOrders, deleteModal, props.active) }
+            </tbody>
+        </Table>
+    </>
 }
 
 export default UsersList

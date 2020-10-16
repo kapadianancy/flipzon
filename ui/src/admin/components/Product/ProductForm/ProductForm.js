@@ -9,6 +9,37 @@ import * as classes from './ProductForm.module.css'
 import SunEditor from 'suneditor-react';
 import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 
+const renderSpecifications = (titles, details, handleChange, deleteSpecification) => {
+    return titles.map( title => (
+                    <div key={title.key} className={classes.specificationContainer} >
+                        <div className={classes.specRemoveBtn}>
+                            <Button variant="danger" onClick={() => deleteSpecification(title.key)}>X</Button>
+                        </div>
+                        <div className={classes.specTitle}>
+                            <Form.Control 
+                                type="text" placeholder="Write product specification title here" 
+                                value={title.title}
+                                onChange={ (e) => handleChange(title.key, e.target.value, "title")}
+                            ></Form.Control>
+                        </div>
+                        <div className={classes.specDetails}>
+                            <SunEditor 
+                                setContents={details[title.key].details} 
+                                onChange={ (val) => handleChange(title.key, val, "details")}
+                                placeholder="Write product specification details here" 
+                                setOptions={{
+                                    buttonList: [
+                                        ["fontSize", "formatBlock", "bold", "underline", "italic" ], 
+                                        ["removeFormat"], 
+                                        ["table","list"]
+                                    ]
+                                }}
+                            />
+                        </div>
+                    </div>
+    ))
+}
+
 const ProductForm = (props) => {
     const [ids, setIds] = useState(new Set([]));
     const [description, setDescription] = useState("");
@@ -33,7 +64,9 @@ const ProductForm = (props) => {
         main_imageError: "",
         ext_imagesError: "",
     })
-    
+    const [titles, setTitles] = useState([]);
+    const [details, setDetails] = useState([]);
+
     useEffect(() => {
         if(props.edit && props.product.name) {
             let editProduct = props.product
@@ -45,6 +78,15 @@ const ProductForm = (props) => {
             tempProduct.discount = editProduct.discount;
             tempProduct.videoLink = editProduct.videoLink;
             tempProduct.categoryId = editProduct.categoryId;
+            let titles = [], details = [];
+            if(editProduct.specifications.length > 0) {
+                editProduct.specifications.forEach( (spec, key) => {
+                    titles.push({ key, title: spec.title });
+                    details.push({ key, details: spec.details });
+                });
+            }
+            setTitles(titles);
+            setDetails(details);
             setProduct(tempProduct);
             setDescription(editProduct.description ? editProduct.description : "")
         } else {
@@ -54,6 +96,7 @@ const ProductForm = (props) => {
         }
     }, [props.product, setProduct, props.edit, props.categories])
 
+    // validation and submitting
     const productFieldChanged = (e, name, image) => {
         let oldProduct = { ...product }
         oldProduct[name] = e.target.value;
@@ -66,17 +109,6 @@ const ProductForm = (props) => {
         }
 
         setProduct(oldProduct);
-    }
-    const imageCheckboxChange = (imgId) => {
-        if(ids.has(imgId)) {
-            let newIds = new Set([...ids])
-            newIds.delete(imgId);
-            setIds(newIds);
-        } else {
-            let newIds = new Set([...ids])
-            newIds.add(imgId);
-            setIds(newIds);
-        }
     }
     const validate = async (e) => {
         e.preventDefault();
@@ -109,7 +141,10 @@ const ProductForm = (props) => {
         if(!productData.image) delete productData.image;
         if(!productData.images) delete productData.images;
         productData.description = description
-        // console.log(productData);
+
+        let specifications = titles.map( (title, i) => ({ "title": title.title, "details": details[i].details }));
+
+        // // console.log(productData);
         let formData = new FormData();
         for(var key in productData) {
             if(key === "images") {
@@ -129,17 +164,62 @@ const ProductForm = (props) => {
                 // }
             } else formData.append(key, productData[key]);
         }
-        console.log(formData);
+        if(specifications.length > 0) {
+            formData.append("specifications", JSON.stringify(specifications));
+        }
+        // console.log(formData);
         if(props.edit) {
             await props.editProduct(formData);
         } else {
             await props.addProduct(formData);
+        }
+        
+    }
+
+    // images
+    const imageCheckboxChange = (imgId) => {
+        if(ids.has(imgId)) {
+            let newIds = new Set([...ids])
+            newIds.delete(imgId);
+            setIds(newIds);
+        } else {
+            let newIds = new Set([...ids])
+            newIds.add(imgId);
+            setIds(newIds);
         }
     }
     const deleteImages = async () => {
         await props.deleteProductImages(ids);
         ids.clear();
     }
+
+    // manage specifications
+    const addSpecification = () => {
+        let newTitles = [...titles];
+        newTitles.push({ key: titles.length, title: "" });
+        let newDetails = [...details];
+        newDetails.push({ key: titles.length, details: "" });
+        setTitles(newTitles);
+        setDetails(newDetails);
+    }
+    const deleteSpecification = (key) => {
+        let newTitles = [...titles].filter( title => title.key !== key);
+        let newDetails = [...details].filter( detail => detail.key !== key);
+        setTitles(newTitles);
+        setDetails(newDetails);
+    }
+    const handleSpecDataChange = (key, value, field) => {
+        if(field === "title") {
+            let newTitles = [...titles];
+            newTitles[key].title = value;
+            setTitles(newTitles); 
+        } else {
+            let newDetails = [...details];
+            newDetails[key].details = value;
+            setDetails(newDetails); 
+        }
+    }
+
     return (
         <Form>
             <Form.Group as={Row}>
@@ -292,7 +372,15 @@ const ProductForm = (props) => {
                 </Col>
             </Row>
 
-            <Form.Group as={Row} controlId="exampleForm.ControlTextarea1">
+            <Row>
+                <Form.Label column sm="1">Specs</Form.Label>
+                <Col sm="11">
+                    { renderSpecifications(titles, details, handleSpecDataChange, deleteSpecification) }
+                    <Button variant="primary" onClick={() => addSpecification()}>+</Button>
+                </Col>
+            </Row>
+
+            <Form.Group as={Row} className="mt-2">
                 <Form.Label column sm="1">Description</Form.Label>
                 <Col sm="11">
                 <SunEditor 
@@ -300,6 +388,7 @@ const ProductForm = (props) => {
                     onChange={setDescription} 
                     placeholder="Write product description here." 
                     lang="en" 
+                    height="250"
                     setOptions={{
                         buttonList: [
                             ["undo","redo"], 
@@ -310,12 +399,6 @@ const ProductForm = (props) => {
                         ]
                     }}
                 />
-                    {/* <Form.Control 
-                        isInvalid={ !formErrors.isFormValid && formErrors.descriptionError !== "" } 
-                        onChange={ (e) => productFieldChanged(e, "description")} as="textarea" rows={3} value={product.description} />
-                    <Form.Control.Feedback type="invalid">
-                        { formErrors.descriptionError }
-                    </Form.Control.Feedback> */}
                 </Col>
             </Form.Group>
 
