@@ -5,7 +5,10 @@ const initialStore = {
     product: {},
     total: null,
     loading: false,
-    error: null
+    error: null,
+    OOSProducts: null,
+    oLoading: false,
+    oError: null,
 };
 
 const store = (state = initialStore, action) => {
@@ -141,7 +144,32 @@ const store = (state = initialStore, action) => {
                 ...state,
                 loading: false,
                 error: action.error
-            }    
+            }
+        case types.INIT_FETCH_OOS_PRODUCTS:
+            return {
+                ...state,
+                OOSProducts: null,
+                oLoading: true,
+                oError: null,
+            }
+        case types.FETCH_OOS_PRODUCTS_SUCCESS:
+            return {
+                ...state,
+                OOSProducts: action.data,
+                oLoading: false
+            }
+        case types.FETCH_OOS_PRODUCTS_FAILED:
+            return {
+                ...state,
+                oLoading: false,
+                error: action.error
+            }
+        case types.REMOVE_OOS_PRODUCT:
+            let newOOSProducts = state.OOSProducts.filter( product => product.id !== action.id )
+            return {
+                ...state,
+                OOSProducts: newOOSProducts
+            }
         default:
             return state;
     }

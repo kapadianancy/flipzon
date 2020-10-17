@@ -132,3 +132,24 @@ export const editProductOffer = (id,discount,offer) => {
         }
     }
 }
+
+export const fetchOOSProducts = () => {
+    return async (dispatch, getState) => {
+        dispatch({ type: types.INIT_FETCH_OOS_PRODUCTS });
+        try {
+            let token = getState().adminAuth.token;
+            const response = await axios.get(`/admin/outOfStock`, {
+                headers: {
+                    "Authorization": token
+                }
+            });
+            dispatch({ type: types.FETCH_OOS_PRODUCTS_SUCCESS, data: response.data });
+        } catch (error) {
+            dispatch({ type: types.FETCH_OOS_PRODUCTS_FAILED, error: error.message });
+        }
+    }
+}
+
+export const removeOOSProduct = (id) => {
+    return { type: types.REMOVE_OOS_PRODUCT, id };
+}
