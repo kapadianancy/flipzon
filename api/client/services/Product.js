@@ -20,7 +20,7 @@ exports.getAllCategory = async (req, res) => {
 exports.getAllSubCategory = async (req, res) => {
   try {
     const c = await sequelize.query(
-      "select * from product_categories where parent!=id"
+      "select * from product_categories where parent!=id and isDeleted = 0"
     );
     res.status(200).send(c[0]);
   } catch (err) {
@@ -62,6 +62,7 @@ exports.getOfferProduct = async (req, res) => {
     const p = await main.product.findAll({
       where: {
         isInOffer: 1,
+        isDeleted : 0
       },
       order: [["discount", "DESC"]],
     });
