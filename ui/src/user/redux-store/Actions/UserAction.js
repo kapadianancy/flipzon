@@ -3,9 +3,22 @@ import axiosInstance from '../../../axios';
 
 export const signup = (user) => {
     return async dispatch => {
-        await axiosInstance.post('/client/signup', user).then(response => {
+        await axiosInstance.post('/client/signup', user).then(async response => {
             localStorage.setItem("token", response.data.token);
             localStorage.setItem("userId", response.data.user.id);
+            if (localStorage.getItem("device") != null)
+             {
+                await axiosInstance.put("/client/updateUserId/" + localStorage.getItem("device"), {}, {
+                    headers: {
+                        authorization: 'Bearer ' + localStorage.getItem("token")
+                    }
+                })
+                    .then(response => {
+                        localStorage.removeItem("device");
+                    }).catch(err => {
+                        console.log("error in user id update");
+                    })
+            }
             dispatch({
                 type: types.SIGNUP,
                 user: response.data.user.id,
@@ -24,25 +37,22 @@ export const signup = (user) => {
 export const login = (user) => {
     return async dispatch => {
 
-        await axiosInstance.post('/client/login', user).then(async(response) => {
+        await axiosInstance.post('/client/login', user).then(async (response) => {
             localStorage.setItem("token", response.data.token);
             localStorage.setItem("userId", response.data.user.id);
-            if(localStorage.getItem("device")!=null)
-            {
-                await axiosInstance.put("/client/updateUserId/"+localStorage.getItem("device"),{},{
+            if (localStorage.getItem("device") != null) {
+                await axiosInstance.put("/client/updateUserId/" + localStorage.getItem("device"), {}, {
                     headers: {
                         authorization: 'Bearer ' + localStorage.getItem("token")
                     }
                 })
-                .then(response=>
-                {
-                    localStorage.removeItem("device");
-                }).catch(err=>
-                    {
+                    .then(response => {
+                        localStorage.removeItem("device");
+                    }).catch(err => {
                         console.log("error in user id update");
                     })
             }
-           
+
 
             dispatch({
                 type: types.LOGIN,
@@ -76,18 +86,18 @@ export const forgetpassword = (email) => {
 
 export const updatepassword = (passwords) => {
     return async dispatch => {
-         await axiosInstance.post('/client/updatepassword',passwords)
-         .then(response => {
-            dispatch({
-                type: types.CHANGE_PASSWORD,
-                message : response.data
-            });
-        }).catch(error => {
-            dispatch({
-                type: types.CHANGE_PASSWORD_FAILED,
-                error: error.message
-            });
-        })
+        await axiosInstance.post('/client/updatepassword', passwords)
+            .then(response => {
+                dispatch({
+                    type: types.CHANGE_PASSWORD,
+                    message: response.data
+                });
+            }).catch(error => {
+                dispatch({
+                    type: types.CHANGE_PASSWORD_FAILED,
+                    error: error.message
+                });
+            })
     };
 };
 
@@ -125,7 +135,7 @@ export const getSingleUser = () => {
 
             dispatch({
                 type: types.GET_SINGLE_USER,
-                error:"",
+                error: "",
                 user: response.data
             })
 
@@ -138,17 +148,17 @@ export const getSingleUser = () => {
     };
 };
 
-export const editprofile =  (user) => {
+export const editprofile = (user) => {
     return async dispatch => {
         const token = localStorage.getItem("token");
-        await axiosInstance.put('/client/editProfile',user,{
+        await axiosInstance.put('/client/editProfile', user, {
             headers: {
                 authorization: 'Bearer ' + token
             }
         }).then(response => {
             dispatch({
                 type: types.EDIT_PROFILE,
-                message : response.data
+                message: response.data
             });
         }).catch(error => {
             dispatch({
@@ -162,14 +172,14 @@ export const editprofile =  (user) => {
 export const changepassword = (passwords) => {
     return async dispatch => {
         const token = localStorage.getItem("token");
-        await axiosInstance.put('/client/changePassword',passwords,{
+        await axiosInstance.put('/client/changePassword', passwords, {
             headers: {
                 authorization: 'Bearer ' + token
             }
         }).then(response => {
             dispatch({
                 type: types.CHANGE_PASSWORD,
-                message : response.data
+                message: response.data
             });
         }).catch(error => {
             dispatch({
