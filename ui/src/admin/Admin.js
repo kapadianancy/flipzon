@@ -12,17 +12,23 @@ import Order from "./containers/Orders";
 import Auth from './containers/Auth';
 import { connect } from 'react-redux';
 import { tryAutoLogin, logout } from './store/actions/AuthActions'
+import { fetchOOSProducts, removeOOSProduct } from './store/actions/ProductActions'
 import Profile from './containers/Profile';
 import Users from './containers/Users';
 import * as classes from './Admin.module.css'
 import ResetPassword from './containers/ResetPassword'
 
 const Admin = (props) => {
+    const { loggedIn, tryAutoLogin, OOSProducts, oError, fetchOOSProducts, location } = props;
+
     useEffect(() => {
-        if(props.location.pathname.startsWith("/admin") && !props.loggedIn) {
-            props.tryAutoLogin();
+        if(location.pathname.startsWith("/admin") && !loggedIn) {
+            tryAutoLogin();
         }
-    }, [props.location.pathname, props.loggedIn, props.tryAutoLogin])
+        if(OOSProducts === null && oError === null) {
+            fetchOOSProducts()
+        }
+    }, [location.pathname, loggedIn, tryAutoLogin, fetchOOSProducts, OOSProducts, oError])
 
     let content = <Redirect to="/" />
 
@@ -34,7 +40,7 @@ const Admin = (props) => {
         </Switch>
     } else if(props.location.pathname.startsWith("/admin") && props.loggedIn) {
         content = <>
-            <Header logout={props.logout} user={props.user} />
+            <Header logout={props.logout} user={props.user} OOSProducts={OOSProducts} removeOOSProduct={props.removeOOSProduct} />
             <div className={classes.Container}>
                 <Switch>
                     <Route path="/admin/dashboard" exact component={Dashboard} />
@@ -59,13 +65,18 @@ const Admin = (props) => {
 const mapStateToProps = state => {
     return {
         loggedIn: state.adminAuth.token ? true : false,
-        user: state.adminAuth.user
+        user: state.adminAuth.user,
+        oLoading: state.adminProduct.oLoading,
+        oError: state.adminProduct.oError,
+        OOSProducts: state.adminProduct.OOSProducts
     }
 }
 const mapDispatchToProps = dispatch => {
     return {
         tryAutoLogin: () => dispatch(tryAutoLogin()),
-        logout: () => dispatch(logout())
+        logout: () => dispatch(logout()),
+        fetchOOSProducts: () => dispatch(fetchOOSProducts()),
+        removeOOSProduct: (id) => dispatch(removeOOSProduct(id))
     }
 }
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Admin));
