@@ -91,7 +91,9 @@ class ViewOrder extends Component {
                     btn = (
                         <button type="button" style={styles.cardBtn} onClick={() => this.cancelOrder(o.id)}>X</button>
                     );
-                    details=null;
+                    details=(
+                        <Nav.Link as={Link} className="forgot-link" style={{display:"inline-block"}} to={"/vieworderdetails/" + o.id}>Order Details</Nav.Link>
+                    );
                 }
 
                 data.push(
