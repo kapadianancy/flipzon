@@ -1,13 +1,12 @@
-import React, { useEffect,useState } from 'react';
-
+import React,{useEffect,useState} from 'react'
+import {connect} from 'react-redux'
 import Card from 'react-bootstrap/Card'
-import { connect } from 'react-redux'
-import * as classes from './Products.module.css'
-import OrdersList from '../components/Order/Order';
 import Spinner from 'react-bootstrap/Spinner'
 import Pagination from 'react-bootstrap/Pagination'
 import Form from 'react-bootstrap/Form'
-import { fetchOrders } from '../store/actions/OrderAction'
+import {fetchReview,removeReview} from '../store/actions/ReviewAction';
+import ReviewList from '../components/Review/ReviewList';
+import * as classes from './Users.module.css'
 const renderPaginationItems = (total, active, changeActive) => {
     let items = [];
     for(let i=1;i<=total;i++) {
@@ -17,33 +16,34 @@ const renderPaginationItems = (total, active, changeActive) => {
     }
     return items
 }
-const Orders = (props) => {
+const Review = (props) => {
     const [perPage, setPerPage] = useState(5)
     const [active, setActive] = useState(1)
 
-    useEffect( () => {
-        props.fetchOrders(active,perPage)
-    }, [props.fetchOrders,active,perPage])
+    useEffect(() => {
+        props.fetchReview(active,perPage);
+    }, [props.fetchReview,active,perPage]);
     const changeActive = (index) => {
         setActive(index);
     }
-    let myorders = <Spinner animation="border" />;
-    if(!props.loading && props.orders) {
-        myorders = <OrdersList orders={props.orders} active={(active-1)*perPage}/>
+    let review = <Spinner animation="border" />;
+    if(!props.loading && props.review) {
+        review = <ReviewList removeReview={props.removeReview} review={props.review} active={(active-1)*perPage}/>
     }
     return(
+        <>
         <Card>
             <Card.Header className={classes.Header}>
                 <div className={classes.Title}>
-                    Orders List
+                    Review List
                 </div>
             </Card.Header>
             <Card.Body>
-               {myorders}
+                {review}
             </Card.Body>
             <Card.Footer className={classes.Footer}>
             {
-                props.orders ?
+                props.review ?
                 <Pagination className={classes.Pagination} >
                     { renderPaginationItems(props.total, active, changeActive) }
                 </Pagination> : null
@@ -57,20 +57,22 @@ const Orders = (props) => {
             </Form.Control>
             </Card.Footer>
         </Card>
+        </>
     )
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
-        orders: state.adminOrdersReducer.orders,
-        total: state.adminOrdersReducer.total
+        review:state.adminReviewReducer.review,
+        total:state.adminReviewReducer.total
     }
 }
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
-        fetchOrders: (page,limit) => dispatch(fetchOrders(page,limit))
+        fetchReview : (page,limit) => dispatch(fetchReview(page,limit)),
+        removeReview: (id) => dispatch(removeReview(id))
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Orders);
+export default connect(mapStateToProps, mapDispatchToProps)(Review);

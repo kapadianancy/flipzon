@@ -1,20 +1,29 @@
 import * as types from '../ActionTypes'
 import axios from '../../../axios'
 
-export const fetchOrders = () => {
+export const fetchOrders = (page,limit) => {
     return async (dispatch,getState) => {
         dispatch({
             type:types.INIT_FETCH_ORDERS
         }) 
         let token = getState().adminAuth.token
-        await axios.get('admin/orders',{
+        let query = "";
+        if(page && limit)
+        {
+            query = `admin/orders/?page=${page}&limit=${limit}`;
+        }else
+        {
+            query = 'admin/orders/' 
+        }
+        await axios.get(query,{
             headers: {
                 "Authorization": token
             }
         }).then(response => {
             dispatch({
                 type:types.FETCH_ORDERS_SUCCESS,
-                orders:response.data
+                orders:response.data.orders,
+                total:response.data.total
             });
         }).catch(error => {
             dispatch({

@@ -6,7 +6,8 @@ const initialStore = {
     order:{},
     orderBill:[],
     loading: false,
-    error: ""
+    error: "",
+    total: null
 };
 
 const store = (state = initialStore, action) => {
@@ -54,7 +55,8 @@ const store = (state = initialStore, action) => {
             return {
                 ...state,
                 orders: action.orders,
-                loading: false
+                loading: false,
+                total:action.total
             }
         case types.FETCH_ORDERS_FAILED:
             return {

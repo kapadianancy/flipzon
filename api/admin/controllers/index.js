@@ -5,4 +5,5 @@ module.exports = (app) => {
     require('./DashboardController')(app);
     require('./AuthController')(app);
     require('./UserController')(app);
+    require('./ReviewController')(app);
 }

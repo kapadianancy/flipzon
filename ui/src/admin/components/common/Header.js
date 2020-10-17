@@ -18,6 +18,7 @@ const Header = (props) => {
             <Nav.Link as={NavLink} activeClassName={classes.Active} to="/admin/products">Products</Nav.Link>
             <Nav.Link as={NavLink} activeClassName={classes.Active} to="/admin/order">Order</Nav.Link>
             <Nav.Link as={NavLink} activeClassName={classes.Active} to="/admin/users">Users</Nav.Link>
+            <Nav.Link as={NavLink} activeClassName={classes.Active} to="/admin/review">Review</Nav.Link>
         </Nav>
         <DropdownButton drop="left" id="dropdown-basic-button" title={props.user.username+" "}>
             <Dropdown.Item as={NavLink} to="/admin/profile">Manage Profile</Dropdown.Item>

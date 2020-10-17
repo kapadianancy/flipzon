@@ -106,7 +106,7 @@ class Dashboard extends Component{
         let d2 = this.barState.datasets[0].data;
         await this.props.fetchMonthlyProduct();
         let tot_prod = await this.props.tot;
-        console.log(this.props.tot);        
+          
         d2.push(tot_prod.jan[0][0].jan);
         d2.push(tot_prod.feb[0][0].feb);
         d2.push(tot_prod.march[0][0].march);
@@ -120,9 +120,6 @@ class Dashboard extends Component{
         d2.push(tot_prod.nov[0][0].nov);
         d2.push(tot_prod.dec[0][0].dece);
         
-        // console.log(tot_rev);
-        // console.log(tot_rev.jan[0]);
-        // console.log(tot_rev.jan[0][0].jan);
         await this.props.fetchProductTotal();
         let tots = await this.props.totals;
         this.setState({
@@ -201,34 +198,7 @@ class Dashboard extends Component{
                 </CardDeck>
             </Card.Body>
         </Card>
-        <Card key={"index2"} style={{ width: '42rem',float:'left',height:'370px' }}>
-            <Card.Body>
-                <Card.Title>Monthly Revenue Analysis</Card.Title>
-                <Line ref="chart" data={this.data} />
-             </Card.Body>
-        
-            {/*<Card style={{ width: '42rem', borderWidth:0}} key={"index3"}> */}
-                {/* <Card.Body style={{marginTop:'-30px'}}>
-                <Card.Title>Categories wise Products</Card.Title>
-                <ul key={"u1"} className="list-group" style={{maxHeight: '135px',overflow:'scroll'}}>
-                    {this.renderCategoryProduct()}    
-                </ul>
-                </Card.Body> */}
-            {/* </Card> */}
-        </Card>
-        <Card key={"index5"} style={{height:"370px"}}>
-            <Card.Body>
-                <Card.Title>Order Analysis</Card.Title>
-                <CardDeck>
-                    <Card style={{borderWidth:0 }}>
-                        <Card.Body>
-                            <Pie data={this.state.dataPie} options={{ responsive: true }} />
-                        </Card.Body>    
-                    </Card>
-                </CardDeck>
-            </Card.Body>
-        </Card>
-        <Card key={"index7"} style={{ width: '42rem',float:'left',height:'388px' }}>
+        <Card key={"index7"} style={{ width: '42rem',float:'left',height:'370px' }}>
             <Card.Body>
                 <Card.Title>Order Statistics</Card.Title>
                 <CardDeck>
@@ -259,6 +229,24 @@ class Dashboard extends Component{
                 </ul>
                 </Card.Body>
             {/* </Card> */}
+        </Card>
+        <Card key={"index5"} style={{height:"370px"}}>
+            <Card.Body>
+                <Card.Title>Order Analysis</Card.Title>
+                <CardDeck>
+                    <Card style={{borderWidth:0 }}>
+                        <Card.Body>
+                            <Pie data={this.state.dataPie} options={{ responsive: true }} />
+                        </Card.Body>    
+                    </Card>
+                </CardDeck>
+            </Card.Body>
+        </Card>
+        <Card key={"index2"} style={{ width: '42rem',float:'left',height:'388px' }}>
+            <Card.Body>
+                <Card.Title>Monthly Revenue Analysis</Card.Title>
+                <Line ref="chart" data={this.data} />
+             </Card.Body>
         </Card>
         <Card key={"index6"} style={{height:"388px"}}>
             <Card.Body>

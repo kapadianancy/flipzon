@@ -42,9 +42,21 @@ const getOrderBill = async (id) => {
         throw error;
     }  
 }
-const getOrders = async () => {
+const getOrders = async (page,limit) => {
     try{
-        return await Orders.findAll({
+
+        // return await Orders.findAll({
+        //     include: [
+        //         {
+        //             model: user ,as:"user"
+        //         },
+        //     ],
+        //     where: {
+        //         IsDeleted:0
+        //     }
+        // })
+
+        let data = { 
             include: [
                 {
                     model: user ,as:"user"
@@ -53,7 +65,22 @@ const getOrders = async () => {
             where: {
                 IsDeleted:0
             }
-        })
+        }
+
+        if(limit && page) {
+            data.offset = 0 + (page-1) * limit;
+            data.limit = +limit;
+        }
+        try {
+            let total = await Orders.count({ where: { isDeleted: false }});
+            if(limit) {
+                total = Math.ceil(total / +limit);
+            }
+            let orders= await Orders.findAll(data);
+            return { total,orders }
+        } catch(error) {
+            console.log(error.message);
+        }
     }catch(error) {
         throw error;
     }  
@@ -122,7 +149,7 @@ var html = "<br/>";
                                             <p>${i+1}). <b>${d1[i].product.name}</b></p>
                                             <p>Rs. ${d1[i].product.price} /-</p>
                                             <p>${d1[i].product.description}</p>
-                                            <p>${d1[i].product.discount}</p>
+                                            <p>Qty:- ${d1[i].quantity}</p>
                                         </div>
                                     </div>
                                 </div>

@@ -5,7 +5,7 @@ module.exports = (app) => {
   // return list of Orders
 app.get("/admin/orders", auth,async (req, res, next) => {
     try{
-        let orders = await ordersServices.getOrders();
+        let orders = await ordersServices.getOrders(req.query.page, req.query.limit);
     
         res.send(orders);
     

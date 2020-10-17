@@ -3,6 +3,7 @@ import Header from './components/common/Header'
 import { Switch, Route, Redirect, withRouter } from 'react-router'
 import Products from './containers/Products'
 import ProductCategories from './containers/ProductCategories'
+import Review from './containers/Review'
 import ProductCategoriesAdd from './components/ProductCategories/ProductCategoriesAdd'
 import ProductCategoriesEdit from './components/ProductCategories/ProductCategoriesEdit'
 import PrintOrder from './containers/PrintOrder'
@@ -48,6 +49,7 @@ const Admin = (props) => {
                     <Route path="/admin/order" exact component={Order} />
                     <Route path="/admin/profile" exact component={Profile} />
                     <Route path="/admin/users" exact component={Users} />
+                    <Route path="/admin/review" exact component={Review} />
                     <Redirect to="/admin/dashboard" />
                 </Switch>
             </div>

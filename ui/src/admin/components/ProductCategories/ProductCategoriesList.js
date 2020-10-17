@@ -18,14 +18,17 @@ class ProductCategoriesList extends Component{
         show:false,
         show1:false,
         show2:false,
+        direction:'default',
         id1:"",
         id2:"",
         offer:"",
         parent:"",
         errors:{
             offer:""
-        }
+        },
+        data:[]
     }
+    
     removeHandler = () =>{
         if(this.state.id)
         {
@@ -93,7 +96,6 @@ class ProductCategoriesList extends Component{
     }
 
     renderProductCategories = (product_categories, active) => {
-        if(product_categories){
         return product_categories.map((product_categories, index) => 
             <tr key={"index"+index+1}>
                 <td>{index+1+active}</td>
@@ -104,8 +106,8 @@ class ProductCategoriesList extends Component{
                 {/* <td><Button variant="info" onClick={() => this.handleShow1(product_categories.id)}>Add</Button></td>
                 <td><Button variant="danger" onClick={() => this.handleRemoveOffer(product_categories.id)}>Remove</Button></td>  */}
             </tr>
-        )
-        }
+    )
+        
     }
     handleChange = (event) => {
         event.preventDefault();
@@ -137,9 +139,23 @@ class ProductCategoriesList extends Component{
     handleRemoveOffer =async(id) => {
         await this.props.editProductOffer(id,0,false);
     }
-   
+    onSortAcending(event, sortKey){
+        const data = this.props.product_categories;
+        if(this.state.direction==='acending' || this.state.direction==='default'){
+            data.sort((a,b) => a[sortKey].localeCompare(b[sortKey]))
+            this.setState({direction:'decending'})
+        }
+    }
+    onSortDecending(event, sortKey){
+        const data = this.props.product_categories;
+        if (this.state.direction==='decending' || this.state.direction==='default'){
+            data.sort((a,b) => b[sortKey].localeCompare(a[sortKey]))
+            this.setState({direction:'acending'})
+        }
+    }  
     render(){
         const {errors} = this.state;
+        
         // let items = [];
         return <> 
         {/* <input type="text" placeholder="Enter Search Here..." className={"form-control"} onKeyUp={(event) => this.setState({searchValue: event.target.value})}/>  */}
@@ -147,7 +163,7 @@ class ProductCategoriesList extends Component{
         <thead>
             <tr>
                 <th>#</th>
-                <th>Category Name</th>
+                <th>Category Name <span onClick={e => this.onSortAcending(e, 'name')}>&#8593;</span><span onClick={e => this.onSortDecending(e, 'name')}>&#8595;</span></th>
                 <th>Image</th>
                 <th>Edit</th>
                 <th>Delete</th>
@@ -176,7 +192,7 @@ class ProductCategoriesList extends Component{
             </tr>
             <tr> 
                 <td>
-                <Button variant="primary" onClick={this.removeHandler}>
+                <Button variant="danger" onClick={this.removeHandler}>
                     Yes, Delete it! 
                 </Button>
                 </td>

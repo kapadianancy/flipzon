@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
 import Modal from 'react-bootstrap/Modal'
 import Alert from 'react-bootstrap/Alert'
-import { fetchOrdersDetails,updateOrders } from '../../store/actions/OrderAction'
+import { fetchOrdersDetails,updateOrders,fetchOrders } from '../../store/actions/OrderAction'
 import { Link } from 'react-router-dom';
 // import ReactToPrint from "react-to-print";
 
@@ -20,6 +20,7 @@ class Order extends Component{
 
     updateHandler = async (id,status) => {
         await this.props.updateOrders(id,status);
+        await this.props.fetchOrders(1,5);
 	};
 	handleHide = (id) => {
 		this.setState({ show: false });
@@ -85,57 +86,91 @@ class Order extends Component{
         // window.close();
         document.body.innerHTML = oldPage
     }
-    renderProductOrder = (orders, activeOld, perPage) => {
-            let ordersArr = [];
-            let active = (activeOld-1)*perPage;
-            for(let i=active;i<(activeOld*perPage);i++) {
-                if(orders[i]) {
-                    ordersArr.push(
-                        <tr key={orders[i].id}>
-                            <td>{i+1}</td>
-                            <td>{orders[i].user.username}</td>
-                            <td>{orders[i].user.address}</td>
-                            <td>{orders[i].user.email}</td>
-                            <td>{orders[i].user.contact}</td>
-                            <td>{orders[i].totalPrice}</td>
-                            <td>{new Date(orders[i].orderDate).toLocaleDateString()}</td>
-                            <td><Button variant="info" onClick={() => this.handleShow(orders[i].id)}>View Order</Button></td>
-                            {
-                             orders[i].status === "Delivered" ? <td><Alert variant="success"> {orders[i].status} </Alert></td> :
-                             orders[i].status === "Canceled" ? <td><Alert variant="danger"> {orders[i].status} </Alert></td> : 
-                            <td><Alert variant="info"> <Alert.Link onClick={() => this.updateHandler(orders[i].id,"Delivered")}>{orders[i].status}</Alert.Link></Alert></td>
-                            }
-                            {/* <td>
-                            <ReactToPrint trigger={() => <a href="#">Print this out!</a>} content={() => this.printOrder} />
-                            <Order ref={el => (this.printOrder = el)} />
-                            </td> */}
-                            <td><Button variant="info" as={Link} to={"/admin/printorder/"+orders[i].id}>Print Bill</Button></td>
-                        </tr>
-                    )
-                }
-            }
-            return ordersArr;
+    renderProductOrder = (orders, active) => {
+            return orders.map((orders, i) => 
+                <tr key={orders.id}>
+                    <td>{i+1+active}</td>
+                    <td>{orders.user.username}</td>
+                    <td>{orders.user.address}</td>
+                    <td>{orders.user.email}</td>
+                    <td>{orders.user.contact}</td>
+                    <td>{orders.totalPrice}</td>
+                    <td>{new Date(orders.orderDate).toLocaleDateString()}</td>
+                    <td><Button variant="info" onClick={() => this.handleShow(orders.id)}>View Order</Button></td>
+                    {
+                        orders.status === "Delivered" ? <td><Alert variant="success"> {orders.status} </Alert></td> :
+                        orders.status === "Canceled" ? <td><Alert variant="danger"> {orders.status} </Alert></td> : 
+                    <td><Alert variant="info"> <Alert.Link onClick={() => this.updateHandler(orders.id,"Delivered")}>{orders.status}</Alert.Link></Alert></td>
+                    }
+                    {/* <td>
+                    <ReactToPrint trigger={() => <a href="#">Print this out!</a>} content={() => this.printOrder} />
+                    <Order ref={el => (this.printOrder = el)} />
+                    </td> */}
+                    <td><Button variant="info" as={Link} to={"/admin/printorder/"+orders.id}>Print Bill</Button></td>
+                </tr>
+            )
         }
-    
+        onSortString(event, sortKey,d){
+            console.log(this.props.orders);
+            const data = this.props.orders;
+            if(d==='a')
+            {
+                data.sort((a,b) => a[sortKey].localeCompare(b[sortKey]))
+                this.setState({direction:'decending'})
+            }
+            else
+            {
+                data.sort((a,b) => b[sortKey].localeCompare(a[sortKey]))
+                this.setState({direction:'acending'})
+            }
+        }
+        onSortNumber(event, sortKey,d){
+            const data = this.props.orders;
+            console.log(this.props.orders);
+            if(d==='a')
+            {
+                data.sort((a,b) => a[sortKey] - b[sortKey])
+                this.setState({direction:'decending'})
+            }
+            else
+            {
+                data.sort((a,b) => b[sortKey] - a[sortKey])
+                this.setState({direction:'acending'})
+            }
+        }
+        onSortDate(event, sortKey,d){
+            const data = this.props.orders;
+            console.log(this.props.orders);
+            if(d==='a')
+            {
+                data.sort((a,b) => new Date(a[sortKey]) - new Date(b[sortKey]))
+                this.setState({direction:'decending'})
+            }
+            else
+            {
+                data.sort((a,b) => new Date(b[sortKey]) - new Date(a[sortKey]))
+                this.setState({direction:'acending'})
+            }
+        }
     render(){
         return <>
         <Table responsive striped bordered hover size="sm">
         <thead>
-        <tr>
+            <tr>
                 <th>#</th>
-                <th>User Name</th>
-                <th>Address</th>
-                <th>Email ID</th>
-                <th>Contact No</th>
-                <th>Total Amount</th>
-                <th>Order Date</th>
+                <th>UserName <span onClick={e => this.onSortNumber(e, 'userId','a')}>&#8593;</span><span onClick={e => this.onSortNumber(e, 'userId','b')}>&#8595;</span> </th>
+                <th>Address <span onClick={e => this.onSortNumber(e, 'userId','a')}>&#8593;</span><span onClick={e => this.onSortNumber(e, 'userId','b')}>&#8595;</span> </th>
+                <th>Email <span onClick={e => this.onSortNumber(e, 'userId','a')}>&#8593;</span><span onClick={e => this.onSortNumber(e, 'userId','b')}>&#8595;</span></th>
+                <th>Contact <span onClick={e => this.onSortNumber(e, 'userId','a')}>&#8593;</span><span onClick={e => this.onSortNumber(e, 'userId','b')}>&#8595;</span></th>
+                <th>TotalAmount <span onClick={e => this.onSortNumber(e, 'totalPrice','a')}>&#8593;</span><span onClick={e => this.onSortNumber(e, 'totalPrice','b')}>&#8595;</span></th>
+                <th>OrderDate <span onClick={e => this.onSortDate(e, 'orderDate','a')}>&#8593;</span><span onClick={e => this.onSortDate(e, 'orderDate','b')}>&#8595;</span></th>
                 <th>Order</th>
                 <th>Status</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-        { this.renderProductOrder(this.props.orders, this.props.active, this.props.perPage) }     
+        { (this.props.orders) ? this.renderProductOrder(this.props.orders, this.props.active) : ""}     
         </tbody>
         </Table>
             
@@ -150,7 +185,7 @@ class Order extends Component{
                 </Modal.Header>	
                 <Modal.Body key={"mindex"} scrollable={"true"}>
                     <Table responsive striped bordered hover size="sm">
-                        {this.renderOrderDetails(this.props.ordersDetails) }
+                        {(this.props.ordersDetails)?this.renderOrderDetails(this.props.ordersDetails):"" }
                     </Table>
                 </Modal.Body>
             </Modal>
@@ -168,7 +203,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         fetchOrdersDetails: (id) => dispatch(fetchOrdersDetails(id)),
-        updateOrders:(id,status)=>dispatch(updateOrders(id,status))
+        updateOrders:(id,status)=>dispatch(updateOrders(id,status)),
+        fetchOrders:(page,limit)=>dispatch(fetchOrders(page,limit))
     }
 }
 
