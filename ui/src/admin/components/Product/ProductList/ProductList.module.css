@@ -1,0 +1,10 @@
+.sortable {
+    /* background-color: rgb(206, 205, 205); */
+    /* padding: 0px 4px; */
+    cursor: pointer;
+}
+.sortable span {
+    /* justify-self: end; */
+    margin-left: 10px;
+    font-weight: bolder;
+}
