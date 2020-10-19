@@ -36,7 +36,8 @@ class ViewOrder extends Component {
                 backgroundColor: "#fb641b",
                 borderColor: "#fb641b",
                 margin: '10px',
-                color: "white"
+                color: "white",
+                display:"inline-block"
             }
         };
       
@@ -58,13 +59,25 @@ class ViewOrder extends Component {
             let btn = null;
             let details=null;
             this.props.orders.map(o => {
+                const date=new Date(Date.parse(o.orderDate)).toString().split("G");
                 let status = "";
                 if (o.status == "Confirm") {
                     status = "btn btn-success btn-circle btn-md";
-                    btn = null;
+                    
                     details=(
-                        <Nav.Link as={Link} className="forgot-link" to={"/vieworderdetails/" + o.id}>Order Details</Nav.Link>
+                        <Nav.Link as={Link} className="forgot-link" style={{display:"inline-block"}} to={"/vieworderdetails/" + o.id}>Order Details</Nav.Link>
                     );
+                    btn = (
+                        <button type="button" style={styles.cardBtn} onClick={() => this.cancelOrder(o.id)}>X</button>
+                    );
+                }
+                else if(o.status=="Delivered")
+                {
+                    status = "btn btn-secondary btn-circle btn-md";
+                    btn=null;
+                    details=(
+                        <Nav.Link as={Link} className="forgot-link" style={{display:"inline-block"}} to={"/vieworderdetails/" + o.id}>Order Details</Nav.Link>
+                    );   
                 }
 
                 else if (o.status == "Cancel") {
@@ -78,22 +91,24 @@ class ViewOrder extends Component {
                     btn = (
                         <button type="button" style={styles.cardBtn} onClick={() => this.cancelOrder(o.id)}>X</button>
                     );
-                    details=null;
+                    details=(
+                        <Nav.Link as={Link} className="forgot-link" style={{display:"inline-block"}} to={"/vieworderdetails/" + o.id}>Order Details</Nav.Link>
+                    );
                 }
 
                 data.push(
 
                     <tr>
-                        <td>{o.orderDate}</td>
+                        <td>{date[0]}</td>
                         <td>{o.totalPrice}</td>
 
                         <td>
                             <button type="button" class={status}>{o.status}</button>
                         </td>
                         <td>
-                            
-                            {btn}
                             {details}
+                            {btn}
+                            
                         </td>
                     </tr>
                 );

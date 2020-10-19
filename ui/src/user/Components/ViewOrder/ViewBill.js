@@ -58,26 +58,26 @@ class viewBill extends Component {
   render() {
     let rows = [];
     let total_price = 0;
+    
 
     this.props.orderItems.map(async (row) => {
       total_price += row.quantity * row.price;
+      
       rows.push(
         <>
-          <table style={{ width: "100%", padding: "5px" }}>
-            <tr>
-              <th>Product</th>
-              <th>Quantity</th>
-              <th>Price</th>
-            </tr>
+            <table style={{ width: "100%", padding: "5px" }}>
+            
             <tr>
               <td>{row.name}</td>
               <td>qty-{row.quantity}</td>
               <td>{row.quantity * row.price}</td>
             </tr>
-          </table>
+          
           <hr />
+          </table>
         </>
       );
+      
 
       return rows;
     });
@@ -111,7 +111,7 @@ class viewBill extends Component {
                   <td>{this.state.contact}</td>
                 </tr>
                 <tr>
-                  <th>delivery name:</th>
+                  <th>delivery address:</th>
                   <td>{this.state.address}</td>
                 </tr>
               </table>

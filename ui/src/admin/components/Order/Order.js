@@ -1,16 +1,17 @@
-import React , {Component} from 'react';
+import React , {Component,useRef } from 'react';
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
 import Modal from 'react-bootstrap/Modal'
 import Alert from 'react-bootstrap/Alert'
-import { fetchOrdersDetails,updateOrders,fetchOrders } from '../../store/actions/OrderAction'
-import { Link } from 'react-router-dom';
-// import ReactToPrint from "react-to-print";
-
+import { fetchOrdersDetails,updateOrders,fetchOrders,fetchOrderBill } from '../../store/actions/OrderAction'
+// import { Link } from 'react-router-dom';
+import PrintOrder from '../../containers/PrintOrder';
 class Order extends Component{
+
 	state = {
-		show: false
+        show: false,
+        print:false
 	};
 
 	handleShow = async (id) => {
@@ -69,22 +70,12 @@ class Order extends Component{
             </tbody>
         )
     }
-    printOrder = (id) => {
-        const ordersHtml = '<html><head><title></title></head><body>'+
-        '<table class="module" role="module" data-type="text" border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed;" data-muid="8b5181ed-0827-471c-972b-74c77e326e3d">'+
-        '<tbody>'+
-          '<tr>'+
-            '<td style="padding:30px 20px 18px 30px; line-height:22px; text-align:inherit;" height="100%" valign="top" bgcolor="" role="module-content"><div><div style="font-family: inherit; text-align: inherit"><span style="color: #0055ff; font-size: 24px">Order Summary</span></div><div></div></div></td>'+
-          '</tr>'+
-        '</tbody>'+
-      '</table></body></html>';
-
-        const oldPage = document.body.innerHTML;
-        document.body.innerHTML = ordersHtml;
-        // window.open();
-        window.print();
-        // window.close();
-        document.body.innerHTML = oldPage
+    printOrders = async (id) => {
+        await this.props.fetchOrderBill(id);
+        this.setState({print:true})
+        // let ordersBill =await this.props.orderBill;
+        // console.log(ordersBill)
+        // return <PrintOrder ordersBill={ordersBill}/>
     }
     renderProductOrder = (orders, active) => {
             return orders.map((orders, i) => 
@@ -102,16 +93,12 @@ class Order extends Component{
                         orders.status === "Canceled" ? <td><Alert variant="danger"> {orders.status} </Alert></td> : 
                     <td><Alert variant="info"> <Alert.Link onClick={() => this.updateHandler(orders.id,"Delivered")}>{orders.status}</Alert.Link></Alert></td>
                     }
-                    {/* <td>
-                    <ReactToPrint trigger={() => <a href="#">Print this out!</a>} content={() => this.printOrder} />
-                    <Order ref={el => (this.printOrder = el)} />
-                    </td> */}
-                    <td><Button variant="info" as={Link} to={"/admin/printorder/"+orders.id}>Print Bill</Button></td>
+                    {/* <td><Button variant="info" as={Link} to={"/admin/printorder/"+orders.id}>Print Bill</Button></td> */}
+                    <td><Button variant="info" onClick={()=>this.printOrders(orders.id)}>Print Bill</Button></td>
                 </tr>
             )
         }
         onSortString(event, sortKey,d){
-            console.log(this.props.orders);
             const data = this.props.orders;
             if(d==='a')
             {
@@ -125,8 +112,7 @@ class Order extends Component{
             }
         }
         onSortNumber(event, sortKey,d){
-            const data = this.props.orders;
-            console.log(this.props.orders);
+            const data = this.props.orders
             if(d==='a')
             {
                 data.sort((a,b) => a[sortKey] - b[sortKey])
@@ -140,7 +126,6 @@ class Order extends Component{
         }
         onSortDate(event, sortKey,d){
             const data = this.props.orders;
-            console.log(this.props.orders);
             if(d==='a')
             {
                 data.sort((a,b) => new Date(a[sortKey]) - new Date(b[sortKey]))
@@ -189,6 +174,7 @@ class Order extends Component{
                     </Table>
                 </Modal.Body>
             </Modal>
+            {(this.props.orderBill)?<PrintOrder ordersBill={this.props.orderBill} print={this.state.print}/>:""}
         </>
     }
 }
@@ -196,7 +182,8 @@ class Order extends Component{
 const mapStateToProps = state => {
     return {
         loading: state.adminOrdersReducer.loading,
-        ordersDetails: state.adminOrdersReducer.ordersDetails
+        ordersDetails: state.adminOrdersReducer.ordersDetails,
+        orderBill:state.adminOrdersReducer.orderBill
     }
 }
 
@@ -204,7 +191,8 @@ const mapDispatchToProps = dispatch => {
     return {
         fetchOrdersDetails: (id) => dispatch(fetchOrdersDetails(id)),
         updateOrders:(id,status)=>dispatch(updateOrders(id,status)),
-        fetchOrders:(page,limit)=>dispatch(fetchOrders(page,limit))
+        fetchOrders:(page,limit)=>dispatch(fetchOrders(page,limit)),
+        fetchOrderBill:(id)=>dispatch(fetchOrderBill(id))
     }
 }
 

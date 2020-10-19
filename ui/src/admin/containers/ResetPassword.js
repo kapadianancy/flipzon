@@ -50,7 +50,7 @@ const ResetPassword = (props) => {
 
     useEffect( () => {
         verifyLink();
-    }, []);
+    }, [verifyLink]);
 
     if(!linkIsValid) {
         content = <p>Link is not valid!</p>

@@ -15,6 +15,7 @@ var upload = multer({ storage: storage });
 var cpUpload = upload.fields([{ name: 'image', maxCount: 1 }, { name: 'images', maxCount: 10 }])
 
 module.exports = (app) => {
+    // i/p: query [ page, limit ]
     app.get("/admin/products", async (req, res, next) => {
         let products = await productService.fetchProducts(req.query.page, req.query.limit);
         res.send(products);
@@ -46,6 +47,9 @@ module.exports = (app) => {
     })
     
     app.post("/admin/products", auth, cpUpload, async (req, res, next) => {
+        if(req.body.specifications) {
+            req.body.specifications = JSON.parse(req.body.specifications);
+        }
         if(!req.files.image) {
             return next({
                 statusCode: 400,
@@ -67,6 +71,9 @@ module.exports = (app) => {
     })
     
     app.put("/admin/products/:id", auth, cpUpload, async (req, res, next) => {
+        if(req.body.specifications) {
+            req.body.specifications = JSON.parse(req.body.specifications);
+        }
         if(req.files.image) {
             req.body = {
                 ...req.body,

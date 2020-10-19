@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { connect } from 'react-redux';
 import ProfileForm from '../components/Auth/ProfileForm';
 import { updateProfile } from '../store/actions/AuthActions'
+
 
 const Profile = (props) => {
     return <>

@@ -1,44 +1,28 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useRef } from 'react';
 
 import Card from 'react-bootstrap/Card'
-import { connect } from 'react-redux'
-
 import PrintOrderList from '../components/Order/PrintOrderList';
-import { fetchOrdersDetails,fetchOrderBill } from '../store/actions/OrderAction';
+// import { connect } from 'react-redux'
+import { useReactToPrint } from 'react-to-print'
+// import PrintOrderList from '../components/Order/PrintOrderList';
+// import { fetchOrdersDetails,fetchOrderBill } from '../store/actions/OrderAction';
 const PrintOrder = (props) => {
-    useEffect( () => {
-        // if(props.orderBill.length === 0)
-        // {
-            props.fetchOrderBill(props.match.params.id);
-        // }
-            props.fetchOrdersDetails(props.match.params.id);
-    }, [props.fetchOrderBill,props.fetchOrdersDetails])
-    let data="";
-    if(props.ordersDetails)
+    useEffect(()=>{
+
+    })
+    const printBlockRef = useRef();
+    const handlePrint = useReactToPrint({
+        content: () => printBlockRef.current,
+    });
+    if(props.ordersBill && props.print === true)
     {
-        data = <PrintOrderList orderBill={props.orderBill} ordersDetails={props.ordersDetails}/>
-    }
+        handlePrint();
+    } 
     return(
-        <Card>
-            <Card.Body>
-                {data}
-            </Card.Body>
-        </Card>
+        <>
+            { props.ordersBill && <PrintOrderList printBlockRef={printBlockRef} orderBill={props.ordersBill}/>  }
+        </>
     )
 }
 
-const mapStateToProps = state => {
-    return {
-        ordersDetails: state.adminOrdersReducer.ordersDetails,
-        orderBill:state.adminOrdersReducer.orderBill
-    }
-}
-
-const mapDispatchToProps = dispatch => {
-    return {
-        fetchOrdersDetails: (id) => dispatch(fetchOrdersDetails(id)),
-        fetchOrderBill:(id) => dispatch(fetchOrderBill(id))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(PrintOrder);
+export default PrintOrder;

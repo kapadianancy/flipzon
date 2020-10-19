@@ -5,6 +5,7 @@ const $or = Op.or;
 const Product = require("../../models/Product");
 const Category = require("../../models/Product_category");
 const ProductImages = require("../../models/Product_image");
+const Specification = require("../../models/Specification");
 
 const fetchProducts = async (page, limit) => {
     let options = {
@@ -16,10 +17,19 @@ const fetchProducts = async (page, limit) => {
         ]
     }
     if(page && limit) {
-        options.offset = page-1;
+        options.offset = 0 + (page-1) * limit;
         options.limit = +limit;
     }
-    return await Product.findAll(options)
+    try {
+        let total = await Product.count({ where: { isDeleted: false }});
+        if(limit) {
+            total = Math.ceil(total / +limit);
+        }
+        let products = await Product.findAll(options);
+        return { total, products }
+    } catch(error) {
+        console.log(error.message);
+    }
 }
 const fetchSingleProduct = async(id) => {
     try {
@@ -39,9 +49,18 @@ const fetchSingleProduct = async(id) => {
             attributes: [ "id", "image" ],
             row: true
         });
+        let specifications = await Specification.findAll({
+            where: {
+                productId: id,
+                isDeleted: false
+            },
+            attributes: [ "id", "title", "details", "isDeleted" ],
+            row: true
+        });
         product = {
             ...product.get({ row: true }),
-            images
+            images,
+            specifications
         }
         return product;
     } catch(error) {
@@ -64,12 +83,13 @@ const searchProducts = async(wordsArr, strong) => {
         });
         return products;
     } catch(error) {
-        console.log(error);
+        console.log("error while searching"+error.message);
         throw error
     }
 }
 const addProduct = async (data, images) => {
     try {
+        // do some validations
         let errorObj = {
             statusCode: 400
         }
@@ -93,6 +113,7 @@ const addProduct = async (data, images) => {
         }
         if(errorObj.message) throw errorObj;
 
+        // create product
         var product = await Product.create({
             name: data.name,
             main_image: data.main_image,
@@ -103,20 +124,29 @@ const addProduct = async (data, images) => {
             isInOffer: data.isInOffer === "true" ? true : false,
             discount: data.isInOffer === "true" ? data.discount : 0,
             videoLink: data.videoLink ? data.videoLink : "",
-
         });
         product = product.get({ row: true })
 
+        // handle product images
         if(images.length > 0) {
             let imageData = images.map( image => ({ image: "/images/"+image.filename, productId: product.id }) );
             images = await ProductImages.bulkCreate(imageData);
             images = images.map( el => el.get({row: true}));
-            product = {
-                ...product,
-                images
-            }
-        } else product.images = []
+        } else images = [];
 
+        // handle product specifications
+        let specifications;
+        if(data.specifications && data.specifications.length > 0) {
+            specifications = await addSpecifications(product.id, data.specifications, false);
+        } else specifications = [];
+        
+        // merge all data
+        product = {
+            ...product,
+            images,
+            specifications
+        }
+        
         return product;
     } catch(error) {
         throw error;
@@ -124,6 +154,7 @@ const addProduct = async (data, images) => {
 }
 const editProduct = async (id, data, images) => {
     try {
+        // do some validations
         let errorObj = { statusCode:400 }
         var product = await Product.findByPk(id);
         if(!product) {
@@ -135,14 +166,23 @@ const editProduct = async (id, data, images) => {
         }
         if(errorObj.message) throw errorObj
 
+        // update product
         product = await Product.update(data, {
             where: { id }
         });
 
+        // handle images
         if(images.length > 0) {
             let imageData = images.map( image => ({ image: "/images/"+image.filename, productId: id }) );
             images = await ProductImages.bulkCreate(imageData);
         } else images = []
+
+        // handle specifications
+        let specifications;
+        if(data.specifications && data.specifications.length > 0) {
+            specifications = await addSpecifications(id, data.specifications, true);
+        } else specifications = [];
+
         return {
             message: "Product Updated"
         }
@@ -202,22 +242,24 @@ const deleteProductImage = async (ids) => {
         throw error;
     }
 }
-const editProductOffer = async (id, discount,offer) => {
-    try {
-        let errorObj = { statusCode:400 }
-        
-        if(errorObj.message) throw errorObj
 
-        let product = await Product.update({discount:discount,isInOffer:offer}, {
-            where: { categoryId:id }
-        });
-        return {
-            message: "Product Updated"
+// extras
+const addSpecifications = async (productId, data, deleteBefore) => {
+    // data format = [ { title, details } ]
+    // console.log(data.specifications);
+    try {
+        if(deleteBefore) {
+            await Specification.destroy({ where: { productId }});
         }
-    } catch (error) {
+        let specifications = data.map( item => ({ title: item.title, details: item.details, productId: productId }));
+        specifications = await Specification.bulkCreate(specifications);
+        specifications = specifications.map( el => el.get({row: true}) );
+        return specifications
+    } catch(error) {
+        console.log("error while adding specifications ", error.message);
         throw error;
     }
-}
+} 
 module.exports = {
     fetchProducts,
     searchProducts,
@@ -226,5 +268,5 @@ module.exports = {
     editProduct,
     deleteProduct,
     deleteProductImage,
-    editProductOffer
+    // editProductOffer
 }

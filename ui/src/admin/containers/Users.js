@@ -5,6 +5,8 @@ import { connect } from 'react-redux'
 import Spinner from 'react-bootstrap/Spinner'
 import Modal from 'react-bootstrap/Modal'
 import Form from 'react-bootstrap/Form'
+import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup'
+import ToggleButton from 'react-bootstrap/ToggleButton'
 
 import * as classes from './Users.module.css'
 import { fetchUserOrders, fetchUsers, deleteUser } from '../store/actions/UserActions'
@@ -15,10 +17,11 @@ const Users = (props) => {
     const [perPage, setPerPage] = useState(5);
     const [active, setActive] = useState(1);
     const [modalOpen, setModalOpen] = useState(false);
+    const [showMode, setShowMode] = useState(1);
 
     useEffect( () => {
-        props.fetchUsers();
-    }, []);
+        props.fetchUsers(active, perPage, showMode);
+    }, [showMode, perPage, active]);
 
     const showUserOrders = async (userId) => {
         setModalOpen(true);
@@ -35,7 +38,7 @@ const Users = (props) => {
     }
     const renderPaginationItems = (total, active, limit, changeActive) => {
         let items = [];
-        for(let i=1;i<=Math.ceil(total/limit);i++) {
+        for(let i=1;i<=total;i++) {
             i===active 
             ? items.push(<Pagination.Item key={i} active>{i}</Pagination.Item>)
             : items.push(<Pagination.Item key={i} onClick={ () => changeActive(i)}>{i}</Pagination.Item>)
@@ -45,9 +48,7 @@ const Users = (props) => {
 
     let data = <Spinner animation="border" />;
     if(!props.loading && props.users) {
-        data = [
-            <UserList key={1} users={props.users} active={active} perPage={perPage} showOrders={showUserOrders} deleteUser={deleteUser} />
-        ]
+        data = <UserList users={props.users} showOrders={showUserOrders} deleteUser={deleteUser} active={(active-1) * perPage} />
     }
     return <>
         <Modal show={modalOpen} onHide={closeModal} size="lg">
@@ -67,13 +68,17 @@ const Users = (props) => {
                 <div className={classes.Title}>
                     Users List
                 </div>
+                <ToggleButtonGroup type="radio" onChange={ (val) => setShowMode(val)} name="showMode" defaultValue={showMode}>
+                    <ToggleButton variant="outline-dark" value={1}>Admin</ToggleButton>
+                    <ToggleButton variant="outline-dark" value={2}>Users</ToggleButton>
+                </ToggleButtonGroup>
             </Card.Header>
             <Card.Body> {data} </Card.Body>
             <Card.Footer className={classes.Footer}>
                 {
                     props.users ?
                     <Pagination key={2} className={classes.Pagination} >
-                        { renderPaginationItems(props.users.length, active, perPage, changeActive) }
+                        { renderPaginationItems(props.totalUsers, active, perPage, changeActive) }
                     </Pagination> :
                     null
                 }
@@ -94,6 +99,7 @@ const mapStateToProps = state => {
         loading: state.adminUser.loading,
         error: state.adminUser.error,
         users: state.adminUser.users,
+        totalUsers: state.adminUser.totalUsers,
         orders: state.adminUser.userOrders,
         ordersLoading: state.adminUser.ordersLoading,
         ordersError: state.adminUser.ordersError
@@ -102,7 +108,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchUsers: () => dispatch(fetchUsers()),
+        fetchUsers: (page, limit, type) => dispatch(fetchUsers(page, limit, type)),
         fetchUserOrders: (userId) => dispatch(fetchUserOrders(userId)),
         deleteUser: (userId) => dispatch(deleteUser(userId))
     }

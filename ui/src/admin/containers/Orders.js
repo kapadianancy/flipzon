@@ -8,6 +8,7 @@ import Spinner from 'react-bootstrap/Spinner'
 import Pagination from 'react-bootstrap/Pagination'
 import Form from 'react-bootstrap/Form'
 import { fetchOrders } from '../store/actions/OrderAction'
+import PrintOrder from '../containers/PrintOrder';
 const renderPaginationItems = (total, active, changeActive) => {
     let items = [];
     for(let i=1;i<=total;i++) {
@@ -40,6 +41,7 @@ const Orders = (props) => {
             </Card.Header>
             <Card.Body>
                {myorders}
+               {/* <PrintOrder ordersBill={props.ordersBill}/> */}
             </Card.Body>
             <Card.Footer className={classes.Footer}>
             {

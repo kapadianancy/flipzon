@@ -35,6 +35,22 @@ export const categoryWiseProduct = (cid) => {
     };
 }
 
+export const getSpecificationByProduct = (pid) => {
+    return async dispatch => {
+
+        await axiosInstance.get('client/getSpecificationByProductId/'+pid).then(response => {
+            dispatch({
+                type: types.DISPLAY_PRODUCT_SPECIFICATION,
+                specification: response.data.product
+            });
+        }).catch(error => {
+            dispatch({
+                error: error.message
+            });
+        })
+    };
+}
+
 export const offerWiseProduct = () => {
     return async dispatch => {
 
@@ -118,6 +134,20 @@ export const addReview = (review) => {
             dispatch({
                 error: error.message
             });
+        })
+    };
+};
+
+export const getReviews = (pid) => {
+    return async dispatch => {
+        await axiosInstance.get("/client/reviews/"+pid).then(response => {
+            console.log(response.data);
+            dispatch({
+                type: types.GET_REVIEWS,
+                review:response.data
+            });
+        }).catch(error => {
+           console.log(error);
         })
     };
 };

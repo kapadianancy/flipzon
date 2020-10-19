@@ -1,177 +1,208 @@
 import React, { Component } from "react";
-import img from '../../../images/product.png';
-import { ListGroup, Button, Row, Form } from 'react-bootstrap';
-import { connect } from 'react-redux';
-import NumericInput from 'react-numeric-input';
+import img from "../../../images/product.png";
+import { ListGroup, Button, Row, Form, Card, Badge } from "react-bootstrap";
+import { connect } from "react-redux";
+import NumericInput from "react-numeric-input";
 import nextId from "react-id-generator";
 import { setPrefix } from "react-id-generator";
 
-import Header from '../../Components/Header/Header';
-import Footer from '../../Components/Footer/Footer';
-import * as actions from '../../redux-store/Actions/ProductAction';
-import * as Orderactions from '../../redux-store/Actions/OrderAction';
+import Header from "../../Components/Header/Header";
+import Footer from "../../Components/Footer/Footer";
+import * as actions from "../../redux-store/Actions/ProductAction";
+import * as Orderactions from "../../redux-store/Actions/OrderAction";
 
 class Product extends Component {
+  state = {
+    products: [],
+    qty: 1,
+  };
 
-    state = {
-        qty: 1
-    }
-    componentDidMount() {
-        this.props.getProducts(this.props.match.params.cid);
-    }
+ 
+  async componentDidMount()
+  {
+    //alert("did");
+   await this.props.getProducts(this.props.match.params.cid);
+    // this.setState({
+    //     products:this.props.products
+    // })
+  }
 
-    componentDidUpdate() {
-        this.props.getProducts(this.props.match.params.cid);
-    }
+  async componentDidUpdate(){
+   // alert("update"+this.props.match.params.cid);
+    await this.props.getProducts(this.props.match.params.cid);
+    // this.setState({
+    //     products:this.props.products
+    // })
+  }
 
-    makeid() {
-       var result           = '';
-       var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-       var charactersLength = characters.length;
-       for ( var i = 0; i < 6; i++ ) {
-          result += characters.charAt(Math.floor(Math.random() * charactersLength));
-       }
-       return result;
+  makeid() {
+    var result = "";
+    var characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    var charactersLength = characters.length;
+    for (var i = 0; i < 6; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
-    
-    addToCart = async (pid, qty) => {
-        // localStorage.removeItem("device");
-    
-        let id;
-        if (this.props.token == "") {
-          if (localStorage.getItem("device") == null) {
-         
-            id = this.makeid();
-            localStorage.setItem("device", id);  
-                  
-          }
-          else
-          {
-              id=localStorage.getItem("device");
-          }
-        } else {
-          id = this.props.userId;
-          // localStorage.removeItem("device");
+    return result;
+  }
+
+  addToCart = async (pid, qty) => {
+    // localStorage.removeItem("device");
+
+    let id;
+    if (this.props.token == "") {
+      if (localStorage.getItem("device") == null) {
+        id = this.makeid();
+        localStorage.setItem("device", id);
+      } else {
+        id = localStorage.getItem("device");
+      }
+    } else {
+      id = this.props.userId;
+      // localStorage.removeItem("device");
+    }
+    //alert("id===="+id);
+    await this.props.addToCart(pid, qty, id);
+    if (this.props.error !== "") {
+      this.props.history.push("/error/" + this.props.error);
+    }
+    this.props.history.push("/viewordercart");
+  };
+
+  clickHandler = (pid) => {
+    this.props.history.push("/productDetails/" + pid);
+  };
+
+  handleChange = (event) => {
+    this.setState({
+      qty: event,
+    });
+  };
+
+  render() {
+    const style = {
+      cardBtn: {
+        alignSelf: "center",
+        backgroundColor: "#fb641b",
+        borderColor: "#fb641b",
+        margin: "10px",
+        color: "white",
+        display: "inline-block",
+      },
+    };
+    let data = [];
+    if (this.props.products.length == 0) {
+      data.push(
+        <div
+          style={{ margin: "auto", marginBottom: "100px", marginTop: "50px" }}
+        >
+          <h1>No data Found</h1>
+        </div>
+      );
+    } else {
+      this.props.products.map((p) => {
+        let disable = false;
+        let x;
+        if (p.stock === 0) {
+          disable = true;
+          x = "Out Of Stock";
         }
-        //alert("id===="+id);
-        await this.props.addToCart(pid, qty, id);
-        if (this.props.error !== "") {
-          this.props.history.push("/error/" + this.props.error);
-        }
-        this.props.history.push("/viewordercart");
-      };
-    
-    clickHandler = (pid) => {
-        this.props.history.push("/productDetails/" + pid);
-    }
 
-    handleChange = (event) => {
-        this.setState({
-            qty: event
-        })
-    }
-
-
-    render() {
-        const style = {
-            cardBtn: {
-                alignSelf: 'center',
-                backgroundColor: "#fb641b",
-                borderColor: "#fb641b",
-                margin: '10px',
-                color: "white",
-                width: '170px'
-            }
-        }
-        let data = [];
-        if (this.props.products.length == 0) {
-            data.push(
-                <div style={{ margin: "auto", marginBottom: '100px', marginTop: '50px' }}>
-                    <h1>No data Found</h1>
+        data.push(
+          <Card
+            style={{ display: "inline-block", width: "24%", margin: "5px" }}
+          >
+            <Form>
+              <div
+                class="card flex-row flex-wrap"
+                style={{ justifyContent: "center", height: "376px" }}
+              >
+                <div class="card-header border-0">
+                  <img
+                    src={`http://localhost:8080${p.main_image}`}
+                    height="150px"
+                    width="100%"
+                    alt="image"
+                  />
                 </div>
-            )
-        }
-        else {
+                <div class="card-block px-2">
+                  <h4 class="card-title">{p.name}</h4>
 
-            this.props.products.map(p => {
+                  {p.discount ? (
+                    <Card.Text>
+                      Price-&#x20B9;{p.price - (p.price * p.discount) / 100}{" "}
+                      <Badge pill variant="success">
+                        Disc-{p.discount}%
+                      </Badge>
+                    </Card.Text>
+                  ) : (
+                      <Card.Text>Price-&#x20B9;{p.price} </Card.Text>
+                    )}
+                  <div className="text-danger">
+                    <b>{x}</b>
+                  </div>
+                  <NumericInput
+                    disabled={disable}
+                    className="form-control"
+                    defaultValue={1}
+                    min={1}
+                    max={p.stock}
+                    step={1}
+                    precision={0}
+                    size={5}
+                    mobile
+                    onChange={(event) => this.handleChange(event)}
+                  />
 
-                let disable = false;
-                let x;
-                if (p.stock === 0) {
-                    disable = true
-                    x = "Out Of Stock";
-                }
-
-                data.push(
-                    <Form>
-                        <ListGroup.Item>
-                            <div class="card flex-row flex-wrap">
-                                <div class="card-header border-0">
-                                    <img src={`http://localhost:8080${p.main_image}`} height="150px" width="200px" alt="image" />
-                                </div>
-                                <div class="card-block px-2">
-                                    <h4 class="card-title">{p.name}</h4>
-                                    <p class="card-text">Description : {p.description}</p>
-                                    <p class="card-text">Price : ₹ {p.price}</p>
-                                    <div className="text-danger"><b>{x}</b></div>
-                                    <NumericInput
-                                        disabled={disable}
-                                        className="form-control"
-                                        defaultValue={1}
-                                        min={1}
-                                        max={p.stock}
-                                        step={1}
-                                        precision={0}
-                                        size={5}
-                                        mobile
-                                        onChange={(event) => this.handleChange(event)}
-                                    />
-
-                                    <Button disabled={disable} id={p.id} style={style.cardBtn} onClick={() => this.addToCart(p.id, this.state.qty)}>Add To Cart</Button>
-                                    <Button style={style.cardBtn} onClick={() => this.clickHandler(p.id)}>View Details</Button>
-                                </div>
-                                <div class="w-100"></div>
-
-                            </div>
-                        </ListGroup.Item>
-                    </Form>
-                );
-                return data;
-            })
-        }
-
-        return (
-            <>
-                <Header />
-
-                <ListGroup style={{ width: "80%", margin: "20px auto" }}>
-
-                    {data}
-
-
-                </ListGroup>
-
-                <Footer />
-            </>
+                  <Button
+                    disabled={disable}
+                    id={p.id}
+                    style={style.cardBtn}
+                    onClick={() => this.addToCart(p.id, this.state.qty)}
+                  >
+                    Add To Cart
+                  </Button>
+                  <Button
+                    style={style.cardBtn}
+                    onClick={() => this.clickHandler(p.id)}
+                  >
+                    View Details
+                  </Button>
+                </div>
+                <div class="w-100"></div>
+              </div>
+            </Form>
+          </Card>
         );
+        return data;
+      });
     }
-};
-const mapStateToProp = (state) => {
-    return {
-        products: state.Product.products,
-        error: state.Order.error,
-        token: state.User.token,
-        userId:state.User.userId
-    }
+
+    return (
+      <>
+        <Header />
+        <div style={{ margin: "30px 30px" }}>
+          <Row style={{ justifyContent: "center" }}>{data}</Row>
+        </div>
+        <Footer />
+      </>
+    );
+  }
 }
+const mapStateToProp = (state) => {
+  return {
+    products: state.Product.catProducts,
+    error: state.Order.error,
+    token: state.User.token,
+    userId: state.User.userId,
+  };
+};
 
 const mapStateToAction = (dispatch) => {
-    return {
-        getProducts: (cid) => dispatch(actions.categoryWiseProduct(cid)),
-        addToCart: (pid, qty,id) => dispatch(Orderactions.addToCart(pid, qty,id))
-    }
-
-}
-
+  return {
+    getProducts: (cid) => dispatch(actions.categoryWiseProduct(cid)),
+    addToCart: (pid, qty, id) => dispatch(Orderactions.addToCart(pid, qty, id)),
+  };
+};
 
 export default connect(mapStateToProp, mapStateToAction)(Product);

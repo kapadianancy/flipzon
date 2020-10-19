@@ -26,17 +26,36 @@ const getAllOrders = async (id) => {
 
 const getOrderBill = async (id) => {
     try{
-        return await Orders.findAll({
-            include: [
-                {
-                    model: user ,as:"user"
-                },
-            ],
-            where: {
+        return await OrdersDetails.findAll({
+            include: [{
+                model:product,as:"product",
+                include:[{
+                    model:productcategory,as:"Product_category"
+                }]
+            },{
+                model:Orders,as:"order",
+                include: [
+                            {
+                                model: user ,as:"user"
+                            },
+                        ]
+            }],
+            where:{
                 IsDeleted:0,
-                id:id
+                orderId:id
             }
         })
+        // return await Orders.findAll({
+        //     include: [
+        //         {
+        //             model: user ,as:"user"
+        //         },
+        //     ],
+        //     where: {
+        //         IsDeleted:0,
+        //         id:id
+        //     }
+        // })
         // return await sequelize.query("SELECT o.*,od.*,p.*,u.* FROM orders o,order_details od,products p,users u WHERE o.id = od.orderId and od.productId=p.id and o.userId = u.id and od.orderId = "+id);;
     }catch(error) {
         throw error;
@@ -189,7 +208,8 @@ var html = "<br/>";
                                 </div>
                             </div><span style="font-size: 18px;"><strong>Item Delivered</strong></span></div>
                             <span style="font-size: 18px;"><span style="color: #000000; font-family: 'Times New Roman'; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;">
-                            <strong>on ${(new Date(d.orderDate)).toLocaleString()}</strong></span><strong>&nbsp;</strong></span>
+                            <strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            on ${(new Date(d.orderDate)).toLocaleString()}</strong></span><strong>&nbsp;</strong></span>
                         </div>
                     </div>
                     ${html1}

@@ -28,10 +28,24 @@ class ReviewList extends Component {
                 <td>{review.product.name}</td>
                 <td>{review.user.username}</td>
                 <td>{review.rating}</td>
+                <td>{new Date(review.updatedAt).toLocaleDateString()}</td>
                 <td><Button onClick={() => this.handleShow(review.id)} variant="danger">Delete</Button></td>
             </tr>
         )
-    }   
+    } 
+    onSortDate(event, sortKey,d){
+        const data = this.props.review;
+        if(d==='a')
+        {
+            data.sort((a,b) => new Date(a[sortKey]) - new Date(b[sortKey]))
+            this.setState({direction:'decending'})
+        }
+        else
+        {
+            data.sort((a,b) => new Date(b[sortKey]) - new Date(a[sortKey]))
+            this.setState({direction:'acending'})
+        }
+    }  
     onSortString(event, sortKey,d){
         const data = this.props.review;
         if(d==='a')
@@ -67,6 +81,7 @@ class ReviewList extends Component {
                 <th>Product <span onClick={e => this.onSortNumber(e, 'productId','a')}>&#8593;</span><span onClick={e => this.onSortNumber(e, 'productId','b')}>&#8595;</span></th>
                 <th>UserName <span onClick={e => this.onSortNumber(e, 'userId','a')}>&#8593;</span><span onClick={e => this.onSortNumber(e, 'userId','b')}>&#8595;</span></th>
                 <th>Rate <span onClick={e => this.onSortNumber(e, 'rating','a')}>&#8593;</span><span onClick={e => this.onSortNumber(e, 'rating','b')}>&#8595;</span></th>
+                <th>Date <span onClick={e => this.onSortDate(e, 'updatedAt','a')}>&#8593;</span><span onClick={e => this.onSortDate(e, 'updatedAt','b')}>&#8595;</span></th>
                 <th>Delete</th>
             </tr>
         </thead>
