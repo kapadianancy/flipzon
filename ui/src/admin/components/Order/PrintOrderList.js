@@ -51,7 +51,7 @@ const printDatasHandler = (bill) => {
     </table> : ""
 )};
 const printDataHandler = (bill) => {
-    return bill.map((bill, index) => <div key={index+1}><table className="module" role="module" data-type="text" border="0" cellPadding="0" cellSpacing="0" width="100%" style={{ tableLayout: 'fixed' }} data-muid="8b5181ed-0827-471c-972b-74c77e326e3d">
+    return bill.map((bill, index) => (index+1 === 1) ? <div key={index+1}><table className="module" role="module" data-type="text" border="0" cellPadding="0" cellSpacing="0" width="100%" style={{ tableLayout: 'fixed' }} data-muid="8b5181ed-0827-471c-972b-74c77e326e3d">
     <tbody>
         <tr>
             <td style={{ padding: '30px 20px 18px 30px', lineHeight: '22px', textAlign: 'inherit' }} height="100%" valign="top" bgcolor="" role="module-content"><div><div style={{ fontFamily: 'inherit', textAlign: 'inherit' }}><span style={{ color: '#0055ff', fontSize: '24px' }}>Order Summary</span></div><div></div></div></td>
@@ -76,7 +76,7 @@ const printDataHandler = (bill) => {
             </td>
         </tr>
     </tbody>
-</table></div>)
+</table></div>:"")
 }
 const printHandler = (ordersDetails) => {
     return ordersDetails.map((ordersDetails, index) =>

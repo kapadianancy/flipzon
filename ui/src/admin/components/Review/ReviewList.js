@@ -2,6 +2,7 @@ import React,{Component} from 'react';
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
+import { FaTrashAlt } from "react-icons/fa";
 
 class ReviewList extends Component {
     state = {
@@ -29,7 +30,7 @@ class ReviewList extends Component {
                 <td>{review.user.username}</td>
                 <td>{review.rating}</td>
                 <td>{new Date(review.updatedAt).toLocaleDateString()}</td>
-                <td><Button onClick={() => this.handleShow(review.id)} variant="danger">Delete</Button></td>
+                <td><Button onClick={() => this.handleShow(review.id)} variant="danger"><FaTrashAlt/></Button></td>
             </tr>
         )
     } 

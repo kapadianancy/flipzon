@@ -45,7 +45,7 @@ const Orders = (props) => {
             </Card.Body>
             <Card.Footer className={classes.Footer}>
             {
-                props.orders ?
+                (props.orders) ?
                 <Pagination className={classes.Pagination} >
                     { renderPaginationItems(props.total, active, changeActive) }
                 </Pagination> : null

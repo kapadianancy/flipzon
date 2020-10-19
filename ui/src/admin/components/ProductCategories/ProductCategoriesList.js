@@ -5,6 +5,8 @@ import FormLabel from 'react-bootstrap/FormLabel'
 import { connect } from 'react-redux'
 import { Link } from 'react-router-dom';
 import './ProductList.module.css'
+import { FaEdit , FaTrashAlt } from "react-icons/fa";
+import { MdModeEdit, MdDelete } from 'react-icons/md' 
 // import Spinner from 'react-bootstrap/Spinner'
 import Modal from 'react-bootstrap/Modal'
 import { Form} from 'react-bootstrap'
@@ -60,27 +62,7 @@ class ProductCategoriesList extends Component{
         this.setState({id2:id,parent:name,show2: true })
     }
     handleParent = (categories) => {
-        let arr = [];
         let len = categories.length;
-        let data = "";
-        for (let index = 0; index < len; index++) {
-            if(len > 1)
-            {
-                if(index===0)
-                {
-                    data+=<ListGroup.Item>{"Sub Categories of : "+categories[index].name}</ListGroup.Item>
-                }
-                else
-                {
-                    data+=<ListGroup.Item>{categories[index].name}</ListGroup.Item>     
-                }
-            }
-            else
-            {
-                data+=<ListGroup.Item>{"There Is No Sub Categories of : "+categories[index].name}</ListGroup.Item>     
-            }
-            arr.push(data);
-        }
         // return arr;
         if(len===0)
         {
@@ -101,8 +83,8 @@ class ProductCategoriesList extends Component{
                 <td>{index+1+active}</td>
                 <td><FormLabel onClick={() => this.handleShowCategories(product_categories.id,product_categories.name)}>{product_categories.name}</FormLabel></td>
                 <td><img src={"http://localhost:8080"+((product_categories.image).replace('/public',''))} alt="description" width="50px"/></td>
-                <td><Button variant="info" onClick={() => this.updateHandler(product_categories.id)} as={Link} to={`/admin/ProductCategoriesEdit/${product_categories.id}`}>Edit</Button></td>
-                <td><Button variant="danger" onClick={() => this.handleShow(product_categories.id)}>Delete</Button></td>
+                <td><Button onClick={() => this.updateHandler(product_categories.id)} as={Link} to={`/admin/ProductCategoriesEdit/${product_categories.id}`}><FaEdit/></Button></td>
+                <td><Button variant="danger" onClick={() => this.handleShow(product_categories.id)}><FaTrashAlt/></Button></td>
                 {/* <td><Button variant="info" onClick={() => this.handleShow1(product_categories.id)}>Add</Button></td>
                 <td><Button variant="danger" onClick={() => this.handleRemoveOffer(product_categories.id)}>Remove</Button></td>  */}
             </tr>
@@ -155,8 +137,6 @@ class ProductCategoriesList extends Component{
     }  
     render(){
         const {errors} = this.state;
-        
-        // let items = [];
         return <> 
         {/* <input type="text" placeholder="Enter Search Here..." className={"form-control"} onKeyUp={(event) => this.setState({searchValue: event.target.value})}/>  */}
         <Table responsive striped bordered hover size="sm">

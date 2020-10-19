@@ -6,15 +6,16 @@ import Modal from 'react-bootstrap/Modal'
 import Alert from 'react-bootstrap/Alert'
 import { fetchOrdersDetails,updateOrders,fetchOrders,fetchOrderBill } from '../../store/actions/OrderAction'
 // import { Link } from 'react-router-dom';
+import { FaPrint,FaRegEye } from "react-icons/fa";
 import PrintOrder from '../../containers/PrintOrder';
 class Order extends Component{
-
 	state = {
         show: false,
         print:false
 	};
 
 	handleShow = async (id) => {
+        this.setState({print:false})
 		await this.props.fetchOrdersDetails(id);
 		this.setState({ show: true });
 	};
@@ -87,14 +88,14 @@ class Order extends Component{
                     <td>{orders.user.contact}</td>
                     <td>{orders.totalPrice}</td>
                     <td>{new Date(orders.orderDate).toLocaleDateString()}</td>
-                    <td><Button variant="info" onClick={() => this.handleShow(orders.id)}>View Order</Button></td>
                     {
                         orders.status === "Delivered" ? <td><Alert variant="success"> {orders.status} </Alert></td> :
                         orders.status === "Canceled" ? <td><Alert variant="danger"> {orders.status} </Alert></td> : 
                     <td><Alert variant="info"> <Alert.Link onClick={() => this.updateHandler(orders.id,"Delivered")}>{orders.status}</Alert.Link></Alert></td>
                     }
+                    <td><Button variant="outline-primary" onClick={() => this.handleShow(orders.id)}><FaRegEye/></Button></td>
                     {/* <td><Button variant="info" as={Link} to={"/admin/printorder/"+orders.id}>Print Bill</Button></td> */}
-                    <td><Button variant="info" onClick={()=>this.printOrders(orders.id)}>Print Bill</Button></td>
+                    <td><Button variant="info" onClick={()=>this.printOrders(orders.id)}><FaPrint/></Button></td>
                 </tr>
             )
         }
@@ -149,16 +150,15 @@ class Order extends Component{
                 <th>Contact <span onClick={e => this.onSortNumber(e, 'userId','a')}>&#8593;</span><span onClick={e => this.onSortNumber(e, 'userId','b')}>&#8595;</span></th>
                 <th>TotalAmount <span onClick={e => this.onSortNumber(e, 'totalPrice','a')}>&#8593;</span><span onClick={e => this.onSortNumber(e, 'totalPrice','b')}>&#8595;</span></th>
                 <th>OrderDate <span onClick={e => this.onSortDate(e, 'orderDate','a')}>&#8593;</span><span onClick={e => this.onSortDate(e, 'orderDate','b')}>&#8595;</span></th>
+                <th>Status <span onClick={e => this.onSortString(e, 'status','a')}>&#8593;</span><span onClick={e => this.onSortString(e, 'status','b')}>&#8595;</span></th>
                 <th>Order</th>
-                <th>Status</th>
-                <th></th>
+                <th>Bill</th>
             </tr>
         </thead>
         <tbody>
         { (this.props.orders) ? this.renderProductOrder(this.props.orders, this.props.active) : ""}     
         </tbody>
-        </Table>
-            
+        </Table>    
             <Modal show={this.state.show}
                 onHide={this.handleHide}
                 dialogClassName="modal-90w"
