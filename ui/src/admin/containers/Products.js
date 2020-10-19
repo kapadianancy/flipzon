@@ -7,6 +7,10 @@ import Pagination from 'react-bootstrap/Pagination'
 import Spinner from 'react-bootstrap/Spinner'
 import Form from 'react-bootstrap/Form'
 import { useReactToPrint } from 'react-to-print'
+import { IoMdAddCircle } from 'react-icons/io'
+import { BiShow } from 'react-icons/bi'
+import { FaSearch, FaPrint } from 'react-icons/fa'
+import { HiViewList } from 'react-icons/hi'
 
 import * as classes from './Products.module.css'
 import ProductList from '../components/Product/ProductList/ProductList';
@@ -54,13 +58,13 @@ const Products = (props) => {
                     <div className={classes.Title}>
                         Product List
                     </div>
-                    <div className="input-group" style={{ maxWidth: "400px" }}>
+                    <div className="input-group" style={{ maxWidth: "450px" }}>
                         <input type="text" className="form-control" placeholder="Product Name" value={searchText} onChange={ (e) => setSearchText(e.target.value) } />
                         <div className="input-group-append" id="button-addon4">
-                            <Button variant="outline-success" onClick={() => searchProducts()}>Search</Button>
-                            <Button variant="outline-secondary" onClick={ () => props.fetchProducts()}>Show All</Button>
-                            <Button as={Link} to={`${props.match.path}/add`} variant="outline-primary">Add New</Button>
-                            <Button onClick={handlePrint} variant="outline-info">Print</Button>
+                            <Button variant="outline-success" onClick={() => searchProducts()}><FaSearch /></Button>
+                            <Button variant="outline-secondary" onClick={ () => props.fetchProducts(1, perPage)}><HiViewList /></Button>
+                            <Button as={Link} to={`${props.match.path}/add`} variant="outline-primary"><IoMdAddCircle /></Button>
+                            <Button onClick={handlePrint} variant="outline-info"><FaPrint /></Button>
                         </div>
                     </div>
                 </Card.Header>

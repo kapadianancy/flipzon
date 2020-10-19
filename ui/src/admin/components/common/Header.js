@@ -7,6 +7,8 @@ import Image from 'react-bootstrap/Image'
 import Badge from 'react-bootstrap/Badge'
 import Button from 'react-bootstrap/Button'
 import DropdownMenu from 'react-bootstrap/esm/DropdownMenu';
+import { FaUserCircle } from 'react-icons/fa'
+import { MdNotificationsActive } from 'react-icons/md'
 
 // pencil  	&#x270F; 
 // cross  	&#x2A2F; 
@@ -47,8 +49,8 @@ const Header = (props) => {
         {
             props.OOSProducts &&
             <Dropdown className={classes.dropdown}>
-                <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components">
-                    &#x1F514; <Badge variant="light">{ props.OOSProducts.length }</Badge>
+                <Dropdown.Toggle as={CustomToggle} id="dropdown-custom-components" >
+                    <MdNotificationsActive className={classes.notification} /> <Badge variant="light">{ props.OOSProducts.length }</Badge>
                 </Dropdown.Toggle>
                 <DropdownMenu className={classes.dropdownMenu} aria-labelledby="dropdown-menu-align-right">
                     {
@@ -70,10 +72,15 @@ const Header = (props) => {
             </Dropdown>
         }
 
-        <DropdownButton drop="left" id="dropdown-basic-button" title={props.user.username+" "}>
-            <Dropdown.Item as={NavLink} to="/admin/profile">Manage Profile</Dropdown.Item>
-            <Dropdown.Item onClick={() => props.logout()} href="#">Logout</Dropdown.Item>
-        </DropdownButton>
+        <Dropdown className={classes.dropdown}>
+            <Dropdown.Toggle as={CustomToggle}>
+                <FaUserCircle className={classes.profile} />
+            </Dropdown.Toggle>
+            <Dropdown.Menu className={classes.profileDropdown}>
+                <Dropdown.Item as={NavLink} to="/admin/profile">Manage Profile</Dropdown.Item>
+                <Dropdown.Item onClick={() => props.logout()} href="#">Logout</Dropdown.Item>
+            </Dropdown.Menu>
+        </Dropdown>
     </Navbar.Collapse>
   </Navbar>
 }
