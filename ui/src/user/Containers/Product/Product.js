@@ -17,7 +17,6 @@ class Product extends Component {
     qty: 1,
   };
 
- 
   async componentDidMount()
   {
     //alert("did");
@@ -34,6 +33,17 @@ class Product extends Component {
     //     products:this.props.products
     // })
   }
+
+    
+
+  //   async componentWillUpdate() {
+  //       await this.props.getProducts(this.props.match.params.cid);
+  //       this.setState({
+  //           ...this.state,
+  //           products:this.props.products
+  //       })
+
+  // }
 
   makeid() {
     var result = "";

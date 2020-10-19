@@ -33,7 +33,10 @@ class viewBill extends Component {
 
   placeOrder = async () => {
     await this.props.placeOrder(this.props.orderItems[0].orderId);
-    alert("Your Order Is Placed . check Your email for confirmation");
+    var ask = window.confirm("Your Order Is Placed . check Your email for confirmation");
+    if (ask) {
+      this.props.history.push('/');
+    }
   };
 
   payment=()=>

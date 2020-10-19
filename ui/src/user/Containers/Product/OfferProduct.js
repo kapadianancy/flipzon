@@ -182,7 +182,7 @@ class OfferProduct extends Component {
 }
 const mapStateToProp = (state) => {
   return {
-    products: state.Product.products,
+    products: state.Product.offer_products,
     error: state.Order.error,
     token: state.User.token,
     userId: state.User.userId,

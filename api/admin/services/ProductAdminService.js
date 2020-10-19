@@ -67,6 +67,29 @@ const fetchSingleProduct = async(id) => {
         throw error;
     }
 }
+const fetchOutOfStockProducts = async (limit = 5, ascending=true) => {
+    try {
+        if(!limit) limit = 5;
+        if(!ascending) ascending = true
+        let products = await Product.findAll({
+            where: {
+                stock: {
+                    [Op.lte]: limit
+                },
+                isDeleted: false
+            },
+            order: [
+                ["stock", ascending ? "ASC" : "DESC" ]
+            ]
+        });
+        return products;
+    } catch (error) {
+        throw {
+            statusCode: 400,
+            message: error.message
+        }
+    }
+}
 const searchProducts = async(wordsArr, strong) => {
     try {
         let qry = wordsArr.map( word => ({ [Op.like]: `%${word}%` }))
@@ -268,5 +291,6 @@ module.exports = {
     editProduct,
     deleteProduct,
     deleteProductImage,
+    fetchOutOfStockProducts,
     // editProductOffer
 }

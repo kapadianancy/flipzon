@@ -1,6 +1,7 @@
 const productService = require("../services/ProductAdminService");
 var multer  = require('multer');
 const auth = require("../middlewares/auth");
+const ProductAdminService = require("../services/ProductAdminService");
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -114,6 +115,15 @@ module.exports = (app) => {
         try {
             let product = await productService.deleteProduct(req.params.id);
             res.send(product);
+        } catch (error) {
+            next(error);
+        }
+    })
+
+    app.get("/admin/outOfStock", auth, async (req,res,next) => {
+        try {
+            let products = await ProductAdminService.fetchOutOfStockProducts(req.query.limit, req.query.ascending);
+            res.send(products);
         } catch (error) {
             next(error);
         }

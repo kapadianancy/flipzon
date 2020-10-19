@@ -66,6 +66,7 @@ const ProductForm = (props) => {
     })
     const [titles, setTitles] = useState([]);
     const [details, setDetails] = useState([]);
+    const [step, setStep] = useState(1);
 
     useEffect(() => {
         if(props.edit && props.product.name) {
@@ -110,8 +111,8 @@ const ProductForm = (props) => {
 
         setProduct(oldProduct);
     }
-    const validate = async (e) => {
-        e.preventDefault();
+    const validate = async (doSubmit) => {
+        // e.preventDefault();
         let errors = { ...formErrors, isFormValid: true };
         if(!product.name || product.name === "") {
             errors.nameError = "Name is required";
@@ -131,7 +132,11 @@ const ProductForm = (props) => {
         } else errors.main_imageError = "";
         setFormErrors(errors);
         if(errors.isFormValid) {
-            await submit();
+            doSubmit 
+            ? await submit()
+            : setStep(2);
+        } else {
+            setStep(1);
         }
     }
     const submit = async () => {
@@ -219,168 +224,174 @@ const ProductForm = (props) => {
             setDetails(newDetails); 
         }
     }
+    const nextStep = () => {
+        if(step===1) {
+            validate(false);
+        } else {
+            setStep(step+1);
+        }
+    }
 
-    return (
-        <Form>
-            <Form.Group as={Row}>
-                <Form.Label column sm="1">Name</Form.Label>
-                <Col sm="11">
-                    <Form.Control value={product.name} 
-                        isInvalid={ !formErrors.isFormValid && formErrors.nameError !== "" } 
-                        onChange={ (e) => productFieldChanged(e, "name")}  type="text" placeholder="Product Name" />
-                    <Form.Control.Feedback type="invalid">
-                        { formErrors.nameError }
-                    </Form.Control.Feedback>
-                </Col>
-            </Form.Group>
+    let content = <>
+                <Form.Group as={Row}>
+                    <Form.Label column sm="1">Name</Form.Label>
+                    <Col sm="11">
+                        <Form.Control value={product.name} 
+                            isInvalid={ !formErrors.isFormValid && formErrors.nameError !== "" } 
+                            onChange={ (e) => productFieldChanged(e, "name")}  type="text" placeholder="Product Name" />
+                        <Form.Control.Feedback type="invalid">
+                            { formErrors.nameError }
+                        </Form.Control.Feedback>
+                    </Col>
+                </Form.Group>
 
-            <Row>
-                <Col sm="6">
-                    <Form.Group as={Row}>
-                        <Form.Label column sm="2">Price</Form.Label>
-                        <Col sm="10">
-                            <Form.Control 
-                                isInvalid={ !formErrors.isFormValid && formErrors.priceError !== "" } 
-                                value={product.price} onChange={ (e) => productFieldChanged(e, "price")} type="number" placeholder="Product Price" />
-                            <Form.Control.Feedback type="invalid">
-                                { formErrors.priceError }
-                            </Form.Control.Feedback>
-                        </Col>
-                    </Form.Group>
-                </Col>
-                <Col sm="6">
-                    <Form.Group as={Row}>
-                        <Form.Label column sm="2">Stock</Form.Label>
-                        <Col sm="10">
-                            <Form.Control
-                                isInvalid={ !formErrors.isFormValid && formErrors.stockError !== "" }  
-                                value={product.stock} onChange={ (e) => productFieldChanged(e, "stock")} type="number" placeholder="Product Stock" />
-                            <Form.Control.Feedback type="invalid">
-                                { formErrors.stockError }
-                            </Form.Control.Feedback>
-                        </Col>
-                    </Form.Group>
-                </Col>
-            </Row>
-
-            <Row>
-                <Col sm="6">
-                    <Form.Group as={Row}>
-                        <Form.Label column sm="2">Video</Form.Label>
-                        <Col sm="10">
-                            <Form.Control 
-                                value={product.videoLink} 
-                                onChange={ (e) => productFieldChanged(e, "videoLink")} 
-                                type="text" 
-                                placeholder="Youtube Video Link" />
-                        </Col>
-                    </Form.Group>
-                </Col>
-                <Col sm="6">
-                    <Form.Group as={Row}>
-                        <Form.Label column sm="2">Category</Form.Label>
-                        <Col sm="10">
-                            <Form.Control as="select" onChange={ (e) => productFieldChanged(e, "categoryId")} value={product.categoryId}>
-                                {
-                                    props.categories.map( category => <option key={category.id} value={category.id}>{category.name}</option>)
-                                }
-                            </Form.Control>
-                        </Col>
-                    </Form.Group>
-                </Col>
-            </Row>
-
-            <Row>
-                <Col sm="6">
+                <Row>
+                    <Col sm="6">
                         <Form.Group as={Row}>
-                            <Form.Label column sm="2"></Form.Label>
+                            <Form.Label column sm="2">Price</Form.Label>
                             <Col sm="10">
-                                <Form.Check
-                                    type="checkbox"
-                                    id="customControlInline"
-                                    label="In Offer?"
-                                    checked={product.isInOffer}
-                                    custom
-                                    value={product.isInOffer}
-                                    onChange={ (e) => productFieldChanged(e, "isInOffer")}
+                                <Form.Control 
+                                    isInvalid={ !formErrors.isFormValid && formErrors.priceError !== "" } 
+                                    value={product.price} onChange={ (e) => productFieldChanged(e, "price")} type="number" placeholder="Product Price" />
+                                <Form.Control.Feedback type="invalid">
+                                    { formErrors.priceError }
+                                </Form.Control.Feedback>
+                            </Col>
+                        </Form.Group>
+                    </Col>
+                    <Col sm="6">
+                        <Form.Group as={Row}>
+                            <Form.Label column sm="2">Stock</Form.Label>
+                            <Col sm="10">
+                                <Form.Control
+                                    isInvalid={ !formErrors.isFormValid && formErrors.stockError !== "" }  
+                                    value={product.stock} onChange={ (e) => productFieldChanged(e, "stock")} type="number" placeholder="Product Stock" />
+                                <Form.Control.Feedback type="invalid">
+                                    { formErrors.stockError }
+                                </Form.Control.Feedback>
+                            </Col>
+                        </Form.Group>
+                    </Col>
+                </Row>
+
+                <Row>
+                    <Col sm="6">
+                        <Form.Group as={Row}>
+                            <Form.Label column sm="2">Video</Form.Label>
+                            <Col sm="10">
+                                <Form.Control 
+                                    value={product.videoLink} 
+                                    onChange={ (e) => productFieldChanged(e, "videoLink")} 
+                                    type="text" 
+                                    placeholder="Youtube Video Link" />
+                            </Col>
+                        </Form.Group>
+                    </Col>
+                    <Col sm="6">
+                        <Form.Group as={Row}>
+                            <Form.Label column sm="2">Category</Form.Label>
+                            <Col sm="10">
+                                <Form.Control as="select" onChange={ (e) => productFieldChanged(e, "categoryId")} value={product.categoryId}>
+                                    {
+                                        props.categories.map( category => <option key={category.id} value={category.id}>{category.name}</option>)
+                                    }
+                                </Form.Control>
+                            </Col>
+                        </Form.Group>
+                    </Col>
+                </Row>
+
+                <Row>
+                    <Col sm="6">
+                            <Form.Group as={Row}>
+                                <Form.Label column sm="2"></Form.Label>
+                                <Col sm="10">
+                                    <Form.Check
+                                        type="checkbox"
+                                        id="customControlInline"
+                                        label="In Offer?"
+                                        checked={product.isInOffer}
+                                        custom
+                                        value={product.isInOffer}
+                                        onChange={ (e) => productFieldChanged(e, "isInOffer")}
+                                    />
+                                </Col>
+                            </Form.Group>
+                    </Col>
+                    <Col sm="6">
+                        <Form.Group as={Row}>
+                            <Form.Label column sm="2">Discount</Form.Label>
+                            <Col sm="10">
+                                <Form.Control
+                                    disabled={!product.isInOffer}
+                                    value={product.discount} 
+                                    onChange={ (e) => productFieldChanged(e, "discount")} 
+                                    type="number" placeholder="Product Discount" 
                                 />
                             </Col>
                         </Form.Group>
-                </Col>
-                <Col sm="6">
-                    <Form.Group as={Row}>
-                        <Form.Label column sm="2">Discount</Form.Label>
-                        <Col sm="10">
-                            <Form.Control
-                                disabled={!product.isInOffer}
-                                className="col-10"
-                                value={product.discount} 
-                                onChange={ (e) => productFieldChanged(e, "discount")} 
-                                type="number" placeholder="Product Discount" 
-                            />
-                        </Col>
-                    </Form.Group>
-                </Col>
-            </Row>
+                    </Col>
+                </Row>
 
-            <Row>
-                <Col sm="6">
-                    <Form.Group as={Row}>
-                        <Form.Label column sm="2">Main Img</Form.Label>
-                        <Col sm="10">
-                            { 
-                                !formErrors.isFormValid && formErrors.main_imageError !== "" ? 
-                                <>
-                                    <input type="file" onChange={ (e) => productFieldChanged(e, "main_image", "image")} className="form-control is-invalid" accept="image/*" />
-                                    <div className="invalid-feedback">{ formErrors.main_imageError }</div>
-                                </> :
-                                <input type="file" onChange={ (e) => productFieldChanged(e, "main_image", "image")} className="form-control" accept="image/*" />
-                            }
-                            {
-                                props.edit ?
-                                <Image src={`http://localhost:8080/${props.product.main_image}`} className={classes.mainImage} /> : null
-                            }
-                        </Col>
-                    </Form.Group>
-                </Col>
-                <Col sm="6">
-                    <Form.Group as={Row}>
-                        <Form.Label column sm="2">Extra Imgs</Form.Label>
-                        <Col sm="10">
-                            <input type="file" onChange={ (e) => productFieldChanged(e, "ext_images", "images")} className="form-control" multiple accept="image/*" />
-                            {
-                                props.edit && props.product.images && props.product.images.length > 0 ?
-                                    <Row>
-                                        {
-                                            props.product.images.map( image => (
-                                                <Col key={image.id} sm="4">
-                                                    <div className={classes.iContainer} onClick={() => imageCheckboxChange(image.id)} >
-                                                        <Image src={`http://localhost:8080/${image.image}`} />
-                                                        { 
-                                                            ids.has(image.id) && <div className={classes.after}>&#10004;</div>
-                                                        }
-                                                    </div>
-                                                </Col>
-                                            ))
-                                        }
-                                    </Row>
-                                : null
-                            }
-                            <Button onClick={deleteImages} disabled={ ids.size === 0 || props.loading } className="my-2 float-right" variant="danger" type="button">Delete All</Button>
-                        </Col>
-                    </Form.Group>
-                </Col>
-            </Row>
-
-            <Row>
+                <Row>
+                    <Col sm="6">
+                        <Form.Group as={Row}>
+                            <Form.Label column sm="2">Main Img</Form.Label>
+                            <Col sm="10">
+                                { 
+                                    !formErrors.isFormValid && formErrors.main_imageError !== "" ? 
+                                    <>
+                                        <input type="file" onChange={ (e) => productFieldChanged(e, "main_image", "image")} className="form-control is-invalid" accept="image/*" />
+                                        <div className="invalid-feedback">{ formErrors.main_imageError }</div>
+                                    </> :
+                                    <input type="file" onChange={ (e) => productFieldChanged(e, "main_image", "image")} className="form-control" accept="image/*" />
+                                }
+                                {
+                                    props.edit ?
+                                    <Image src={`http://localhost:8080/${props.product.main_image}`} className={classes.mainImage} /> : null
+                                }
+                            </Col>
+                        </Form.Group>
+                    </Col>
+                    <Col sm="6">
+                        <Form.Group as={Row}>
+                            <Form.Label column sm="2">Extra Imgs</Form.Label>
+                            <Col sm="10">
+                                <input type="file" onChange={ (e) => productFieldChanged(e, "ext_images", "images")} className="form-control" multiple accept="image/*" />
+                                {
+                                    props.edit && props.product.images && props.product.images.length > 0 ?
+                                        <Row>
+                                            {
+                                                props.product.images.map( image => (
+                                                    <Col key={image.id} sm="4">
+                                                        <div className={classes.iContainer} onClick={() => imageCheckboxChange(image.id)} >
+                                                            <Image src={`http://localhost:8080/${image.image}`} />
+                                                            { 
+                                                                ids.has(image.id) && <div className={classes.after}>&#10004;</div>
+                                                            }
+                                                        </div>
+                                                    </Col>
+                                                ))
+                                            }
+                                        </Row>
+                                    : null
+                                }
+                                <Button onClick={deleteImages} disabled={ ids.size === 0 || props.loading } className="my-2 float-right" variant="danger" type="button">Delete All</Button>
+                            </Col>
+                        </Form.Group>
+                    </Col>
+                </Row>
+            </>
+    if(step === 2) {
+        content = <Row>
                 <Form.Label column sm="1">Specs</Form.Label>
                 <Col sm="11">
                     { renderSpecifications(titles, details, handleSpecDataChange, deleteSpecification) }
                     <Button variant="primary" onClick={() => addSpecification()}>+</Button>
                 </Col>
             </Row>
-
-            <Form.Group as={Row} className="mt-2">
+    } else if(step === 3) {
+        content = <Form.Group as={Row} className="mt-2">
                 <Form.Label column sm="1">Description</Form.Label>
                 <Col sm="11">
                 <SunEditor 
@@ -401,14 +412,42 @@ const ProductForm = (props) => {
                 />
                 </Col>
             </Form.Group>
+    }
 
-            { props.error ? <p className="text-danger">{props.error}</p> : null }
-            {
-                props.loading ?
-                <Spinner animation="border" /> :
-                <Button onClick={validate} disabled={props.loading} variant="primary" type="submit">Submit</Button>
-            }
-        </Form>
+    return (
+        <>
+            <div className="row form-group">
+                <div className="col-12">
+                    <ul className={classes.tabs}>
+                        <li className={ step === 1 ? classes.tabActive : classes.tabNotActive } onClick={() => setStep(1)}>
+                            <h4 className="list-group-item-heading">1</h4>
+                            <p className="list-group-item-text">Product Details</p>
+                        </li>
+                        <li className={step === 2 ? classes.tabActive : classes.tabNotActive} onClick={() => setStep(2)}>
+                            <h4 className="list-group-item-heading">2</h4>
+                            <p className="list-group-item-text">Product Specifications</p>
+                        </li>
+                        <li className={step === 3 ? classes.tabActive : classes.tabNotActive} onClick={() => setStep(3)}>
+                            <h4 className="list-group-item-heading">3</h4>
+                            <p className="list-group-item-text">Product Description</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div className={classes.content}>
+                { content }
+                { props.error ? <p className="text-danger">{props.error}</p> : null }
+                {
+                    props.loading 
+                    ? <Spinner animation="border" />
+                    :   step === 3
+                        ? <Button onClick={() => validate(true)} disabled={props.loading} variant="primary" type="button">Submit</Button>
+                        : <Button onClick={nextStep} disabled={props.loading} variant="info" type="button">Next</Button>
+                }
+            </div>
+
+        </>
     )
 }
 

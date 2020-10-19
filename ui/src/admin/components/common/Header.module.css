@@ -10,3 +10,72 @@
     border-bottom: 3px solid goldenrod;
     color: white !important;
 }
+.dropdown {
+    margin: 0px 10px !important;
+}
+.dropdownMenu {
+    /* position: absolute;
+    top: 100%;
+    z-index: 1000;
+    display: none;
+    float: right; */
+    right: 0 !important;
+    left: auto !important;
+    width: 25rem;
+    padding: 0px !important;
+    max-height: 400px;
+    overflow: auto;
+    /* margin: .125rem 0 0;
+    font-size: 1rem;
+    color: #212529;
+    text-align: left;
+    list-style: none;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: .25rem; */
+}
+.show {
+    display: block;
+}
+
+.notificationTile {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    border-bottom: 0.3px solid rgb(196, 196, 196);
+    background-color: gainsboro;
+}
+.notificationActions {
+    width: 10%;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+.notificationEdit {
+    height: 50%;
+    width: 100%;
+    background-color: #0152d0;
+    font-size: medium;
+    font-weight: bold;
+    color: white;
+    border: 1.5px solid #004d66;
+    text-align: center;
+    border-top-left-radius: .25rem;
+    border-top-left-radius: .25rem;
+}
+.notificationIgnore {
+    height: 50%;
+    width: 100%;
+    background-color: gold;
+    font-size: medium;
+    font-weight: bold;
+    text-align: center;
+    border: 1.5px solid goldenrod;
+    border-bottom-left-radius: .25rem;
+    border-bottom-left-radius: .25rem;
+}
+.notificationText {
+    width: 90%;
+    padding: 5px;
+}

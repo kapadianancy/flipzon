@@ -166,8 +166,17 @@ class Product extends Component {
     if (this.props.specification.length !== 0) {
       this.props.specification.map(s => {
         specification.push(
-          <tr><td style={style.tableTD}>{s.title}</td>
-            <td style={style.tableTD}>{s.details}</td></tr>
+          // <tr><td style={style.tableTD}>{s.title}</td>
+          //   <td style={style.tableTD}>{s.details}</td></tr>
+          <>
+            <h6>
+              {s.title}
+            </h6>
+            <div
+              id="table-div"
+              dangerouslySetInnerHTML={{ __html: s.details }}
+            ></div>
+          </>
         )
         return specification
       })
@@ -265,7 +274,7 @@ class Product extends Component {
               </div>
               <div
                 class="card-block px-2"
-                style={{ marginLeft: "20px", textAlign: "left", width: "50%",minHeight:"700px" }}
+                style={{ marginLeft: "20px", textAlign: "left", width: "50%", minHeight: "700px" }}
               >
                 <h1
                   class="card-title"
@@ -286,12 +295,12 @@ class Product extends Component {
                     {this.state.price -
                       (this.state.price * this.state.discount) / 100}
                   </h4>
-                  {this.state.discount!=0?
-                  (<><strike>₹ {this.state.price} </strike>
-                  <br />
-                  <span style={{ color: "green", fontWeight: "bold" }}>
-                    {this.state.discount}% off
-                  </span></>):null}
+                  {this.state.discount != 0 ?
+                    (<><strike>₹ {this.state.price} </strike>
+                      <br />
+                      <span style={{ color: "green", fontWeight: "bold" }}>
+                        {this.state.discount}% off
+                  </span></>) : null}
                 </p>
                 <NumericInput
                   disabled={disable}
@@ -307,38 +316,39 @@ class Product extends Component {
                 />
                 <hr />
                 <p class="card-text">
-                  <b> Product Description :</b>
+                  <h4 style={{ color: "#fb641b", display: "inline-block" }}> Product Description :</h4>
                   <div
                     id="table-div"
                     dangerouslySetInnerHTML={{ __html: this.state.description }}
                   ></div>
                 </p>
                 <p class="card-text">
-                  <b> Product Specification :</b>
+                  <h4 style={{ color: "#fb641b", display: "inline-block" }}> Product Specification :</h4>
 
-                  <table width="100%">
+                  {/* <table width="100%">
                     {specification}
-                  </table>
+                  </table> */}
+                  {specification}
                 </p>
                 <div className="text-danger">
                   <b>{error}</b>
                 </div>
               </div>
 
-{this.state.reviews.length!=0 ? 
-              (<div class="w-100" style={{ textAlign: "left", margin: "10px" }}>
-                <hr />
-                <h4 style={{ display: "inline-block", color: "#fb641b" }}>
-                  Reviews and Ratings &nbsp;
+              {this.state.reviews.length != 0 ?
+                (<div class="w-100" style={{ textAlign: "left", margin: "10px" }}>
+                  <hr />
+                  <h4 style={{ display: "inline-block", color: "#fb641b" }}>
+                    Reviews and Ratings &nbsp;
                   {this.state.reviews.length != 0 ? (
-                    <Badge pill variant="success">
-                      {rating + " "}
-                      <img src={star} height="20px" width="20px" />
-                    </Badge>
-                  ) : null}
-                </h4>
-                {rdata}
-              </div>) :null}
+                      <Badge pill variant="success">
+                        {rating + " "}
+                        <img src={star} height="20px" width="20px" />
+                      </Badge>
+                    ) : null}
+                  </h4>
+                  {rdata}
+                </div>) : null}
             </div>
             <Modal show={this.state.show}>
               <Modal.Header>

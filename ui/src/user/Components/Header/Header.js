@@ -62,7 +62,7 @@ class Header extends Component {
     this.props.categories.map(async (c) => {
       let sub = [];
       let a = [];
-      if (i <= 5) {
+      // if (i <= 5) {
         if (c.parent == c.id) {
           await this.props.fetchMenuSubCat(c.id);
         
@@ -103,8 +103,8 @@ class Header extends Component {
           );
         }
 
-        i++;
-      }
+      //   i++;
+      // }
       return this.category;
     });
 
