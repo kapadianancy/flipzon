@@ -24,7 +24,7 @@ const renderSpecifications = (titles, details, handleChange, deleteSpecification
                         </div>
                         <div className={classes.specDetails}>
                             <SunEditor 
-                                setContents={details[title.key].details} 
+                                setContents={details[title.key] ? details[title.key].details : ""} 
                                 onChange={ (val) => handleChange(title.key, val, "details")}
                                 placeholder="Write product specification details here" 
                                 setOptions={{
