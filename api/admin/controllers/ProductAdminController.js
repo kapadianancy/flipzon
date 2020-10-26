@@ -1,6 +1,8 @@
 const productService = require("../services/ProductAdminService");
 var multer  = require('multer');
 const auth = require("../middlewares/auth");
+const validator = require("../utils/Validator");
+const { validationResult } = require('express-validator');
 const ProductAdminService = require("../services/ProductAdminService");
 
 var storage = multer.diskStorage({
@@ -46,8 +48,13 @@ module.exports = (app) => {
             next(error);
         }
     })
-    
-    app.post("/admin/products", auth, cpUpload, async (req, res, next) => {
+
+    app.post("/admin/products", auth, cpUpload, validator.createUser, async (req, res, next) => {
+        const ctx = validationResult(req);
+        if(ctx.errors.length > 0) {
+            return next({ statusCode: 400, message: ctx });
+        }
+        
         if(req.body.specifications) {
             req.body.specifications = JSON.parse(req.body.specifications);
         }
@@ -71,7 +78,12 @@ module.exports = (app) => {
         }
     })
     
-    app.put("/admin/products/:id", auth, cpUpload, async (req, res, next) => {
+    app.put("/admin/products/:id", auth, cpUpload, validator.editUser, async (req, res, next) => {
+        const ctx = validationResult(req);
+        if(ctx.errors.length > 0) {
+            return next({ statusCode: 400, message: ctx });
+        }
+        
         if(req.body.specifications) {
             req.body.specifications = JSON.parse(req.body.specifications);
         }

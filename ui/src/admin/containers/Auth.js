@@ -52,7 +52,7 @@ const Auth = (props) => {
             loading={props.loading} 
             error={props.registerError} 
         />
-    } else if(activeKey == "forgotPassword") {
+    } else if(activeKey === "forgotPassword") {
         content = <ForgotPassword 
             goToLogin={ () => setActiveKey("login") } 
             loading={props.loading} 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Row from 'react-bootstrap/Row'
@@ -177,8 +177,7 @@ const ProductForm = (props) => {
             await props.editProduct(formData);
         } else {
             await props.addProduct(formData);
-        }
-        
+        }   
     }
 
     // images
@@ -414,6 +413,15 @@ const ProductForm = (props) => {
             </Form.Group>
     }
 
+    let errorContent = "";
+    if(props.error) {
+        // if(step !== 1) setStep(1);
+        if(props.error.length) {
+            errorContent = <ul>
+                { props.error.map( er => <li>{er.msg}</li>)}
+            </ul>
+        } else errorContent = props.error
+    }
     return (
         <>
             <div className="row form-group">
@@ -437,7 +445,7 @@ const ProductForm = (props) => {
 
             <div className={classes.content}>
                 { content }
-                { props.error ? <p className="text-danger">{props.error}</p> : null }
+                <div className="text-danger">{errorContent}</div>
                 {
                     props.loading 
                     ? <Spinner animation="border" />

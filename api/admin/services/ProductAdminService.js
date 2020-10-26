@@ -112,30 +112,6 @@ const searchProducts = async(wordsArr, strong) => {
 }
 const addProduct = async (data, images) => {
     try {
-        // do some validations
-        let errorObj = {
-            statusCode: 400
-        }
-        if(!data.name) {
-            errorObj.message = "Name is required";
-        }
-        if(!data.main_image) {
-            errorObj.message = "Product main image is required";
-        }
-        if(!data.stock) {
-            errorObj.message = "Product stock is required";
-        }
-        if(!data.categoryId) {
-            errorObj.message = "Product Category is required";
-        }
-        if(!data.price) {
-            errorObj.message = "Product Price is required";
-        }
-        if(data.isInOffer === "true" && (+data.discount) <= 0) {
-            errorObj.message = "Discount is not valid";
-        }
-        if(errorObj.message) throw errorObj;
-
         // create product
         var product = await Product.create({
             name: data.name,
@@ -183,9 +159,6 @@ const editProduct = async (id, data, images) => {
         if(!product) {
             errorObj.statusCode = 404
             errorObj.message = "Product not found";
-        }
-        if(data.isInOffer === "true" && (+data.discount) <= 0) {
-            errorObj.message = "Discount is not valid";
         }
         if(errorObj.message) throw errorObj
 

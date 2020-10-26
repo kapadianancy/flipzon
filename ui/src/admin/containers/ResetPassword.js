@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Card from 'react-bootstrap/Card'
 import { connect } from 'react-redux';
 import Image from 'react-bootstrap/Image'
@@ -18,7 +18,7 @@ const ResetPassword = (props) => {
     const goToLogin = async () => {
         props.history.push("/admin/auth");
     }
-    const verifyLink = async () => {
+    const verifyLink = useCallback(async () => {
         try {
             query = props.location.search.substring(1).split("&")
                 .map( item => { 
@@ -36,7 +36,7 @@ const ResetPassword = (props) => {
         } catch(error) {
             setLinkIsValid(false);
         }
-    }
+    }, [])
     const resetPassword = password => {
         query = props.location.search.substring(1).split("&")
         .map( item => { 
