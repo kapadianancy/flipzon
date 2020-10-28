@@ -23,7 +23,17 @@ const Product_category = db.sequelize.define('Product_category', {
         allowNull:false,
         validate: {
             notNull: {
-                msg: 'required image'
+                msg: 'required Image'
+            }
+        }
+    },
+    thumbnailImage:
+    {
+        type:DataTypes.TEXT,
+        allowNull:false,
+        validate: {
+            notNull: {
+                msg: 'required thumbnailImage'
             }
         }
     },

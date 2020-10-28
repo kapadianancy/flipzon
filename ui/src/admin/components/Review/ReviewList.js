@@ -87,7 +87,7 @@ class ReviewList extends Component {
             </tr>
         </thead>
         <tbody>
-            { this.renderReview(this.props.review,this.props.active) }
+            { (this.props.review.length>0)?this.renderReview(this.props.review,this.props.active):null }
         </tbody>
     </Table>
     <Modal show={this.state.show} centered>

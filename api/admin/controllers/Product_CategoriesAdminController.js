@@ -1,17 +1,8 @@
 const Product_Categories_Services = require('../services/Product_CategoriesAdminServices');
-var multer  = require('multer');
+var upload = require("../middlewares/categoryImage");
 const auth = require("../middlewares/auth");
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'public/images/')
-    },
-    filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-        cb(null, file.fieldname + '-' + uniqueSuffix+'.png')
-    }
-});
-const upload = multer({ storage: storage });
-
+var path = require('path');
+var Jimp = require('jimp');
 module.exports = (app) => {
 
   // return list of Product_Category
@@ -55,11 +46,25 @@ app.get("/admin/product_categoriesParent/:id", async (req, res, next) => {
     }
     })
 // add  Product_Category
-app.post("/admin/product_categories/:id", upload.single('image'),async (req, res, next) => {
-    if(req.file) {
+app.post("/admin/product_categories/:id", upload,async (req, res, next) => {
+    
+    if(req.files.image) {
+        var myPath = path.join(__dirname, '..', '..', 'public', 'images');
+        var myPath1 = path.join(__dirname, '..', '..', 'public', 'thumbnails');
+        Jimp.read(myPath+"/"+req.files.image[0].filename)
+            .then(lenna => {
+                let thumbnailImage = lenna.resize(64, 64).quality(90).write(myPath1+"/"+req.files.image[0].filename);
+        
+        return { thumbnailImage }
+        })
+        .catch(err => {
+            console.error(err);
+        });
+        
         req.body = {
             ...req.body,
-            image:"/images/"+req.file.filename
+            image:"/images/"+req.files.image[0].filename,
+            thumbnailImage:"/thumbnails/"+req.files.image[0].filename
         }
     }
     try {
@@ -70,11 +75,24 @@ app.post("/admin/product_categories/:id", upload.single('image'),async (req, res
     }
 })
 //Edit Product_Category
-app.put("/admin/product_categories/:id", auth, upload.single('image'),async (req, res, next) => {
-    if(req.file) {
+app.put("/admin/product_categories/:id", auth, upload,async (req, res, next) => {
+    
+    if(req.files.image) {
+        var myPath = path.join(__dirname, '..', '..', 'public', 'images');
+        var myPath1 = path.join(__dirname, '..', '..', 'public', 'thumbnails');
+        
+        Jimp.read(myPath+"/"+req.files.image[0].filename)
+            .then(lenna => {
+                let thumbnailImage = lenna.resize(64, 64).quality(90).write(myPath1+"/"+req.files.image[0].filename);
+        return { thumbnailImage }
+        })
+        .catch(err => {
+            console.error(err);
+        });
         req.body = {
             ...req.body,
-            image: "/images/"+req.file.filename
+            image:"/images/"+req.files.image[0].filename,
+            thumbnailImage:"/thumbnails/"+req.files.image[0].filename
         }
     }
     try {

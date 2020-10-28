@@ -38,7 +38,7 @@ class Order extends Component{
             </tr>        
             <tr>
                 <th>
-                    Product Categories 
+                    Categories 
                 </th>
                 <td>
                     {ordersDetails.product.Product_category.name}
@@ -46,7 +46,7 @@ class Order extends Component{
             </tr>
             <tr>
                 <th>
-                    Product Name 
+                    Product 
                 </th>
                 <td>
                     {ordersDetails.product.name}

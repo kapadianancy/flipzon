@@ -10,6 +10,7 @@ import Pagination from 'react-bootstrap/Pagination'
 import Form from 'react-bootstrap/Form'
 import ProductCategoriesList from '../components/ProductCategories/ProductCategoriesList';
 import { fetchProductCategories,searchCategories } from '../store/actions/Product_CategoriesActions'
+
 const renderPaginationItems = (total, active, changeActive) => {
     let items = [];
     for(let i=1;i<=total;i++) {
@@ -59,20 +60,21 @@ const ProductCategorie = (props) => {
                 {productCategories}
             </Card.Body>
             <Card.Footer className={classes.Footer}>
-                    {
-                        props.product_categories ?
-                        <Pagination className={classes.Pagination} >
-                            { renderPaginationItems(props.total, active, changeActive) }
-                        </Pagination> : null
-                    }
-                    <Form.Control as="select" value={perPage} custom className={classes.Select} onChange={ (e) => { setActive(1);setPerPage(e.target.value) } }>
-                        <option>2</option>
-                        <option>5</option>
-                        <option>10</option>
-                        <option>20</option>
-                        <option>30</option>
-                    </Form.Control>
-                </Card.Footer>
+                
+                { 
+                    props.product_categories ?
+                    <Pagination className={classes.Pagination} >
+                        { renderPaginationItems(props.total, active, changeActive) }
+                    </Pagination> : null
+                }
+                <Form.Control as="select" value={perPage} custom className={classes.Select} onChange={ (e) => { setActive(1);setPerPage(e.target.value) } }>
+                    <option>2</option>
+                    <option>5</option>
+                    <option>10</option>
+                    <option>20</option>
+                    <option>30</option>
+                </Form.Control>
+            </Card.Footer>
         </Card>
     )
 }

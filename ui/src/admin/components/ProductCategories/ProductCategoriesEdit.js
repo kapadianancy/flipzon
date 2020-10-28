@@ -10,8 +10,9 @@ class ProductCategoriesEdit extends Component{
     state = {
         id:'',
         name:'',
-        category:"",
+        category:'',
         image:'',
+        thumbnailImage:'',
         myimg:'',
         valid:false,
         valid1:false,
@@ -34,7 +35,7 @@ class ProductCategoriesEdit extends Component{
             category:prod_category[0].parent
         })  
 
-        this.setState({myimg:(prod_category[0].image).replace('/public','')})
+        this.setState({myimg:(prod_category[0].thumbnailImage).replace('/public','')})
     }
     handleChange = (event) => {
         event.preventDefault();

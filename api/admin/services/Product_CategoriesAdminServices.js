@@ -1,17 +1,7 @@
 const Product_category = require("../../models/Product_category");
-const { sequelize } = require('../../db/db');
 
 const getProduct_Category = async (page,limit) => {
     try{
-        // return await sequelize.query("SELECT MIN(x.id),x.parent,x.name,x.image FROM `product_categories` x JOIN (SELECT p.parent,MIN(name) AS names,MIN(image) img FROM product_categories p GROUP BY p.parent) y ON y.parent = x.parent AND y.names = x.name AND y.img = x.image GROUP BY x.name,x.parent,x.image ORDER BY parent");
-        // attributes: [
-        //     [sequelize.fn('DISTINCT', sequelize.col('parent')) ,'parent'],
-        // ],
-        // return await Product_category.findAll({
-        //     where: {
-        //         IsDeleted:0
-        //     }
-        // })
         let data = { 
             where: {
                 IsDeleted:0
@@ -27,7 +17,7 @@ const getProduct_Category = async (page,limit) => {
                 total = Math.ceil(total / +limit);
             }
             let product_categories= await Product_category.findAll(data);
-            // console.log(total, product_categories)
+            
             return { total,product_categories }
         } catch(error) {
             console.log(error.message);
@@ -95,6 +85,7 @@ const addProduct_Category = async (id,data) => {
             product_category = await Product_category.create({
                 name: data.name,
                 image:data.image,
+                thumbnailImage:data.thumbnailImage
                 // parent:NULL
             }).then((data)=>{
                 let product_categorys = Product_category.findByPk(data.id);
@@ -110,6 +101,7 @@ const addProduct_Category = async (id,data) => {
             product_category = await Product_category.create({
                 name: data.name,
                 image:data.image,
+                thumbnailImage:data.thumbnailImage,
                 parent:nid
             })
         }
@@ -184,3 +176,12 @@ module.exports = {
     getProduct_CategorySearch,
     getProduct_CategoryParent
 }
+        // return await sequelize.query("SELECT MIN(x.id),x.parent,x.name,x.image FROM `product_categories` x JOIN (SELECT p.parent,MIN(name) AS names,MIN(image) img FROM product_categories p GROUP BY p.parent) y ON y.parent = x.parent AND y.names = x.name AND y.img = x.image GROUP BY x.name,x.parent,x.image ORDER BY parent");
+        // attributes: [
+        //     [sequelize.fn('DISTINCT', sequelize.col('parent')) ,'parent'],
+        // ],
+        // return await Product_category.findAll({
+        //     where: {
+        //         IsDeleted:0
+        //     }
+        // })

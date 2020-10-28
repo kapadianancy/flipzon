@@ -191,7 +191,7 @@ class Dashboard extends Component{
                         <Card.Body className={"text"}>
                         <Card.Title>Total Revenue</Card.Title>
                             <Card.Text>
-                                {this.state.totalRevenue}
+                                Rs. {this.state.totalRevenue} /-
                             </Card.Text>
                         </Card.Body>
                     </Card>
@@ -222,7 +222,7 @@ class Dashboard extends Component{
              </Card.Body>
         
             {/*<Card style={{ width: '42rem', borderWidth:0}} key={"index3"}> */}
-                <Card.Body style={{paddingBottom:'90px'}}>
+                <Card.Body style={{paddingBottom:'70px'}}>
                 <Card.Title>Categories wise Products</Card.Title>
                 <ul key={"u1"} className="list-group" style={{maxHeight: '170px',overflow:'scroll'}}>
                     {this.renderCategoryProduct()}    

@@ -6,7 +6,6 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom';
 import './ProductList.module.css'
 import { FaEdit , FaTrashAlt } from "react-icons/fa";
-import { MdModeEdit, MdDelete } from 'react-icons/md' 
 // import Spinner from 'react-bootstrap/Spinner'
 import Modal from 'react-bootstrap/Modal'
 import { Form} from 'react-bootstrap'
@@ -63,7 +62,6 @@ class ProductCategoriesList extends Component{
     }
     handleParent = (categories) => {
         let len = categories.length;
-        // return arr;
         if(len===0)
         {
             return <ListGroup.Item>No Sub Categories</ListGroup.Item>
@@ -82,7 +80,7 @@ class ProductCategoriesList extends Component{
             <tr key={"index"+index+1}>
                 <td>{index+1+active}</td>
                 <td><FormLabel onClick={() => this.handleShowCategories(product_categories.id,product_categories.name)}>{product_categories.name}</FormLabel></td>
-                <td><img src={"http://localhost:8080"+((product_categories.image).replace('/public',''))} alt="description" width="50px"/></td>
+                <td><img src={"http://localhost:8080"+((product_categories.thumbnailImage))} alt="description"/></td>
                 <td><Button onClick={() => this.updateHandler(product_categories.id)} as={Link} to={`/admin/ProductCategoriesEdit/${product_categories.id}`}><FaEdit/></Button></td>
                 <td><Button variant="danger" onClick={() => this.handleShow(product_categories.id)}><FaTrashAlt/></Button></td>
                 {/* <td><Button variant="info" onClick={() => this.handleShow1(product_categories.id)}>Add</Button></td>
@@ -97,7 +95,6 @@ class ProductCategoriesList extends Component{
         let value = event.target.value;
         let errors = this.state.errors;
         this.setState({errors, [name]: value}, ()=> {
-            console.log(name+" <=> "+value)
         })
       }
     submitHandler =async() => {
@@ -152,7 +149,7 @@ class ProductCategoriesList extends Component{
             </tr>
         </thead>
         <tbody>
-            { (this.props.product_categories)?this.renderProductCategories(this.props.product_categories, this.props.active):""}
+            {(this.props.product_categories.length>0) ? this.renderProductCategories(this.props.product_categories, this.props.active):null}
         </tbody>
         
     </Table>
