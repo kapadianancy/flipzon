@@ -10,6 +10,7 @@ import ReactStars from "react-rating-stars-component";
 import nextId from "react-id-generator";
 import { setPrefix } from "react-id-generator";
 import { Badge, Card } from "react-bootstrap";
+import ReactImageMagnify from 'react-image-magnify';
 
 
 import Header from "../../Components/Header/Header";
@@ -143,26 +144,34 @@ class Product extends Component {
         border: "1px gray solid",
         padding: "10px",
         margin: "10px"
+      },
+      videolink: {
+        padding: "10px",
+        margin: "10px"
       }
     };
+    let price = (this.state.price - (this.state.price * this.state.discount) / 100).toFixed(2);
     let data = [];
     let specification = [];
+    let description = [];
     let disable = false;
     let error = "";
     if (this.props.products.stock == 0) {
       disable = true;
       error = "Out Of Stock";
     }
-    if (this.props.products.videoLink !== "") {
-      data.push(
-        <iframe src={this.props.products.videoLink}
-          frameborder='0'
-          allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
-          allowfullscreen
-          title='video'
-        />
-      )
+
+    if (this.props.products.description !== "") {
+      description.push(
+        <>
+          <h4 style={{ color: "#fb641b", display: "inline-block" }}> Product Description :</h4>
+          <div
+            id="table-div"
+            dangerouslySetInnerHTML={{ __html: this.state.description }}
+          ></div>
+        </>)
     }
+
     if (this.props.specification.length !== 0) {
       this.props.specification.map(s => {
         specification.push(
@@ -194,9 +203,24 @@ class Product extends Component {
           height="100px"
           style={{ margin: "0px 5px" }}
         />
+
+
       );
       return data;
     });
+
+    if (this.props.products.videoLink !== "") {
+      data.push(
+        <iframe src={this.props.products.videoLink}
+          frameborder='0'
+          style={style.videolink}
+          allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture'
+          allowfullscreen
+          title='video'
+        />
+      )
+    }
+
 
     let rating;
     let sum = 0;
@@ -209,6 +233,8 @@ class Product extends Component {
     this.state.reviews.map((r) => {
 
       const date = new Date(Date.parse(r.createdAt)).toString().split("G");
+      let price = ((this.state.price) - (this.state * this.state.discount) / 100).toFixed(2);
+
 
       rdata.push(
         <Card
@@ -246,12 +272,28 @@ class Product extends Component {
                 class="card-header border-0"
                 style={{ height: "355px", width: "40%" }}
               >
-                <img
+
+                {/* <img
                   src={`http://localhost:8080${this.state.main_image}`}
                   alt="image"
                   height="100%"
                   width="100%"
-                />
+                /> */}
+
+
+                <ReactImageMagnify {...{
+                  smallImage: {
+                    alt: 'Product Image',
+                    isFluidWidth: true,
+                    src: `http://localhost:8080${this.state.main_image}`
+                  },
+                  largeImage: {
+                    src: `http://localhost:8080${this.state.main_image}`,
+                    width: 1200,
+                    height: 1800
+                  }
+                }} />
+
                 <div style={{ marginTop: "25px" }}>{data}</div>
                 <div style={{ width: "100%" }}>
                   <Button
@@ -292,8 +334,7 @@ class Product extends Component {
                   <b>Payabale amount </b>{" "}
                   <h4>
                     ₹{" "}
-                    {this.state.price -
-                      (this.state.price * this.state.discount) / 100}
+                    {price}
                   </h4>
                   {this.state.discount != 0 ?
                     (<><strike>₹ {this.state.price} </strike>
@@ -302,6 +343,9 @@ class Product extends Component {
                         {this.state.discount}% off
                   </span></>) : null}
                 </p>
+                <div className="text-danger" style={{marginLeft:"80px"}}>
+                  <b>{error}</b>
+                </div>
                 <NumericInput
                   disabled={disable}
                   className="form-control"
@@ -315,24 +359,25 @@ class Product extends Component {
                   onChange={(event) => this.handleChange(event)}
                 />
                 <hr />
-                <p class="card-text">
-                  <h4 style={{ color: "#fb641b", display: "inline-block" }}> Product Description :</h4>
+
+               {/* <p class="card-text">
+                   <h4 style={{ color: "#fb641b", display: "inline-block" }}> Product Description :</h4>
                   <div
                     id="table-div"
                     dangerouslySetInnerHTML={{ __html: this.state.description }}
                   ></div>
-                </p>
+                </p>*/}
+                 {description}
                 <p class="card-text">
-                  <h4 style={{ color: "#fb641b", display: "inline-block" }}> Product Specification :</h4>
+                  <h4 style={{ color: "#fb641b", display: "inline-block" }}> Product Specification :</h4> 
 
                   {/* <table width="100%">
                     {specification}
                   </table> */}
+                 
                   {specification}
                 </p>
-                <div className="text-danger">
-                  <b>{error}</b>
-                </div>
+               
               </div>
 
               {this.state.reviews.length != 0 ?
@@ -371,7 +416,7 @@ class Product extends Component {
                       <h4 class="card-title">{this.state.name}</h4>
                       <p class="card-text">
                         <b>Price : </b>
-                        {this.state.price}
+                        {price}
                       </p>
                     </div>
                   </div>

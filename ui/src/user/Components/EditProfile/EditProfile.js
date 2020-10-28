@@ -16,7 +16,7 @@ class EditProfile extends Component {
         address: "",
         contact: "",
         errors: {},
-        message:""
+        message: ""
     }
 
     async componentDidMount() {
@@ -48,10 +48,10 @@ class EditProfile extends Component {
             }
             await this.props.editprofile(CurrentUser);
             if (this.props.error == "") {
-               this.setState({
-                   message:this.props.message
-               })
-               //this.props.history.push('/');
+                this.setState({
+                    message: this.props.message
+                })
+                //this.props.history.push('/');
             }
             else {
                 this.props.history.push('/error/' + this.props.error);
@@ -64,7 +64,7 @@ class EditProfile extends Component {
         let errors = {};
         let isValid = true;
         this.setState({
-            message : ""
+            message: ""
         })
 
         if (!input["username"]) {
@@ -138,6 +138,11 @@ class EditProfile extends Component {
                 fontWeight: 'bold',
                 fontFamily: 'Times New Roman',
                 fontSize: '30px'
+            },
+            labelTitle: {
+                fontWeight: 'bold',
+                fontFamily: 'Times New Roman',
+                fontSize: '20px'
             }
 
         };
@@ -156,29 +161,30 @@ class EditProfile extends Component {
                                 <Form>
                                     <Input type="hidden" name="userid" id="userid"
                                         value={this.state.userid} />
-                                    <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                                        <Label for="username" className="mr-sm-2">Username</Label>
-                                        <div className="text-danger">{this.state.errors.username}</div>
-                                        <Input type="text" name="username" id="username"
-                                            required="true"
-                                            value={this.state.username}
+
+                                    <FormGroup>
+                                        <Label for="email" style={style.labelTitle}>Email</Label>
+                                        <div className="text-danger">{this.state.errors.email}</div>
+                                        <Input type="email" name="email" id="email"
+                                            value={this.state.email}
                                             onChange={this.handleChange.bind(this)}
-                                            placeholder="Enter Your Username" />
+                                            placeholder="abc@gmail.com" />
                                     </FormGroup>
                                     <Row form>
                                         <Col md={6}>
-                                            <FormGroup>
-                                                <Label for="email">Email</Label>
-                                                <div className="text-danger">{this.state.errors.email}</div>
-                                                <Input type="email" name="email" id="email"
-                                                    value={this.state.email}
+                                            <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+                                                <Label for="username" className="mr-sm-2" style={style.labelTitle}>Username</Label>
+                                                <div className="text-danger">{this.state.errors.username}</div>
+                                                <Input type="text" name="username" id="username"
+                                                    required="true"
+                                                    value={this.state.username}
                                                     onChange={this.handleChange.bind(this)}
-                                                    placeholder="abc@gmail.com" />
+                                                    placeholder="Enter Your Username" />
                                             </FormGroup>
                                         </Col>
                                         <Col md={6}>
                                             <FormGroup>
-                                                <Label for="contact">Contact</Label>
+                                                <Label for="contact" style={style.labelTitle}>Contact</Label>
                                                 <div className="text-danger">{this.state.errors.contact}</div>
                                                 <Input type="number" name="contact" id="contact"
                                                     value={this.state.contact}
@@ -189,7 +195,7 @@ class EditProfile extends Component {
                                     </Row>
 
                                     <FormGroup>
-                                        <Label for="address">Address</Label>
+                                        <Label for="address" style={style.labelTitle}>Address</Label>
                                         <div className="text-danger">{this.state.errors.address}</div>
                                         <Input type="textarea" name="address" id="address"
                                             value={this.state.address}
@@ -226,7 +232,7 @@ const mapStateToProp = (state) => {
 const mapStateToActions = (dispatch) => {
     return {
         getSingleUser: () => dispatch(actions.getSingleUser()),
-        editprofile:(CurrentUser) => dispatch(actions.editprofile(CurrentUser))
+        editprofile: (CurrentUser) => dispatch(actions.editprofile(CurrentUser))
     }
 }
 

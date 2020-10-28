@@ -102,19 +102,19 @@ class viewBill extends Component {
             <Card.Text>
               <table style={{ width: "100%", padding: "5px" }}>
                 <tr>
-                  <th>Customer name:</th>
+                  <th>Name:</th>
                   <td>{this.state.username}</td>
                 </tr>
                 <tr>
-                  <th>Customer email:</th>
+                  <th>Email:</th>
                   <td>{this.state.email}</td>
                 </tr>
                 <tr>
-                  <th>Customer contact:</th>
+                  <th>Contact:</th>
                   <td>{this.state.contact}</td>
                 </tr>
                 <tr>
-                  <th>delivery address:</th>
+                  <th>Delivery Address:</th>
                   <td>{this.state.address}</td>
                 </tr>
               </table>
@@ -160,7 +160,7 @@ class viewBill extends Component {
           </Card.Body>
         </Card>
 
-        <div>
+        <div style={{paddingBottom:"20px"}}>
           <Card
             style={{
               visibility: this.state.visibility,
@@ -171,7 +171,7 @@ class viewBill extends Component {
             }}
           >
             <Card.Body>
-              <Card.Title>select Payment Mathod</Card.Title>
+              <Card.Title>Select Payment Mathod</Card.Title>
               <Form>
                   <div style={{textAlign: "-webkit-left"}}>
                <input type="radio" value="COD" name="payment" onChange={this.radiochange}/> COD

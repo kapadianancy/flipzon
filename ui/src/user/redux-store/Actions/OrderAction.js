@@ -109,6 +109,26 @@ export const cancelOrder = (oid) => {
 };
 
 
+export const updateOrder = (order) => {
+    return async dispatch => {
+        const token = localStorage.getItem("token");
+        await axiosInstance.put('/client/updateOrder',order,{
+            headers: {
+                authorization: 'Bearer ' + token
+            }
+        }).then(response => {
+            dispatch({
+                type: types.UPDATE_ORDER,
+                message:response.data
+            });
+        }).catch(error => {
+            dispatch({
+                error: error.message
+            });
+        })
+    };
+};
+
 
 export const viewOrderDetails = (oid) => {
     return async dispatch => {

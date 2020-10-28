@@ -4,6 +4,7 @@ import {Table } from "reactstrap";
 import {Button } from 'react-bootstrap';
 import { withRouter } from "react-router-dom";
 import Modal from 'react-bootstrap/Modal'
+import NumericInput from "react-numeric-input";
 
 import * as actions from "../../redux-store/Actions/OrderAction";
 import * as paction from "../../redux-store/Actions/ProductAction";
@@ -46,6 +47,20 @@ class ViewOrderCart extends Component {
     window.location.reload(true);
   };
 
+  handleChange =async (event,oid,pid) => {
+
+    //Change Quantity
+    const order ={
+      "id" : oid,
+      "productId" : pid,
+      "quantity" : event
+    }
+    await this.props.updateOrder(order);
+    this.props.viewCart();
+
+
+
+  };
 
   handleClose=()=>
   {
@@ -108,7 +123,22 @@ class ViewOrderCart extends Component {
           </td>
           <td>{row.name}</td>
           <td>{row.price}</td>
-          <td>{row.quantity}</td>
+          <td>
+            <div style={{marginLeft:"70px"}}>
+          <NumericInput
+                  className="form-control"
+                  defaultValue={1}
+                  min={1}
+                  max={row.stock}
+                  value={row.quantity}
+                  step={1}
+                  precision={0}
+                  size={5}
+                  mobile
+                  onChange={(event) => this.handleChange(event,row.id,row.productId)}
+                />
+                </div>
+          </td>
           <td>{row.price * row.quantity}</td>
           <td>
             <button
@@ -182,6 +212,7 @@ const mapStateToAction = (dispatch) => {
     getProduct: (pid) => dispatch(paction.productDetails(pid)),
     placeOrder: (oid) => dispatch(actions.placeOrder(oid)),
     removeOrderItem: (oid) => dispatch(actions.removeOrderItem(oid)),
+    updateOrder: (order) => dispatch(actions.updateOrder(order)),
     getUser:()=>dispatch(uaction.getSingleUser()),
     editprofile:(CurrentUser) => dispatch(uaction.editprofile(CurrentUser))
   };

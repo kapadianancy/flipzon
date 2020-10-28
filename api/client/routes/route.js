@@ -65,6 +65,9 @@ router.delete("/client/cancelOrder/:id",auth,Order.cancelOrder);
 //cancel order item
 router.delete("/client/cancelOrderItem/:id",Order.cancelOrderItem);
 
+//update order quantity
+router.put("/client/updateOrder/",auth,Order.updateOrder);
+
 //most ordered products
 router.get("/client/orderedProducts/",Order.orderedProducts);
 

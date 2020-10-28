@@ -110,6 +110,10 @@ class ChangePassword extends Component {
                 fontWeight: 'bold',
                 fontFamily: 'Times New Roman',
                 fontSize: '30px'
+            } ,labelTitle: {
+                fontWeight: 'bold',
+                fontFamily: 'Times New Roman',
+                fontSize: '20px'
             }
 
         };
@@ -124,7 +128,7 @@ class ChangePassword extends Component {
                                 <div className="text-danger">{this.state.errors.err}</div>
                                 <Form>
                                     <FormGroup>
-                                        <Label for="old_password">Old Password</Label>
+                                        <Label for="old_password" style={style.labelTitle}>Old Password</Label>
                                         <div className="text-danger">{this.state.errors.old_password}</div>
                                         <Input type="text" name="old_password" id="old_password"
                                             value={this.state.old_password}
@@ -133,7 +137,7 @@ class ChangePassword extends Component {
                                     </FormGroup>
 
                                     <FormGroup>
-                                        <Label for="new_password">New Password</Label>
+                                        <Label for="new_password" style={style.labelTitle}>New Password</Label>
                                         <div className="text-danger">{this.state.errors.new_password}</div>
                                         <Input type="password" name="new_password" id="new_password"
                                             value={this.state.new_password}
@@ -142,7 +146,7 @@ class ChangePassword extends Component {
                                     </FormGroup>
 
                                     <FormGroup>
-                                        <Label for="confirm_password">Confirm Password</Label>
+                                        <Label for="confirm_password" style={style.labelTitle}>Confirm Password</Label>
                                         <div className="text-danger">{this.state.errors.confirm_password}</div>
                                         <Input type="password" name="confirm_password" id="confirm_password"
                                             value={this.state.confirm_password}

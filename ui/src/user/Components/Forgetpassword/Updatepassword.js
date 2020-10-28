@@ -91,6 +91,10 @@ class UpdatePassword extends Component {
                 fontWeight: 'bold',
                 fontFamily: 'Times New Roman',
                 fontSize: '30px'
+            },labelTitle: {
+                fontWeight: 'bold',
+                fontFamily: 'Times New Roman',
+                fontSize: '20px'
             }
 
         };
@@ -106,7 +110,7 @@ class UpdatePassword extends Component {
                                 <Form>
                                    
                                     <FormGroup>
-                                        <Label for="new_password">New Password</Label>
+                                        <Label for="new_password" style={style.labelTitle}>New Password</Label>
                                         <div className="text-danger">{this.state.errors.new_password}</div>
                                         <Input type="password" name="new_password" id="new_password"
                                             value={this.state.new_password}
@@ -115,7 +119,7 @@ class UpdatePassword extends Component {
                                     </FormGroup>
 
                                     <FormGroup>
-                                        <Label for="confirm_password">Confirm Password</Label>
+                                        <Label for="confirm_password" style={style.labelTitle}>Confirm Password</Label>
                                         <div className="text-danger">{this.state.errors.confirm_password}</div>
                                         <Input type="password" name="confirm_password" id="confirm_password"
                                             value={this.state.confirm_password}
