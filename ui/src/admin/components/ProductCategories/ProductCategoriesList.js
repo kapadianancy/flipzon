@@ -1,27 +1,33 @@
 import React , {Component} from 'react';
+import { connect } from 'react-redux'
+
+import { Link } from 'react-router-dom';
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import FormLabel from 'react-bootstrap/FormLabel'
-import { connect } from 'react-redux'
-import { Link } from 'react-router-dom';
-import './ProductList.module.css'
-import { FaEdit , FaTrashAlt } from "react-icons/fa";
-// import Spinner from 'react-bootstrap/Spinner'
 import Modal from 'react-bootstrap/Modal'
 import { Form} from 'react-bootstrap'
 import ListGroup from 'react-bootstrap/ListGroup'
+import { FaEdit , FaTrashAlt } from "react-icons/fa";
+
+import './ProductList.module.css'
+import Lightbox from "react-image-lightbox";
+import "react-image-lightbox/style.css";
 import { RemoveProductCategories,SingleProductCategories,fetchParentCategories } from '../../store/actions/Product_CategoriesActions'
 import { editProductOffer } from '../../store/actions/ProductActions';
+
 class ProductCategoriesList extends Component{
     state = {
-        searchValue:"",
         id:"",
+        photoIndex: 0,
+        isOpen: false,
         show:false,
         show1:false,
         show2:false,
         direction:'default',
         id1:"",
         id2:"",
+        img:"",
         offer:"",
         parent:"",
         errors:{
@@ -74,21 +80,21 @@ class ProductCategoriesList extends Component{
             ) 
         }
     }
-
+    handleImage = (img) => {
+        this.setState({ isOpen: true,img:img })
+    }
     renderProductCategories = (product_categories, active) => {
         return product_categories.map((product_categories, index) => 
             <tr key={"index"+index+1}>
                 <td>{index+1+active}</td>
                 <td><FormLabel onClick={() => this.handleShowCategories(product_categories.id,product_categories.name)}>{product_categories.name}</FormLabel></td>
-                <td><img src={"http://localhost:8080"+((product_categories.thumbnailImage))} alt="description"/></td>
+                <td><img src={"http://localhost:8080"+((product_categories.thumbnailImage))} alt="no image" onClick={() => this.handleImage("http://localhost:8080"+((product_categories.image))) }/></td>
                 <td><Button onClick={() => this.updateHandler(product_categories.id)} as={Link} to={`/admin/ProductCategoriesEdit/${product_categories.id}`}><FaEdit/></Button></td>
                 <td><Button variant="danger" onClick={() => this.handleShow(product_categories.id)}><FaTrashAlt/></Button></td>
                 {/* <td><Button variant="info" onClick={() => this.handleShow1(product_categories.id)}>Add</Button></td>
                 <td><Button variant="danger" onClick={() => this.handleRemoveOffer(product_categories.id)}>Remove</Button></td>  */}
             </tr>
-    )
-        
-    }
+    )}
     handleChange = (event) => {
         event.preventDefault();
         let name = event.target.name;
@@ -134,6 +140,7 @@ class ProductCategoriesList extends Component{
     }  
     render(){
         const {errors} = this.state;
+        const { photoIndex, isOpen } = this.state;
         return <> 
         {/* <input type="text" placeholder="Enter Search Here..." className={"form-control"} onKeyUp={(event) => this.setState({searchValue: event.target.value})}/>  */}
         <Table responsive striped bordered hover size="sm">
@@ -225,7 +232,15 @@ class ProductCategoriesList extends Component{
             </thead>
         </table>
         </Modal.Body>
-      </Modal></>
+      </Modal>
+      {isOpen && this.state.img && (
+          <Lightbox
+            mainSrc={this.state.img}
+            onCloseRequest={() => this.setState({ isOpen: false })}
+          />
+        )}  
+
+      </>
     }
 }
 const mapStateToProps = (state) => ({
