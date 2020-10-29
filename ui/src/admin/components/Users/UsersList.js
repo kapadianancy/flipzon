@@ -3,6 +3,8 @@ import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import Card from 'react-bootstrap/Card'
+import { FaTrashAlt } from "react-icons/fa";
+import { GrOverview } from 'react-icons/gr'
 
 const renderUsers = (users, showOrders, deleteUser, active) => {
     return users.map( (user, i) => (
@@ -12,8 +14,8 @@ const renderUsers = (users, showOrders, deleteUser, active) => {
             <td>{user.email}</td>
             <td>{user.contact}</td>
             <td>{user.address}</td>
-            <td><Button onClick={ () => showOrders(user.id) } variant="info">View Orders</Button></td>
-            <td><Button onClick={ () => deleteUser(user.id) } variant="danger">Delete</Button></td>
+            <td>{ user.roleId === 2 && <Button onClick={ () => showOrders(user.id) } variant="info"><GrOverview /></Button> }</td>
+            <td><Button onClick={ () => deleteUser(user.id) } variant="danger"><FaTrashAlt /></Button></td>
         </tr>
     ))
 }
@@ -42,7 +44,7 @@ const UsersList = (props) => {
                 </Card.Body>
             </Card>
         </Modal>
-        <Table responsive striped bordered hover size="sm">
+        <Table responsive striped bordered hover size="sm" className="text-center">
             <thead>
                 <tr>
                     <th>#</th>

@@ -48,6 +48,11 @@ const store = (state = initialStore, action) => {
                 ...state,
                 message: action.message
             }
+        case types.UPDATE_ORDER:
+            return {
+                ...state,
+                message: action.message
+            }
         case types.CANCEL_ORDER:
             return {
                 ...state,

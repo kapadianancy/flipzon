@@ -18,10 +18,10 @@ const Users = (props) => {
     const [active, setActive] = useState(1);
     const [modalOpen, setModalOpen] = useState(false);
     const [showMode, setShowMode] = useState(1);
-
+    const { fetchUsers } = props
     useEffect( () => {
-        props.fetchUsers(active, perPage, showMode);
-    }, [showMode, perPage, active]);
+        fetchUsers(active, perPage, showMode);
+    }, [showMode, perPage, active, fetchUsers]);
 
     const showUserOrders = async (userId) => {
         setModalOpen(true);

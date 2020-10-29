@@ -10,19 +10,24 @@ import { fetchProductCategories } from '../store/actions/Product_CategoriesActio
 import ProductForm from '../components/Product/ProductForm/ProductForm'
 
 const ProductFormController = (props) => {
+    const { fetchProductCategories, fetchOneProduct, params } = props;
     useEffect( () => {
-        props.fetchProductCategories();
-        if(props.match.params.id) {
-            props.fetchOneProduct(props.match.params.id);
+        fetchProductCategories();
+        if(params.id) {
+            fetchOneProduct(params.id);
         }
-    }, [props.match.params.id, props.fetchProductCategories, props.fetchOneProduct]);
+    }, [params.id, fetchProductCategories, fetchOneProduct]);
     const addProduct = async (formData) => {
-        await props.addProduct(formData);
-        props.history.push("/admin/products");
+        try {
+            await props.addProduct(formData);
+            props.history.push("/admin/products");
+        } catch(error) { }
     }
     const editProduct = async (formData) => {
-        await props.editProduct(props.match.params.id, formData);
-        props.history.push("/admin/products");
+        try {
+            await props.editProduct(props.match.params.id, formData);
+            props.history.push("/admin/products");
+        } catch (error) { }
     }
     return (
         <>

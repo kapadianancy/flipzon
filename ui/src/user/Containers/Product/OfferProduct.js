@@ -95,8 +95,10 @@ class OfferProduct extends Component {
           disable = true;
           x = "Out Of Stock";
         }
+        let price =((p.price) - (p.price * p.discount) / 100).toFixed(2);
 
         data.push(
+        
           <Card
             style={{ display: "inline-block", width: "24%", height:"400px",margin: "5px" }}
           >
@@ -118,7 +120,8 @@ class OfferProduct extends Component {
 
                   {p.discount ? (
                     <Card.Text>
-                      <b><h4>&#x20B9;{(p.price) - (p.price * p.discount) / 100}</h4></b>
+                      
+                  <b><h4>&#x20B9;{price}</h4></b>
                       <strike>&#x20B9;{p.price}</strike>{" "}
                       <Badge pill variant="success">
                         Disc-{p.discount}%

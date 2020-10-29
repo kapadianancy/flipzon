@@ -61,7 +61,7 @@ exports.addOrderItems = async (req, res) => {
         if (!p) {
             return res.status(401).send("Product Not Found")
         }
-        const price = (p.price)-(p.price * p.discount /100);
+        const price = (p.price) - (p.price * p.discount / 100);
 
         const temp = await main.Order_details.findAll({
             where: {
@@ -75,8 +75,7 @@ exports.addOrderItems = async (req, res) => {
 
             orderItem = await main.Order_details.update(
                 {
-                    quantity: temp[0].quantity + data.quantity,
-                    price: temp[0].price + price * data.quantity
+                    quantity: temp[0].quantity + data.quantity
                 },
                 {
                     where: {
@@ -109,6 +108,61 @@ exports.addOrderItems = async (req, res) => {
         return res.status(400).send(error);
     }
 }
+
+exports.updateOrder = async (req, res) => {
+    try {
+        const data = req.body;
+        //find Product Price
+        const p = await main.product.findByPk(data.productId);
+        if (!p) {
+            return res.status(401).send("Product Not Found")
+        }
+
+        const temp = await main.Order_details.findOne({
+            where: {
+                id: data.id,
+                productId: data.productId
+            }
+        })
+        //Increment Product Quantity
+        const pro = await main.product.update({ stock: p.stock + temp.quantity }, {
+            where: {
+                id: data.productId
+            }
+        });
+        if (pro) {
+            orderItem = await main.Order_details.update(
+                {
+                    quantity: data.quantity
+                },
+                {
+                    where: {
+                        id: data.id
+                    }
+                })
+
+            //Decrement Product Quantity
+            const p1 = await main.product.findByPk(data.productId);
+            if (orderItem) {
+                const pro = await main.product.update({ stock: p1.stock - data.quantity }, {
+                    where: {
+                        id: data.productId
+                    }
+                });
+            }
+
+            res.status(201).send("Order Updated")
+        }
+        else {
+            res.status(401).send("Not Updated")
+        }
+
+    }
+    catch (error) {
+        res.status(400).send(error);
+    }
+}
+
 
 const sendMail = async function (email) {
     let status = "";
@@ -372,7 +426,7 @@ exports.viewOrderCart = async (req, res) => {
     try {
         let uid = req.params.uid;
         //console.log("----uid-----"+req.params.uid);
-        const o = await sequelize.query("SELECT od.*,p.name,p.main_image,od.price FROM orders o,products p,order_details od where o.id=od.orderId and od.productId=p.id and o.status='Pending' and od.isDeleted=0 and o.userId='" + uid + "'");
+        const o = await sequelize.query("SELECT od.*,p.name,p.main_image,p.stock,od.price FROM orders o,products p,order_details od where o.id=od.orderId and od.productId=p.id and o.status='Pending' and od.isDeleted=0 and o.userId='" + uid + "'");
 
         res.status(200).send(o[0]);
     } catch (err) {

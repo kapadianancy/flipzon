@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import ProfileForm from '../components/Auth/ProfileForm';
 import { updateProfile } from '../store/actions/AuthActions'

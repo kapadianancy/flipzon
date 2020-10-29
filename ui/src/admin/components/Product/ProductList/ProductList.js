@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import Modal from 'react-bootstrap/Modal'
 import Card from 'react-bootstrap/Card'
 import * as classes from './ProductList.module.css'
+import { FaEdit , FaTrashAlt } from "react-icons/fa";
+
 
 const renderProducts = (products, deleteProduct, active) => {
     return products.map( (product, i) => (
@@ -14,8 +16,8 @@ const renderProducts = (products, deleteProduct, active) => {
             <td>{product.Product_category.name}</td>
             <td>{product.price}</td>
             <td>{product.stock}</td>
-            <td><Button as={Link} to={`/admin/products/edit/${product.id}`} variant="info">Edit</Button></td>
-            <td><Button onClick={() => deleteProduct(product.id)} variant="danger">Delete</Button></td>
+            <td><Button as={Link} to={`/admin/products/edit/${product.id}`} variant="info"><FaEdit /></Button></td>
+            <td><Button onClick={() => deleteProduct(product.id)} variant="danger"><FaTrashAlt /></Button></td>
         </tr>
     ))
 }
@@ -111,7 +113,7 @@ const ProductList = (props) => {
                     </Card.Body>
                 </Card>
             </Modal>
-                <Table striped responsive hover size="sm">
+                <Table striped responsive hover size="sm" className="text-center">
                     <thead>
                         <tr>
                             {

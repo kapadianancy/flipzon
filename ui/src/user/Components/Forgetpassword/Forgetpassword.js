@@ -95,6 +95,10 @@ class Forgetpassword extends Component {
                 fontWeight: 'bold',
                 fontFamily: 'Times New Roman',
                 fontSize: '30px'
+            },labelTitle: {
+                fontWeight: 'bold',
+                fontFamily: 'Times New Roman',
+                fontSize: '20px'
             }
 
         };
@@ -107,7 +111,7 @@ class Forgetpassword extends Component {
                                 <CardTitle style={style.cardTitle}>Forget Password</CardTitle>
                                 <Form>
                                     <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                                        <Label for="email" className="mr-sm-2">Email</Label>
+                                        <Label for="email" className="mr-sm-2" style={style.labelTitle}>Email</Label>
                                         <div className="text-danger">{this.state.error}</div>
                                         <div className="text-success">{this.state.message}</div>
                                         <Input type="email" name="email" id="email"

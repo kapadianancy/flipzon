@@ -99,6 +99,9 @@ class Product extends Component {
         color: "white",
         display: "inline-block",
       },
+      numericInput: {
+        alignSelf: "center"
+      }
     };
     let data = [];
     if (this.props.products.length == 0) {
@@ -117,6 +120,7 @@ class Product extends Component {
           disable = true;
           x = "Out Of Stock";
         }
+        let price =((p.price) - (p.price * p.discount) / 100).toFixed(2);
 
         data.push(
           <Card
@@ -140,7 +144,7 @@ class Product extends Component {
 
                   {p.discount ? (
                     <Card.Text>
-                      Price-&#x20B9;{p.price - (p.price * p.discount) / 100}{" "}
+                      Price-&#x20B9;{price}{" "}
                       <Badge pill variant="success">
                         Disc-{p.discount}%
                       </Badge>
@@ -151,6 +155,7 @@ class Product extends Component {
                   <div className="text-danger">
                     <b>{x}</b>
                   </div>
+                  <div style={style.numericInput}>
                   <NumericInput
                     disabled={disable}
                     className="form-control"
@@ -163,6 +168,7 @@ class Product extends Component {
                     mobile
                     onChange={(event) => this.handleChange(event)}
                   />
+                  </div>
 
                   <Button
                     disabled={disable}

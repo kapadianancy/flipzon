@@ -44,7 +44,12 @@ export const addProduct = (productData) => {
             });
             dispatch({ type: types.ADD_PRODUCT_SUCCESS, product: result.data });
         } catch (error) {
-            dispatch({ type: types.ADD_PRODUCT_FAILED, error: error.message });
+            if(error.response.data.message.errors) {
+                dispatch({ type: types.ADD_PRODUCT_FAILED, error: error.response.data.message.errors });
+            } else {
+                dispatch({ type: types.ADD_PRODUCT_FAILED, error: error.message });
+            }
+            throw new Error()
         }
     }
 }
