@@ -10,13 +10,13 @@ import { fetchProductCategories } from '../store/actions/Product_CategoriesActio
 import ProductForm from '../components/Product/ProductForm/ProductForm'
 
 const ProductFormController = (props) => {
-    const { fetchProductCategories, fetchOneProduct, params } = props;
+    const { fetchProductCategories, fetchOneProduct, match } = props;
     useEffect( () => {
         fetchProductCategories();
-        if(params.id) {
-            fetchOneProduct(params.id);
+        if(match.params.id) {
+            fetchOneProduct(match.params.id);
         }
-    }, [params.id, fetchProductCategories, fetchOneProduct]);
+    }, [match, fetchProductCategories, fetchOneProduct]);
     const addProduct = async (formData) => {
         try {
             await props.addProduct(formData);

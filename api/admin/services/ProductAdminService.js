@@ -1,11 +1,10 @@
-const fs = require("fs");
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
-const $or = Op.or;
 const Product = require("../../models/Product");
 const Category = require("../../models/Product_category");
 const ProductImages = require("../../models/Product_image");
 const Specification = require("../../models/Specification");
+const Jimp = require("jimp");
 
 const fetchProducts = async (page, limit) => {
     let options = {
@@ -123,13 +122,15 @@ const addProduct = async (data, images) => {
             isInOffer: data.isInOffer === "true" ? true : false,
             discount: data.isInOffer === "true" ? data.discount : 0,
             videoLink: data.videoLink ? data.videoLink : "",
+            thumbnail: data.thumbnail
         });
         product = product.get({ row: true })
 
         // handle product images
         if(images.length > 0) {
-            let imageData = images.map( image => ({ image: "/images/"+image.filename, productId: product.id }) );
-            images = await ProductImages.bulkCreate(imageData);
+            // let imageData = images.map( image => ({ image: "/images/"+image.filename, productId: product.id }) );
+            images = await createThumbnail(images, product.id);
+            images = await ProductImages.bulkCreate(images);
             images = images.map( el => el.get({row: true}));
         } else images = [];
 
@@ -148,6 +149,7 @@ const addProduct = async (data, images) => {
         
         return product;
     } catch(error) {
+        console.log(error);
         throw error;
     }
 }
@@ -169,7 +171,8 @@ const editProduct = async (id, data, images) => {
 
         // handle images
         if(images.length > 0) {
-            let imageData = images.map( image => ({ image: "/images/"+image.filename, productId: id }) );
+            // let imageData = images.map( image => ({ image: "/images/"+image.filename, productId: id }) );
+            let imageData = await createThumbnail(images, id);
             images = await ProductImages.bulkCreate(imageData);
         } else images = []
 
@@ -255,7 +258,29 @@ const addSpecifications = async (productId, data, deleteBefore) => {
         console.log("error while adding specifications ", error.message);
         throw error;
     }
-} 
+}
+const createThumbnail = async (images, productId) => {
+    var imageData = [];
+    let thumbnail, img, name, image, webPath;
+    let uniqueSuffix;
+
+    for(let key in images) {
+        image = images[key];
+        uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+        name = "public/thumbnails/"+uniqueSuffix+'.webp';
+        webPath = "/thumbnails/"+uniqueSuffix+'.webp';
+        try {
+            img = await Jimp.read(image.destination+"/"+image.filename);
+            thumbnail = await img.resize(100, 100).quality(90).grayscale().write(name)
+            imageData.push({
+                image: "/images/"+image.filename, productId, thumbnail: webPath
+            });
+        } catch(error) {
+            console.error(error.message);
+        }
+    }
+    return imageData;
+}
 module.exports = {
     fetchProducts,
     searchProducts,
