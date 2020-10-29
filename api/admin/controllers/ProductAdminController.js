@@ -4,14 +4,17 @@ const auth = require("../middlewares/auth");
 const validator = require("../utils/Validator");
 const { validationResult } = require('express-validator');
 const ProductAdminService = require("../services/ProductAdminService");
+const Jimp = require("jimp");
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
       cb(null, 'public/images/')
     },
     filename: function (req, file, cb) {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-      cb(null, file.fieldname + '-' + uniqueSuffix+'.png')
+    //   const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+    //   cb(null, file.fieldname + '-' + uniqueSuffix+'.png')
+        let filename = file.originalname.replace(" ","-").split(".")[0]+Date.now()+'.png';
+        cb(null, filename)
     }
 });
 var upload = multer({ storage: storage });
@@ -54,7 +57,6 @@ module.exports = (app) => {
         if(ctx.errors.length > 0) {
             return next({ statusCode: 400, message: ctx });
         }
-        
         if(req.body.specifications) {
             req.body.specifications = JSON.parse(req.body.specifications);
         }
@@ -64,9 +66,16 @@ module.exports = (app) => {
                 message: "Product Image is required"
             })
         }
+        
+        let imgPath = "public/thumbnails/"+req.files.image[0].filename;
+        let webPath = "/thumbnails/"+req.files.image[0].filename;
+        let img = await Jimp.read(req.files.image[0].destination+"/"+req.files.image[0].filename);
+        let thumbnail = await img.resize(100, 100).quality(90).grayscale().write(imgPath);
+        
         req.body = {
             ...req.body,
             main_image: "/images/"+req.files.image[0].filename,
+            thumbnail: webPath
         }
         // main_image: "/"+req.files.image[0].destination+req.files.image[0].filename,
         try {
@@ -88,9 +97,15 @@ module.exports = (app) => {
             req.body.specifications = JSON.parse(req.body.specifications);
         }
         if(req.files.image) {
+            let imgPath = "public/thumbnails/"+req.files.image[0].filename;
+            let webPath = "/thumbnails/"+req.files.image[0].filename;
+            let img = await Jimp.read(req.files.image[0].destination+"/"+req.files.image[0].filename);
+            let thumbnail = await img.resize(100, 100).quality(90).grayscale().write(imgPath);
+
             req.body = {
                 ...req.body,
-                main_image: "/images/"+req.files.image[0].filename
+                main_image: "/images/"+req.files.image[0].filename,
+                thumbnail: webPath
             }
         }
         try {
