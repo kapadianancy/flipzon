@@ -26,9 +26,10 @@ class ProductSlider extends Component {
 
     let products = [];
     let p = this.props.products;
-
     let n = this.props.products.length;
+    let price;
     let card = (j) => {
+      price=(p[j].price - (p[j].price * p[j].discount) / 100).toFixed(2);
       return (
         <Card
           key={p[j].id}
@@ -44,7 +45,7 @@ class ProductSlider extends Component {
             <Card.Title>{p[j].name}</Card.Title>
             {p[j].discount ? (
               <Card.Text>
-                Price-&#x20B9;{p[j].price - (p[j].price * p[j].discount) / 100}{" "}
+                Price-&#x20B9;{price}{" "}
                 <Badge pill variant="success">
                   Disc-{p[j].discount}%
                 </Badge>

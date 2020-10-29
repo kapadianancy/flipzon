@@ -11,6 +11,7 @@ import nextId from "react-id-generator";
 import { setPrefix } from "react-id-generator";
 import { Badge, Card } from "react-bootstrap";
 import ReactImageMagnify from 'react-image-magnify';
+import ModalImage from "react-modal-image";
 
 
 import Header from "../../Components/Header/Header";
@@ -35,7 +36,9 @@ class Product extends Component {
     feedback: "",
     rating: 1,
     reviews: [],
-    specification: []
+    i: 1,
+    specification: [],
+    modal_image:""
   };
 
   async componentDidMount() {
@@ -52,7 +55,8 @@ class Product extends Component {
       stock: this.props.products.stock,
       main_image: this.props.products.main_image,
       reviews: this.props.reviews,
-      specification: this.props.specification
+      specification: this.props.specification,
+      modal_image: this.props.products.main_image
     });
   }
 
@@ -107,6 +111,18 @@ class Product extends Component {
       [name]: value,
     });
   }
+  linkClick(len) {
+    this.setState({
+      i: len
+    });
+  }
+
+  imageClick(img){
+    this.setState({
+      modal_image:img
+    });
+  }
+
   onStarClick(event) {
     this.setState({ rating: event });
   }
@@ -148,6 +164,14 @@ class Product extends Component {
       videolink: {
         padding: "10px",
         margin: "10px"
+      },
+      linkBtn: {
+        alignSelf: "center",
+        backgroundColor: "white",
+        borderColor: "white",
+        color: "#fb641b",
+        display: "inline-block",
+        textDecoration: "underline"
       }
     };
     let price = (this.state.price - (this.state.price * this.state.discount) / 100).toFixed(2);
@@ -171,29 +195,53 @@ class Product extends Component {
           ></div>
         </>)
     }
-
+    let j = 0;
     if (this.props.specification.length !== 0) {
       this.props.specification.map(s => {
-        specification.push(
-          // <tr><td style={style.tableTD}>{s.title}</td>
-          //   <td style={style.tableTD}>{s.details}</td></tr>
-          <>
-            <h6>
-              {s.title}
-            </h6>
-            <div
-              id="table-div"
-              dangerouslySetInnerHTML={{ __html: s.details }}
-            ></div>
-          </>
-        )
+        if (j < this.state.i) {
+          specification.push(
+            <>
+              <h6>
+                <b>
+                  {s.title}
+                </b>
+              </h6>
+              <div
+                id="table-div"
+                dangerouslySetInnerHTML={{ __html: s.details }}
+              ></div>
+            </>
+
+          )
+        }
+        j = j + 1;
         return specification
       })
+
+      if (j != specification.length) {
+        specification.push(
+          <Button
+            style={style.linkBtn}
+            onClick={() =>
+              this.linkClick(specification.length + 1)
+            }
+          >Read More</Button>)
+      }
 
     }
     else {
       specification.push(<tr><td><b>-</b></td></tr>)
     }
+    data.push(
+      <img
+        src={`http://localhost:8080${this.state.main_image}`}
+        alt="image"
+        width="100px"
+        height="100px"
+        style={{ margin: "0px 5px" }}
+        onClick={()=>{this.imageClick(this.state.main_image)}}
+      />
+    );
     this.props.images.map((p) => {
       data.push(
         <img
@@ -202,9 +250,8 @@ class Product extends Component {
           width="100px"
           height="100px"
           style={{ margin: "0px 5px" }}
+          onClick={()=>{this.imageClick(p.image)}}
         />
-
-
       );
       return data;
     });
@@ -281,20 +328,15 @@ class Product extends Component {
                 /> */}
 
 
-                <ReactImageMagnify {...{
-                  smallImage: {
-                    alt: 'Product Image',
-                    isFluidWidth: true,
-                    src: `http://localhost:8080${this.state.main_image}`
-                  },
-                  largeImage: {
-                    src: `http://localhost:8080${this.state.main_image}`,
-                    width: 1200,
-                    height: 1800
-                  }
-                }} />
-
-                <div style={{ marginTop: "25px" }}>{data}</div>
+                <ModalImage
+                  small={`http://localhost:8080${this.state.modal_image}`}
+                  large={`http://localhost:8080${this.state.modal_image}`}
+                  hideDownload="true"
+                  imageBackgroundColor="transparent "
+                />
+                <div style={{ marginTop: "25px" }}>
+                  {data}
+                </div>
                 <div style={{ width: "100%" }}>
                   <Button
                     disabled={disable}
@@ -343,7 +385,7 @@ class Product extends Component {
                         {this.state.discount}% off
                   </span></>) : null}
                 </p>
-                <div className="text-danger" style={{marginLeft:"80px"}}>
+                <div className="text-danger" style={{ marginLeft: "80px" }}>
                   <b>{error}</b>
                 </div>
                 <NumericInput
@@ -360,24 +402,24 @@ class Product extends Component {
                 />
                 <hr />
 
-               {/* <p class="card-text">
+                {/* <p class="card-text">
                    <h4 style={{ color: "#fb641b", display: "inline-block" }}> Product Description :</h4>
                   <div
                     id="table-div"
                     dangerouslySetInnerHTML={{ __html: this.state.description }}
                   ></div>
                 </p>*/}
-                 {description}
+                {description}
                 <p class="card-text">
-                  <h4 style={{ color: "#fb641b", display: "inline-block" }}> Product Specification :</h4> 
+                  <h4 style={{ color: "#fb641b", display: "inline-block" }}> Product Specification :</h4>
 
                   {/* <table width="100%">
                     {specification}
                   </table> */}
-                 
+
                   {specification}
                 </p>
-               
+
               </div>
 
               {this.state.reviews.length != 0 ?
