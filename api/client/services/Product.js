@@ -1,6 +1,6 @@
 const main = require("../../models/main");
 const Sequelize = require("sequelize");
-const { sequelize } = require("../../db/db");
+const { sequelize } = require("../../db/db"); 
 const Op = Sequelize.Op;
 const $or = Op.or;
 
@@ -62,7 +62,7 @@ exports.getOfferProduct = async (req, res) => {
     const p = await main.product.findAll({
       where: {
         isInOffer: 1,
-        isDeleted : 0
+        isDeleted: 0
       },
       order: [["discount", "DESC"]],
     });
@@ -101,11 +101,11 @@ exports.getSpecificationByProductId = async (req, res) => {
     const p = await main.Specification.findAll({
       where: {
         productId: pid,
-        isDeleted : 0
+        isDeleted: 0
       },
     });
 
-    res.status(200).send({ product: p});
+    res.status(200).send({ product: p });
   } catch (err) {
     res.status(400).send(err);
   }
@@ -141,13 +141,27 @@ exports.searchProducts = async (req, res) => {
 exports.addReviews = async (req, res) => {
   try {
     const data = req.body;
-    const review = await main.Review.create({
-      review: data.review,
-      rating: data.rating,
-      userId: req.validUser.id,
-      productId: data.productId,
+
+    const isPurchase = await sequelize.query("select o.id,o.productId from order_details o,orders od where od.id=o.orderId and o.productId='" + data.productId + "' and od.userId='"+req.validUser.id+"' and o.isDeleted=0");
+    let count=0;
+    isPurchase[0].forEach(i => {
+      count++;
     });
-    res.status(201).send(review);
+   
+   
+    if (count !== 0) {
+      const review = await main.Review.create({
+        review: data.review,
+        rating: data.rating,
+        userId: req.validUser.id,
+        productId: data.productId,
+      });
+      res.status(201).send("Review Added");
+    }
+    else{
+     res.status(201).send("Sorry! You are not allowed to review this product since you haven't bought it on Flipzon.");
+    }
+
   } catch (error) {
     res.status(400).send(error);
   }
@@ -170,7 +184,7 @@ exports.reviews = async (req, res) => {
 exports.categoryMenu = async (req, res) => {
   try {
     const cid = req.params.cid;
-    const cat = await sequelize.query("select * from product_categories where id!="+cid+" and parent="+cid);
+    const cat = await sequelize.query("select * from product_categories where id!=" + cid + " and parent=" + cid);
     res.status(200).send(cat[0]);
   } catch (error) {
     res.status(400).send(error);

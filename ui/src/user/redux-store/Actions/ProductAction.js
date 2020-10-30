@@ -128,7 +128,7 @@ export const addReview = (review) => {
         }).then(response => {
             dispatch({
                 type: types.ADD_REVIEW,
-                review:response.data
+                message:response.data
             });
         }).catch(error => {
             dispatch({

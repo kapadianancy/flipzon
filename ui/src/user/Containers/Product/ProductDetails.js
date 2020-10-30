@@ -38,7 +38,8 @@ class Product extends Component {
     reviews: [],
     i: 1,
     specification: [],
-    modal_image:""
+    modal_image: "",
+    message: ""
   };
 
   async componentDidMount() {
@@ -117,9 +118,9 @@ class Product extends Component {
     });
   }
 
-  imageClick(img){
+  imageClick(img) {
     this.setState({
-      modal_image:img
+      modal_image: img
     });
   }
 
@@ -136,6 +137,11 @@ class Product extends Component {
     await this.props.addReview(review);
     if (this.props.error !== "") {
       this.props.history.push("/error/" + this.props.error);
+    }
+    if (this.props.message !== "Review Added") {
+      this.setState({
+        message: this.props.message
+      })
     }
     this.setState({ show: false });
     await this.props.getReviews(this.state.id);
@@ -239,7 +245,7 @@ class Product extends Component {
         width="100px"
         height="100px"
         style={{ margin: "0px 5px" }}
-        onClick={()=>{this.imageClick(this.state.main_image)}}
+        onClick={() => { this.imageClick(this.state.main_image) }}
       />
     );
     this.props.images.map((p) => {
@@ -250,8 +256,10 @@ class Product extends Component {
           width="100px"
           height="100px"
           style={{ margin: "0px 5px" }}
-          onClick={()=>{this.imageClick(p.image)}}
+          onClick={() => { this.imageClick(p.image) }}
         />
+        
+        
       );
       return data;
     });
@@ -301,7 +309,7 @@ class Product extends Component {
               <br />
               <b>{r.review}</b>
 
-              <p style={{ color: "gray", fontSize: "14px" }}> Flipkart cutomer- {date[0]}</p>
+              <p style={{ color: "gray", fontSize: "14px" }}> Flipzon cutomer- {date[0]}</p>
             </Card.Text>
           </Card.Body>
         </Card>
@@ -334,9 +342,10 @@ class Product extends Component {
                   hideDownload="true"
                   imageBackgroundColor="transparent "
                 />
-                <div style={{ marginTop: "25px" }}>
+                <div style={{ marginTop: "75px" }}>
                   {data}
                 </div>
+                <h6 className="text-danger" style={{paddingTop:"10px"}}>{this.state.message}</h6>
                 <div style={{ width: "100%" }}>
                   <Button
                     disabled={disable}
@@ -477,6 +486,8 @@ class Product extends Component {
                     />
                   </FormGroup>
                   <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+
+                    
                     <Label for="feedback" className="mr-sm-2">
                       Review
                     </Label>
@@ -511,6 +522,7 @@ const mapStateToProp = (state) => {
   return {
     products: state.Product.products,
     images: state.Product.images,
+    message: state.Product.message,
     error: state.Order.error,
     token: state.User.token,
     userId: state.User.userId,
