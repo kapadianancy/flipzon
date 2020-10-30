@@ -85,9 +85,9 @@ const Login = (props) => {
             <Spinner animation="border" /> :
             <Button variant="primary" type="submit">Login</Button>
         }
-        <div className="d-flex justify-content-center">
+        {/* <div className="d-flex justify-content-center">
             <Button variant="link" onClick={props.goToRegister}>Don't have an account? Register here.</Button>
-        </div>
+        </div> */}
         <div className="d-flex justify-content-center">
             <Button variant="link" onClick={props.goToForgotPassword}>Forgot your Password? click here.</Button>
         </div>

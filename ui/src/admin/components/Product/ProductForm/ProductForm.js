@@ -343,7 +343,7 @@ const ProductForm = (props) => {
                                         <input type="file" onChange={ (e) => productFieldChanged(e, "main_image", "image")} className="form-control is-invalid" accept="image/*" />
                                         <div className="invalid-feedback">{ formErrors.main_imageError }</div>
                                     </> :
-                                    <input type="file" onChange={ (e) => productFieldChanged(e, "main_image", "image")} className="form-control" accept="image/*" />
+                                    <input type="file" accept="image/x-png,image/gif,image/jpeg" onChange={ (e) => productFieldChanged(e, "main_image", "image")} className="form-control" accept="image/*" />
                                 }
                                 {
                                     props.edit ?
@@ -356,7 +356,7 @@ const ProductForm = (props) => {
                         <Form.Group as={Row}>
                             <Form.Label column sm="2">Extra Imgs</Form.Label>
                             <Col sm="10">
-                                <input type="file" onChange={ (e) => productFieldChanged(e, "ext_images", "images")} className="form-control" multiple accept="image/*" />
+                                <input type="file" accept="image/x-png,image/gif,image/jpeg" onChange={ (e) => productFieldChanged(e, "ext_images", "images")} className="form-control" multiple accept="image/*" />
                                 {
                                     props.edit && props.product.images && props.product.images.length > 0 ?
                                         <Row>
