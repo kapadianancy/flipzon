@@ -109,7 +109,7 @@ class OfferProduct extends Component {
               >
                 <div class="card-header border-0">
                   <img
-                    src={`http://localhost:8080${p.main_image}`}
+                    src={`http://localhost:8080${p.thumbnail}`}
                     height="150px"
                     width="100%"
                     alt="image"

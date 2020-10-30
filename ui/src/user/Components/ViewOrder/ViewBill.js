@@ -3,6 +3,9 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Form, Card, Button } from "react-bootstrap";
 import { withRouter } from "react-router-dom";
+import Modal from 'react-bootstrap/Modal';
+import Cards from 'react-credit-cards';
+import 'react-credit-cards/es/styles-compiled.css';
 
 import * as actions from "../../redux-store/Actions/OrderAction";
 import * as paction from "../../redux-store/Actions/ProductAction";
@@ -16,7 +19,13 @@ class viewBill extends Component {
     address: "",
     contact: "",
     disbale: true,
-    visibility:"hidden"
+    visibility: "hidden",
+    show: false,
+    cvc: '',
+    expiry: '',
+    focus: '',
+    name: '',
+    number: ''
   };
 
   async componentDidMount() {
@@ -39,48 +48,68 @@ class viewBill extends Component {
     }
   };
 
-  payment=()=>
-  {
-      this.setState({
-          ...this.state,
-          visibility:"visible"
-      })
+  payment = () => {
+    this.setState({
+      ...this.state,
+      visibility: "visible"
+    })
   }
 
-  radiochange=(event)=>
-  {
-      if(event.target.value=="COD")
-      {
-          this.setState({
-              ...this.state,
-              disbale:false
-          })
-      }
+  handleInputFocus = (e) => {
+    this.setState({ focus: e.target.name });
+  }
+
+  handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    this.setState({ [name]: value });
+  }
+
+  radiochange = (event) => {
+    if (event.target.value == "COD") {
+      this.setState({
+        ...this.state,
+        disbale: false
+      })
+    }
+    else {
+      this.setState({
+        ...this.state,
+        show: true,
+        disbale: true
+      })
+    }
+  }
+
+  handleClose = () => {
+    this.setState({
+      show: false
+    })
   }
 
   render() {
     let rows = [];
     let total_price = 0;
-    
+
 
     this.props.orderItems.map(async (row) => {
       total_price += row.quantity * row.price;
-      
+
       rows.push(
         <>
-            <table style={{ width: "100%", padding: "5px" }}>
-            
+          <table style={{ width: "100%", padding: "5px" }}>
+
             <tr>
               <td>{row.name}</td>
               <td>qty-{row.quantity}</td>
               <td>{row.quantity * row.price}</td>
             </tr>
-          
-          <hr />
+
+            <hr />
           </table>
         </>
       );
-      
+
 
       return rows;
     });
@@ -160,7 +189,7 @@ class viewBill extends Component {
           </Card.Body>
         </Card>
 
-        <div style={{paddingBottom:"20px"}}>
+        <div style={{ paddingBottom: "20px" }}>
           <Card
             style={{
               visibility: this.state.visibility,
@@ -173,21 +202,51 @@ class viewBill extends Component {
             <Card.Body>
               <Card.Title>Select Payment Mathod</Card.Title>
               <Form>
-                  <div style={{textAlign: "-webkit-left"}}>
-               <input type="radio" value="COD" name="payment" onChange={this.radiochange}/> COD
-               <br/>
-               <input type="radio" value="Card" name="payment"/> Credit/Debit card
-               <br/>
-               <input type="radio" value="Net" name="payment"/> Net Banking
-               <br/>
-               <input type="radio" value="upi" name="payment"/> UPI
-               <br/>
-               <input type="radio" value="wallet" name="payment"/> Wallet
+                <div style={{ textAlign: "-webkit-left" }}>
+                  <input type="radio" value="COD" name="payment" onChange={this.radiochange} /> COD
+               <br />
+                  <input type="radio" value="Card" name="payment" onChange={this.radiochange} /> Credit/Debit card
+
                </div>
               </Form>
             </Card.Body>
           </Card>
         </div>
+
+        <Modal show={this.state.show} onHide={this.handleClose}
+          backdrop="static"
+          keyboard={false} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Card Details</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div id="PaymentForm">
+              <Cards
+                cvc={this.state.cvc}
+                expiry={this.state.expiry}
+                focused={this.state.focus}
+                name={this.state.name}
+                number={this.state.number}
+              />
+              <form>
+                <input
+                  type="tel"
+                  name="number"
+                  placeholder="Card Number"
+                  onChange={this.handleInputChange}
+                  onFocus={this.handleInputFocus}
+                />
+
+              </form>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+
+            <Button variant="primary" onClick={this.saveChanges}>
+              Save Changes
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </>
     );
   }

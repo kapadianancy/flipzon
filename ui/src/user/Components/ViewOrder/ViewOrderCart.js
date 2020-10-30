@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import {Table } from "reactstrap";
 import {Button } from 'react-bootstrap';
 import { withRouter } from "react-router-dom";
-import Modal from 'react-bootstrap/Modal'
+import Modal from 'react-bootstrap/Modal';
 import NumericInput from "react-numeric-input";
 
 import * as actions from "../../redux-store/Actions/OrderAction";
@@ -182,7 +182,7 @@ class ViewOrderCart extends Component {
             <Modal.Title>Delivery Address</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-              <textarea name="address" cols="60"
+              <textarea name="address" cols="60" rows="5"
               value={this.state.address} onChange={this.addressChange}/>
           </Modal.Body>
           <Modal.Footer>
