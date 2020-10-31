@@ -347,7 +347,7 @@ const ProductForm = (props) => {
                                 }
                                 {
                                     props.edit ?
-                                    <Image src={`http://localhost:8080/${props.product.main_image}`} className={classes.mainImage} /> : null
+                                    <Image src={`${props.product.main_image}`} className={classes.mainImage} /> : null
                                 }
                             </Col>
                         </Form.Group>
@@ -364,7 +364,7 @@ const ProductForm = (props) => {
                                                 props.product.images.map( image => (
                                                     <Col key={image.id} sm="4">
                                                         <div className={classes.iContainer} onClick={() => imageCheckboxChange(image.id)} >
-                                                            <Image src={`http://localhost:8080/${image.image}`} />
+                                                            <Image src={`${image.image}`} />
                                                             { 
                                                                 ids.has(image.id) && <div className={classes.after}>&#10004;</div>
                                                             }

@@ -11,7 +11,7 @@ exports.createUser =[
 ]
 
 exports.editUser =[
-    check('name').not().isEmpty().withMessage("Product Name is required!").trim().escape(),
+    check('name').optional().isString().withMessage("Product Name is invalid!").trim().escape(),
     check('stock').optional().isInt().withMessage("Product Stock is invalid!").trim().escape(),
     check('categoryId').optional().isInt().withMessage("Product Category is invalid!").trim().escape(),
     check('price').optional().isInt().withMessage("Product Price is invalid!").trim().escape(),

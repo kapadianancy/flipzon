@@ -2,7 +2,7 @@ const Product_Categories_Services = require('../services/Product_CategoriesAdmin
 var upload = require("../middlewares/categoryImage");
 const auth = require("../middlewares/auth");
 var path = require('path');
-var Jimp = require('jimp');
+// var Jimp = require('jimp');
 module.exports = (app) => {
 
   // return list of Product_Category
