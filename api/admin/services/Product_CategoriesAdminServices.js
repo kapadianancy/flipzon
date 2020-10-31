@@ -1,5 +1,6 @@
 const Product_category = require("../../models/Product_category");
-
+const { Storage } = require('@google-cloud/storage');
+var path = require('path');
 const getProduct_Category = async (page,limit) => {
     try{
         let data = { 
@@ -125,6 +126,7 @@ const editProduct_Category = async (id, data) => {
         product_category = await Product_category.update(data, {
             where: { id : id }
         });
+
         return await Product_category.findByPk(id);
     } catch (error) {
         throw error;
@@ -144,6 +146,26 @@ const edit_DeleteProduct_Category = async (id) => {
         product_category = await Product_category.update({isDeleted:1}, {
             where: { id : id }
         });
+        let del = await Product_category.findByPk(id);
+        let newdel = del.image.split("/o/")[1];
+        let cdel = newdel.split("?")[0];
+
+        let newdel2 = del.thumbnailImage.split("/o/")[1];
+        let cdel2 = newdel2.split("?")[0];
+
+        console.log(cdel+" <=> "+ cdel2);
+
+        var credPath = path.join(__dirname, '..', '..', 'public', 'flipzon-345e3e86f7d9.json');
+        storage = await new Storage({
+            projectId: "flipzon-4cf32",
+            keyFilename: credPath,
+        });
+        bucket = await storage.bucket("gs://flipzon-4cf32.appspot.com/");
+        let bucketName = await storage.bucket("gs://flipzon-4cf32.appspot.com/");
+
+        await storage.bucket(bucketName.name).file(cdel).delete();
+        await storage.bucket(bucketName.name).file(cdel2).delete();
+
         return await Product_category.findByPk(id);
     } catch (error) {
         throw error;
