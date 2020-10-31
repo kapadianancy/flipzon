@@ -2,12 +2,13 @@ import * as types from "../actionNames";
 
 const initialStore = {
   products: [],
-  offer_products : [],
+  offer_products: [],
   images: [],
   error: "",
   review: [],
+  message: "",
   specification: [],
-  catProducts:[]
+  catProducts: []
 };
 
 const store = (state = initialStore, action) => {
@@ -61,7 +62,7 @@ const store = (state = initialStore, action) => {
     case types.ADD_REVIEW:
       return {
         ...state,
-        // review: action.review,
+        message: action.message
       };
     case types.GET_REVIEWS:
       return {

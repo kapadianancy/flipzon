@@ -26,6 +26,14 @@ const Order =db.sequelize.define("Order", {
             type:DataTypes.STRING,
             allowNull:false
         },
+        mode:{
+            type:DataTypes.STRING,
+            allowNull:false
+        },
+        payment_status:{
+            type:DataTypes.STRING,
+            allowNull:false
+        },
         isDeleted:
         {
             type:DataTypes.BOOLEAN,

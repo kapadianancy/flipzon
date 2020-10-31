@@ -11,6 +11,7 @@ import nextId from "react-id-generator";
 import { setPrefix } from "react-id-generator";
 import { Badge, Card } from "react-bootstrap";
 import ReactImageMagnify from 'react-image-magnify';
+import ModalImage from "react-modal-image";
 
 
 import Header from "../../Components/Header/Header";
@@ -35,7 +36,10 @@ class Product extends Component {
     feedback: "",
     rating: 1,
     reviews: [],
-    specification: []
+    i: 1,
+    specification: [],
+    modal_image: "",
+    message: ""
   };
 
   async componentDidMount() {
@@ -52,7 +56,8 @@ class Product extends Component {
       stock: this.props.products.stock,
       main_image: this.props.products.main_image,
       reviews: this.props.reviews,
-      specification: this.props.specification
+      specification: this.props.specification,
+      modal_image: this.props.products.thumbnail
     });
   }
 
@@ -107,6 +112,18 @@ class Product extends Component {
       [name]: value,
     });
   }
+  linkClick(len) {
+    this.setState({
+      i: len
+    });
+  }
+
+  imageClick(img) {
+    this.setState({
+      modal_image: img
+    });
+  }
+
   onStarClick(event) {
     this.setState({ rating: event });
   }
@@ -120,6 +137,11 @@ class Product extends Component {
     await this.props.addReview(review);
     if (this.props.error !== "") {
       this.props.history.push("/error/" + this.props.error);
+    }
+    if (this.props.message !== "Review Added") {
+      this.setState({
+        message: this.props.message
+      })
     }
     this.setState({ show: false });
     await this.props.getReviews(this.state.id);
@@ -148,6 +170,14 @@ class Product extends Component {
       videolink: {
         padding: "10px",
         margin: "10px"
+      },
+      linkBtn: {
+        alignSelf: "center",
+        backgroundColor: "white",
+        borderColor: "white",
+        color: "#fb641b",
+        display: "inline-block",
+        textDecoration: "underline"
       }
     };
     let price = (this.state.price - (this.state.price * this.state.discount) / 100).toFixed(2);
@@ -171,40 +201,65 @@ class Product extends Component {
           ></div>
         </>)
     }
-
+    let j = 0;
     if (this.props.specification.length !== 0) {
       this.props.specification.map(s => {
-        specification.push(
-          // <tr><td style={style.tableTD}>{s.title}</td>
-          //   <td style={style.tableTD}>{s.details}</td></tr>
-          <>
-            <h6>
-              {s.title}
-            </h6>
-            <div
-              id="table-div"
-              dangerouslySetInnerHTML={{ __html: s.details }}
-            ></div>
-          </>
-        )
+        if (j < this.state.i) {
+          specification.push(
+            <>
+              <h6>
+                <b>
+                  {s.title}
+                </b>
+              </h6>
+              <div
+                id="table-div"
+                dangerouslySetInnerHTML={{ __html: s.details }}
+              ></div>
+            </>
+
+          )
+        }
+        j = j + 1;
         return specification
       })
+
+      if (j != specification.length) {
+        specification.push(
+          <Button
+            style={style.linkBtn}
+            onClick={() =>
+              this.linkClick(specification.length + 1)
+            }
+          >Read More</Button>)
+      }
 
     }
     else {
       specification.push(<tr><td><b>-</b></td></tr>)
     }
+    data.push(
+      <img
+        src={this.props.products.thumbnail}
+        alt="image"
+        width="100px"
+        height="100px"
+        style={{ margin: "0px 5px" }}
+        onClick={() => { this.imageClick(this.props.products.thumbnail) }}
+      />
+    );
     this.props.images.map((p) => {
       data.push(
         <img
-          src={`http://localhost:8080${p.image}`}
+          src={p.thumbnail}
           alt="image"
           width="100px"
           height="100px"
           style={{ margin: "0px 5px" }}
+          onClick={() => { this.imageClick(p.image) }}
         />
-
-
+        
+        
       );
       return data;
     });
@@ -254,7 +309,7 @@ class Product extends Component {
               <br />
               <b>{r.review}</b>
 
-              <p style={{ color: "gray", fontSize: "14px" }}> Flipkart cutomer- {date[0]}</p>
+              <p style={{ color: "gray", fontSize: "14px" }}> Flipzon cutomer- {date[0]}</p>
             </Card.Text>
           </Card.Body>
         </Card>
@@ -281,20 +336,16 @@ class Product extends Component {
                 /> */}
 
 
-                <ReactImageMagnify {...{
-                  smallImage: {
-                    alt: 'Product Image',
-                    isFluidWidth: true,
-                    src: `http://localhost:8080${this.state.main_image}`
-                  },
-                  largeImage: {
-                    src: `http://localhost:8080${this.state.main_image}`,
-                    width: 1200,
-                    height: 1800
-                  }
-                }} />
-
-                <div style={{ marginTop: "25px" }}>{data}</div>
+                <ModalImage
+                  small={this.state.modal_image}
+                  large={this.state.modal_image}
+                  hideDownload="true"
+                  imageBackgroundColor="transparent "
+                />
+                <div style={{ marginTop: "75px" }}>
+                  {data}
+                </div>
+                <h6 className="text-danger" style={{paddingTop:"10px"}}>{this.state.message}</h6>
                 <div style={{ width: "100%" }}>
                   <Button
                     disabled={disable}
@@ -343,7 +394,7 @@ class Product extends Component {
                         {this.state.discount}% off
                   </span></>) : null}
                 </p>
-                <div className="text-danger" style={{marginLeft:"80px"}}>
+                <div className="text-danger" style={{ marginLeft: "80px" }}>
                   <b>{error}</b>
                 </div>
                 <NumericInput
@@ -360,24 +411,24 @@ class Product extends Component {
                 />
                 <hr />
 
-               {/* <p class="card-text">
+                {/* <p class="card-text">
                    <h4 style={{ color: "#fb641b", display: "inline-block" }}> Product Description :</h4>
                   <div
                     id="table-div"
                     dangerouslySetInnerHTML={{ __html: this.state.description }}
                   ></div>
                 </p>*/}
-                 {description}
+                {description}
                 <p class="card-text">
-                  <h4 style={{ color: "#fb641b", display: "inline-block" }}> Product Specification :</h4> 
+                  <h4 style={{ color: "#fb641b", display: "inline-block" }}> Product Specification :</h4>
 
                   {/* <table width="100%">
                     {specification}
                   </table> */}
-                 
+
                   {specification}
                 </p>
-               
+
               </div>
 
               {this.state.reviews.length != 0 ?
@@ -406,7 +457,7 @@ class Product extends Component {
                   <div class="card flex-row flex-wrap">
                     <div class="card-header">
                       <img
-                        src={`http://localhost:8080${this.state.main_image}`}
+                        src={this.state.main_image}
                         alt="image"
                         height="50px"
                         width="50px"
@@ -435,6 +486,8 @@ class Product extends Component {
                     />
                   </FormGroup>
                   <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+
+                    
                     <Label for="feedback" className="mr-sm-2">
                       Review
                     </Label>
@@ -469,6 +522,7 @@ const mapStateToProp = (state) => {
   return {
     products: state.Product.products,
     images: state.Product.images,
+    message: state.Product.message,
     error: state.Order.error,
     token: state.User.token,
     userId: state.User.userId,

@@ -5,6 +5,7 @@ const initialStore = {
     token: "",
     error: "",
     message: "",
+    otp:"",
     orderItems: []
 };
 
@@ -57,6 +58,11 @@ const store = (state = initialStore, action) => {
             return {
                 ...state,
                 message: action.message
+            }
+        case types.SEND_OTP:
+            return {
+                ...state,
+                otp: action.otp
             }
 
         default:
