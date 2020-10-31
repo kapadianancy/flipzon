@@ -116,7 +116,7 @@ class ViewOrderCart extends Component {
         <tr>
           <td>
             <img
-              src={`http://localhost:8080${row.main_image}`}
+              src={row.main_image}
               height="50px"
               width="50px"
             />

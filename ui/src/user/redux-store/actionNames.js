@@ -44,6 +44,7 @@ export const ADD_TO_CART_FAILED="ADD_TO_CART_FAILED";
 export const VIEW_CART="VIEW_CART";
 
 export const PLACE_ORDER="PLACE_ORDER";
+export const SEND_OTP="SEND_OTP"
 export const PLACE_ORDER_FAILED="PLACE_ORDER_FAILED";
 
 export const REMOVE_ORDER_ITEM="REMOVE_ORDER_ITEM";
@@ -56,3 +57,4 @@ export const GET_REVIEWS="GET_REVIEWS"
 
 export const SUB_CATEGORY="SUB_CATEGORY"
 export const MENU_SUB_CAT="MENU_SUB_CAT"
+

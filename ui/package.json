@@ -30,6 +30,7 @@
     "react-modal-image": "^2.5.0",
     "react-multilevel-dropdown": "^1.0.5",
     "react-numeric-input": "^2.2.3",
+    "react-otp-input": "^2.2.0",
     "react-rating-component": "^1.0.0",
     "react-rating-stars-component": "^2.2.0",
     "react-redux": "^7.2.1",

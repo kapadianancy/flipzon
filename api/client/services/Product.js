@@ -173,6 +173,7 @@ exports.reviews = async (req, res) => {
     const p = await main.Review.findAll({
       where: {
         productId: pid,
+        isDeleted:0
       },
     });
     res.status(200).send(p);

@@ -39,7 +39,7 @@ class ProductSlider extends Component {
             variant="top"
             height="177px"
             width="266px"
-            src={`http://localhost:8080${p[j].main_image}`}
+            src={p[j].main_image}
           />
           <Card.Body>
             <Card.Title>{p[j].name}</Card.Title>

@@ -1,7 +1,7 @@
 var nodemailer = require('nodemailer');
 
 const { sequelize } = require('../../db/db');
-const { product } = require('../../models/main');
+var nodemailer = require('nodemailer');
 const main = require('../../models/main');
 
 exports.checkOrder = async (req, res) => {
@@ -40,7 +40,9 @@ exports.placeOrder = async (req, res) => {
             userId: req.body.userId,
             orderDate: Date.now(),
             totalPrice: 0,
-            status: 'Pending'
+            status: 'Pending',
+            mode: '',
+            payment_status: 'Pending'
         });
         oid = order.id;
         req.orderId = oid;
@@ -211,11 +213,13 @@ exports.confirmOrder = async (req, res) => {
             return res.status(400).send("Order is Not Found")
         }
         const total_price = await getTotalCost(orderid.id);
-
+        const data = req.body;
         const Order = await main.Order.update({
             "orderDate": Date.now(),
             "totalPrice": total_price,
-            "status": "Confirm"
+            "status": "Confirm",
+            "mode": data.mode,
+            "payment_status": data.payment_status
         }, {
             where: {
                 id: orderid.id,
@@ -457,3 +461,71 @@ exports.updateUserId = async (req, res) => {
         res.status(400).send(err);
     }
 }
+
+exports.sendOTP = async (req, res) => {
+    try {
+        const email = req.validUser.email;
+        const user = await main.User.findOne(
+            {
+                where:
+                {
+                    "email": email,
+                    isDeleted: 0
+                }
+            });
+            
+
+        if (!user) {
+            return res.status(401).send("User Not Found");
+        }
+       
+        const result = await sendOTPMail(email);
+        if (result) {
+            return res.status(200).send(result);
+        }
+        else {
+            return res.status(400).send("Error");
+        }
+    }
+    catch (err) {
+        res.status(400).send(err);
+    }
+}
+
+const sendOTPMail = async function (email) {
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'nidhinancy0921@gmail.com',
+            pass: 'nidhi0921nancy'
+        }
+    });
+
+    var randomstring = '';
+    var characters = '0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i <= 5; i++) {
+        randomstring += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    const User = await main.User.findOne({
+        where: {
+            email: email
+        }
+    })
+
+    let msg = '<html><body>Your One Time Password Is : <b>' + randomstring + '</b></body></htm>';
+    var mailOptions = {
+        from: 'nidhinancy0921@gmail.com',
+        to: email,
+        subject: 'OTP From Flipzon',
+        text: 'OTP From Flipzon',
+        html: msg
+    };
+
+    let sendmail = await transporter.sendMail(mailOptions);
+
+    return randomstring;
+
+
+}
+

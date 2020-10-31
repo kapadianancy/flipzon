@@ -57,7 +57,7 @@ class Product extends Component {
       main_image: this.props.products.main_image,
       reviews: this.props.reviews,
       specification: this.props.specification,
-      modal_image: this.props.products.main_image
+      modal_image: this.props.products.thumbnail
     });
   }
 
@@ -240,18 +240,18 @@ class Product extends Component {
     }
     data.push(
       <img
-        src={`http://localhost:8080${this.state.main_image}`}
+        src={this.props.products.thumbnail}
         alt="image"
         width="100px"
         height="100px"
         style={{ margin: "0px 5px" }}
-        onClick={() => { this.imageClick(this.state.main_image) }}
+        onClick={() => { this.imageClick(this.props.products.thumbnail) }}
       />
     );
     this.props.images.map((p) => {
       data.push(
         <img
-          src={`http://localhost:8080${p.image}`}
+          src={p.thumbnail}
           alt="image"
           width="100px"
           height="100px"
@@ -337,8 +337,8 @@ class Product extends Component {
 
 
                 <ModalImage
-                  small={`http://localhost:8080${this.state.modal_image}`}
-                  large={`http://localhost:8080${this.state.modal_image}`}
+                  small={this.state.modal_image}
+                  large={this.state.modal_image}
                   hideDownload="true"
                   imageBackgroundColor="transparent "
                 />
@@ -457,7 +457,7 @@ class Product extends Component {
                   <div class="card flex-row flex-wrap">
                     <div class="card-header">
                       <img
-                        src={`http://localhost:8080${this.state.main_image}`}
+                        src={this.state.main_image}
                         alt="image"
                         height="50px"
                         width="50px"
