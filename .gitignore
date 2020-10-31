@@ -1,5 +1,3 @@
 /api/node_modules
 /ui/node_modules
-/api/public/images
-/api/public/thumbnails
-/node_modules
+/api/flipzon-key.json
