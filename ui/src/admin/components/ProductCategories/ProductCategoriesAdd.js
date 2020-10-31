@@ -3,6 +3,7 @@ import { Form} from 'react-bootstrap'
 import { connect } from 'react-redux'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
+import Spinner from 'react-bootstrap/Spinner';
 import * as classes from '../../containers/Products.module.css'
 import { AddProductCategories,fetchProductCategories } from '../../store/actions/Product_CategoriesActions'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
@@ -14,6 +15,7 @@ class ProductCategoriesAdd extends Component{
         image:"",
         category:"",
         cate:"",
+        sub:false,
         errors: {
             name: '',
             image:'',
@@ -73,6 +75,7 @@ class ProductCategoriesAdd extends Component{
         }
        
         await this.props.fetchProductCategories();
+        this.setState({sub:false})
         await this.props.history.push('/admin/productcategories'); 
     }
    
@@ -110,7 +113,9 @@ class ProductCategoriesAdd extends Component{
 
         if(a===0 && a1===0 && a2===0)
         {
+            this.setState({sub:true})
             this.postDataHandler();
+            
         }
         this.setState({errors:errors});
     }
@@ -191,7 +196,7 @@ class ProductCategoriesAdd extends Component{
                     </Form.Group>
                     <Button onClick={this.submitDataHandler} type="button" variant="primary">
                         Submit
-                    </Button>
+                    </Button>{(this.state.sub)?<Spinner animation="border" />:""}
                     </Form>
                 </Card.Body>
             </Card>

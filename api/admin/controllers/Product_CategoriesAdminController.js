@@ -1,8 +1,18 @@
 const Product_Categories_Services = require('../services/Product_CategoriesAdminServices');
-var upload = require("../middlewares/categoryImage");
+// var uploader = require("../middlewares/categoryImage");
 const auth = require("../middlewares/auth");
 var path = require('path');
 var Jimp = require('jimp');
+const { Storage } = require('@google-cloud/storage');
+var multer  = require('multer');
+const upload = require('../middlewares/upload');
+
+const uploader = multer({
+    storage: multer.memoryStorage(),
+    limits: {
+        fileSize: 5 * 1024 * 1024, // keep images size < 5 MB
+    },
+}).fields([{ name: 'image', maxCount: 1 }]);
 module.exports = (app) => {
 
   // return list of Product_Category
@@ -46,61 +56,43 @@ app.get("/admin/product_categoriesParent/:id", async (req, res, next) => {
     }
     })
 // add  Product_Category
-app.post("/admin/product_categories/:id", upload,async (req, res, next) => {
-    
-    if(req.files.image) {
-        var myPath = path.join(__dirname, '..', '..', 'public', 'images');
-        var myPath1 = path.join(__dirname, '..', '..', 'public', 'thumbnails');
-        Jimp.read(myPath+"/"+req.files.image[0].filename)
-            .then(lenna => {
-                let thumbnailImage = lenna.resize(64, 64).quality(90).write(myPath1+"/"+req.files.image[0].filename);
-        
-        return { thumbnailImage }
-        })
-        .catch(err => {
-            console.error(err);
-        });
-        
+app.post("/admin/product_categories/:id", uploader,upload,async (req, res, next) => {
+    console.log("Called")
+    try {    
         req.body = {
             ...req.body,
-            image:"/images/"+req.files.image[0].filename,
-            thumbnailImage:"/thumbnails/"+req.files.image[0].filename
-        }
-    }
-    try {
-        let product_categories = await Product_Categories_Services.addProduct_Category(req.params.id,req.body);
+            image:req.images.image[0],
+            thumbnailImage:req.images.image[1]
+        }    
+        let product_categories =await Product_Categories_Services.addProduct_Category(req.params.id,req.body);
         res.send(product_categories);
     } catch(error) {
         next(error);
-    }
+    }            
+        // var myPath = path.join(__dirname, '..', '..', 'public', 'images');
+        // var myPath1 = path.join(__dirname, '..', '..', 'public', 'thumbnails');
+        // Jimp.read(myPath+"/"+req.files.image.filename)
+        //     .then(lenna => {
+        //         let thumbnailImage = lenna.resize(64, 64).quality(90).write(myPath1+"/"+req.files.image[0].filename);
+        
+        // return { thumbnailImage }
+        // }).catch(err => {
+        //     console.error(err);
+        // });
 })
 //Edit Product_Category
-app.put("/admin/product_categories/:id", auth, upload,async (req, res, next) => {
-    
-    if(req.files.image) {
-        var myPath = path.join(__dirname, '..', '..', 'public', 'images');
-        var myPath1 = path.join(__dirname, '..', '..', 'public', 'thumbnails');
-        
-        Jimp.read(myPath+"/"+req.files.image[0].filename)
-            .then(lenna => {
-                let thumbnailImage = lenna.resize(64, 64).quality(90).write(myPath1+"/"+req.files.image[0].filename);
-        return { thumbnailImage }
-        })
-        .catch(err => {
-            console.error(err);
-        });
+app.put("/admin/product_categories/:id", auth,uploader,upload,async (req, res, next) => {
+    try {    
         req.body = {
             ...req.body,
-            image:"/images/"+req.files.image[0].filename,
-            thumbnailImage:"/thumbnails/"+req.files.image[0].filename
-        }
-    }
-    try {
+            image:req.images.image[0],
+            thumbnailImage:req.images.image[1]
+        }    
         let product_categories = await Product_Categories_Services.editProduct_Category(req.params.id, req.body);
         res.send(product_categories);
-    } catch (error) {
+    } catch(error) {
         next(error);
-    }
+    } 
 })
 app.put("/admin/categories/:id", async (req, res, next) => {
     try {

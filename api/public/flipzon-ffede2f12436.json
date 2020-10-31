@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "flipzon-4cf32",
+  "private_key_id": "ffede2f1243610f613557d27956390ccb6273561",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCTdaONkMgV9vLr\npD9UosIcwNEYWqBotQ1Nrz0549r33CpYJWlhWNQXFQNMolVsFm9Ngm1sJndRJGZQ\nOpuo+mxSUcT+BGrF6ZZ/5C6zlp4QqGwiscoFeF7MoE13Af5o4drhQzo6FudNiNhG\nzPMavOZkaUWhDeyJ7iaf9h9Vvsu67o7mFfB9bcL3lDo+fexGXCmK275qTt6uf+5M\nUHns5J44vG4Codp4N/O8dfvPGPhdleKLD0w+YbS2NXDtjnLJDpXuIkWtRjw/KMBh\n2pjV2vOCZoiXEjmhk3cr3v8Q3sqekAiaAHv/WQpq2+VhQhdMMotVobTAUGY9Mp+o\nmiWs9xnbAgMBAAECggEASQwAfjNXetH/Wk3d9X4+7GFz8z2JsvTlZzNFADVolloh\nO9Mklc2cGucU4FSWPloKvvm6XNXdS3vdlybBT37mRA0vqankfrANFsOhguM84AGe\nt70c14Leaz2JwkdhkPE5LVfRM09/O4Brqv8B+p/S/bDMhlDQeS9ZQOp6cU53u9yK\nmXJdg3cLFlDeV6L8H5p/7CnVAqHettTSfEBmzZOHcqogHZtloWutmGyd1thbcjLj\nlUQXtLZT+D8yGAdC/uFofL3LQs5iLPQbbRJT3Oyy6yNHV2IBsGXPO36CoShV9AIl\nQWA7/mZ1dcD0zFLEP6Qhh2PMhdLFFztIUuccNPYxSQKBgQDJvyZLk5QMNLS5Ybmn\nCOJcl2FPzNxOhsaGOBe4X7zrGfen83tuKp7GEyIR+EPS/w9GnyzUx3hA2/GrBieF\nJmPUJSJ8ZjAd2SGCmbHiyDFonZFDJMR8+QzHcqtiT66RWIVMHnUppKisdddTyG0Z\nvPK64H4loA+1H/ZVWvikYHv8xwKBgQC7HTKpo1/E/dct1zqBmzJo51Ik5gSXItjJ\nuzxV6mfGwNtR3qSSckFVr976gVxtBQYSFUkehMAks8BF8AimaclNWxcMVqGgrcB1\nd56NIktCBKYxCq29xlxQKF9J5bbBg9zhZ+faqBKk4HkaWf8eI44ffS3v3gNN+Iqu\nwxCgH01eTQKBgQCe8SmKgUoyE5QOOR+6qRUtPVY9OHiYpTXiqG6Ho2WDE4I5n2mu\n8YUFKC2/WoiUwr2WNfFr8XqcHqvWwZKBJC2iBV+WAiwGV/o+mje7I11JvlmjPGRQ\n0SVwPLcpTP2LJOJfhd9oX4FD3dM2/sB1dpcFA7hejCvT1sqLlJAvcJQ+IQKBgQCd\nt9HBbaVG/ZQH3rhBENkf1YPG+F98KXJEMF9+J9QLkvoK+zkK++WYXWL9ElceybJB\nQdHdOJZhGWaDTP1tkBOO8a3ux4L7Vhm4qfhqDDMVVafkBJVINlAPfMg9GLTATu66\nzIOBKlR0x4Usshk5hUzBvBkha6ira0kyX9e+sEPdrQKBgEOM0o75r7JDXnI/Dqgr\nFnzzysHL2hCaLAHaUVVN5IrW6ZyNnkseTxxT1L9SVebaVxGgNExjIGuXykDzoKn+\nRZJ1CEoKjl/I6mr5JZCSy6uEhPaPAeVOxjQgejuEIxPv5zBdIjgbAvZNUDW+N5dB\nk1XkuMbAbQ/EDZUyrwIgQ6z6\n-----END PRIVATE KEY-----\n",
+  "client_email": "flipzon@flipzon-4cf32.iam.gserviceaccount.com",
+  "client_id": "113935356498561546761",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/flipzon%40flipzon-4cf32.iam.gserviceaccount.com"
+}

@@ -1,5 +1,5 @@
-import React , {Component} from 'react';
 import { connect } from 'react-redux'
+import React, {Component} from 'react';
 
 import { Link } from 'react-router-dom';
 import Table from 'react-bootstrap/Table'
@@ -88,7 +88,8 @@ class ProductCategoriesList extends Component{
             <tr key={"index"+index+1}>
                 <td>{index+1+active}</td>
                 <td><FormLabel onClick={() => this.handleShowCategories(product_categories.id,product_categories.name)}>{product_categories.name}</FormLabel></td>
-                <td><img src={"http://localhost:8080"+((product_categories.thumbnailImage))} alt="no image" onClick={() => this.handleImage("http://localhost:8080"+((product_categories.image))) }/></td>
+                {/* <td><img src={"http://localhost:8080"+((product_categories.thumbnailImage))} alt="no image" onClick={() => this.handleImage(product_categories.image) }/></td> */}
+                <td><img src={product_categories.thumbnailImage} alt="no image" onClick={() => this.handleImage(product_categories.image) }/></td>
                 <td><Button onClick={() => this.updateHandler(product_categories.id)} as={Link} to={`/admin/ProductCategoriesEdit/${product_categories.id}`}><FaEdit/></Button></td>
                 <td><Button variant="danger" onClick={() => this.handleShow(product_categories.id)}><FaTrashAlt/></Button></td>
                 {/* <td><Button variant="info" onClick={() => this.handleShow1(product_categories.id)}>Add</Button></td>

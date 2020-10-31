@@ -3,6 +3,7 @@ import { Form} from 'react-bootstrap'
 import { connect } from 'react-redux'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
+import Spinner from 'react-bootstrap/Spinner';
 import * as classes from '../../containers/Products.module.css'
 import { updateProductCategories,SingleProductCategories,fetchProductCategories } from '../../store/actions/Product_CategoriesActions'
 
@@ -14,6 +15,7 @@ class ProductCategoriesEdit extends Component{
         image:'',
         thumbnailImage:'',
         myimg:'',
+        sub:false,
         valid:false,
         valid1:false,
         errors: {
@@ -35,7 +37,7 @@ class ProductCategoriesEdit extends Component{
             category:prod_category[0].parent
         })  
 
-        this.setState({myimg:(prod_category[0].thumbnailImage).replace('/public','')})
+        this.setState({myimg:(prod_category[0].thumbnailImage)})
     }
     handleChange = (event) => {
         event.preventDefault();
@@ -95,13 +97,14 @@ class ProductCategoriesEdit extends Component{
     }
     postDataHandler = async (e) =>{
         e.preventDefault();
-       
+        this.setState({sub:true})
         const data = new FormData()
         data.append('id', this.state.id)
         data.append('name', this.state.name)
         data.append('image', this.state.image)
         data.append('parent', this.state.category)
         await this.props.updateProductCategories(this.state.id,data);
+        this.setState({sub:false})
         await this.props.fetchProductCategories();
         await this.props.history.replace('/admin/productcategories');
     }
@@ -153,13 +156,13 @@ class ProductCategoriesEdit extends Component{
                         <Form.Control.Feedback type="invalid">
                             {errors.image}
                         </Form.Control.Feedback>
-                        {this.state.image === "" ? "":<img src={"http://localhost:8080"+this.state.myimg} alt="description" width="150px"/>}    
+                        {this.state.image === "" ? "":<img src={this.state.myimg} alt="description" width="150px"/>}    
                     </Form.Group>
 
                     <Form.Group controlId="exampleForm.ControlTextarea4">
                     <Button disabled={proderr === "true" ? true : false} onClick={this.postDataHandler} type="button" variant="primary">
                         Submit
-                    </Button>
+                    </Button>{(this.state.sub)?<Spinner animation="border" />:""}
                         </Form.Group>
                 </Form>
                 </Card.Body>
