@@ -1,4 +1,8 @@
 /api/node_modules
 /ui/node_modules
 /api/flipzon-key.json
+<<<<<<< HEAD
 /flipzon-key.json
+=======
+/api/public
+>>>>>>> fb32e1285675eb58f9ffcdd85dd5471967ebd7e2
