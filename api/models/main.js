@@ -10,7 +10,7 @@ const Order_details=require("../models/Order_details");
 const Review = require("./Review");
 const Specification = require("./Specification");
 
-let options = { alter: true };
+let options = { force: true };
 if(process.env.environment === "TEST") {
     options = { alter: true };
 }
