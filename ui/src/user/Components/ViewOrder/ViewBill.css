@@ -1,0 +1,56 @@
+
+.App-payment {
+    padding: 30px;
+  }
+  
+  /* form {
+    margin: 30px auto 0;
+    max-width: 400px;
+  }
+  
+  .form-actions {
+    margin-top: 15px;
+  } */
+  
+  .App-cards {
+    margin: 0 auto;
+    max-width: 1280px;
+    text-align: center;
+  }
+  
+  .App-cards-list {
+    display: flex;
+    margin-top: 30px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  
+  .App-cards-list > * {
+    transform: scale(0.8);
+    margin-bottom: 30px !important;
+  }
+  
+  .App-highlight {
+    font-family: serif;
+    margin: 15px auto 0;
+    max-width: 300px;
+  }
+  
+  .App-highlight > div {
+    padding-left: 40px;
+  }
+  
+  .App-badges {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .App-badges a {
+    display: block;
+  }
+  
+  .App-badges a + a {
+    margin-top: 18px;
+  }

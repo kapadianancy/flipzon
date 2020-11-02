@@ -13,8 +13,8 @@ import ChangePassword from './Containers/ChangePassword/ChangePassword';
 import UpdatePassword from './Containers/Forgetpassword/UpdatePassword';
 import ViewOrder from './Containers/ViewOrder/ViewOrder';
 import Error from './Components/error';
-import Footer from './Components/Footer/Footer';
-import Header from './Components/Header/Header';
+import Success from './Components/ViewOrder/success';
+import OTP from './Components/ViewOrder/otp';
 import Logout from './Components/Logout';
 import ProductDetails from './Containers/Product/ProductDetails';
 import OfferProduct from './Containers/Product/OfferProduct';
@@ -37,6 +37,8 @@ class User extends Component {
           <Route path="/signup" exact component={Signup}/>
           <Route path="/searchProduct/:text" exact component={searchProduct}/>
           <Route path="/error/:error" exact component={Error}/>
+          <Route path="/success" exact component={Success}/>
+          <Route path="/otp" exact component={OTP}/>
           <Route path="/forgetpassword" exact component={Forgetpassword}/>
           <Route path="/updatepassword/:uid" exact component={UpdatePassword}/>
           <Route path="/editprofile" exact component={EditProfile}/>

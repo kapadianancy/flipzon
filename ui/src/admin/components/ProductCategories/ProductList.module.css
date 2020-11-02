@@ -1,92 +1,92 @@
 .Header {
-    display: flex;
-    justify-content: space-between;
+    display: flex !important;
+    justify-content: space-between !important;
 }
 .Title {
-    font-size: 25px;
-    font-weight: bold;
+    font-size: 25px !important;
+    font-weight: bold !important;
 }
 .large {
-    position: absolute;
-    left: -9999px;
+    position: absolute !important;
+    left: -9999px !important;
   }
 
   .tr {
-    display: flex;
+    display: flex !important;
   }
 
   .td {
-    list-style-type: none;
-    padding: 10px;
-    position: relative;
+    list-style-type: none !important;
+    padding: 10px !important;
+    position: relative !important;
   }
 
   td:hover .large {
-    left: 20px;
-    top: -150px;
+    left: 20px !important;
+    top: -150px !important;
   }
 
   .large-image {
-    border-radius: 4px;
-     box-shadow: 1px 1px 3px 3px rgba(127, 127, 127, 0.15);;
+    border-radius: 4px !important;
+     box-shadow: 1px 1px 3px 3px rgba(127, 127, 127, 0.15) !important;
   }
 /* .arrow-up {
-  width: 0; 
-  height: 0; 
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
+  width: 0 !important; 
+  height: 0 !important; 
+  border-left: 5px solid transparent !important;
+  border-right: 5px solid transparent !important;
   
-  border-bottom: 5px solid black;
+  border-bottom: 5px solid black !important;
 }
 
 .arrow-down {
-  width: 0; 
-  height: 0; 
-  border-left: 20px solid transparent;
-  border-right: 20px solid transparent;
+  width: 0 !important; 
+  height: 0 !important; 
+  border-left: 20px solid transparent !important;
+  border-right: 20px solid transparent !important;
   
-  border-top: 20px solid #f00;
+  border-top: 20px solid #f00 !important;
 } */
 .up-arrow {
-  width: 0;
-  height: 0;
-  border: solid 5px transparent;
-  background: transparent;
-  border-bottom: solid 7px black;
-  border-top-width: 0;
-  cursor: pointer;
+  width: 0 !important;
+  height: 0 !important;
+  border: solid 5px transparent !important;
+  background: transparent !important;
+  border-bottom: solid 7px black !important;
+  border-top-width: 0 !important;
+  cursor: pointer !important;
 }
 
 .down-arrow {
-  width: 0;
-  height: 0;
-  border: solid 5px transparent;
-  background: transparent;
-  border-top: solid 7px black;
-  border-bottom-width: 0;
-  margin-top:1px;
-  cursor: pointer;
+  width: 0 !important;
+  height: 0 !important;
+  border: solid 5px transparent !important;
+  background: transparent !important;
+  border-top: solid 7px black !important;
+  border-bottom-width: 0 !important;
+  margin-top:1px !important;
+  cursor: pointer !important;
 }
 
 .img {
-  border: 1px solid #ddd; /* Gray border */
-  border-radius: 4px;  /* Rounded border */
-  padding: 5px; /* Some padding */
-  width: 150px; /* Set a small width */
+  border: 1px solid #ddd !important; /* Gray border */
+  border-radius: 4px !important;  /* Rounded border */
+  padding: 5px !important; /* Some padding */
+  width: 150px !important; /* Set a small width */
 }
 
 /* Add a hover effect (blue shadow) */
 .img:hover {
-  box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+  box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5) !important;
 }
 
 .dialog {
-  box-shadow: 0 8px 6px -6px black;
-  position: static;
-  left: 20%;
-  top: 10%;
+  box-shadow: 0 8px 6px -6px black !important;
+  position: static !important;
+  left: 20% !important;
+  top: 10% !important;
 }
 
 .image {
-  width: 300px;
+  width: 300px !important;
 }

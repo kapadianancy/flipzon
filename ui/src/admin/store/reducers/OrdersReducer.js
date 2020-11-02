@@ -70,10 +70,17 @@ const store = (state = initialStore, action) => {
                 loading: true,
             };    
         case types.UPDATE_ORDERS_SUCCESS:
-            let order = state.orders.filter(order => order.id === action.order_id);
+            let old = [...state.orders];
+            
+            old.map(order => {
+                if(order.id === action.orders_id)
+                {
+                    order.status = action.orders.status
+                }
+            });
             return {
                 ...state,
-                orders: order,
+                orders:old,
                 loading: false
             };
         case types.UPDATE_ORDERS_FAILED:

@@ -45,36 +45,12 @@ const getOrderBill = async (id) => {
                 orderId:id
             }
         })
-        // return await Orders.findAll({
-        //     include: [
-        //         {
-        //             model: user ,as:"user"
-        //         },
-        //     ],
-        //     where: {
-        //         IsDeleted:0,
-        //         id:id
-        //     }
-        // })
-        // return await sequelize.query("SELECT o.*,od.*,p.*,u.* FROM orders o,order_details od,products p,users u WHERE o.id = od.orderId and od.productId=p.id and o.userId = u.id and od.orderId = "+id);;
     }catch(error) {
         throw error;
     }  
 }
 const getOrders = async (page,limit) => {
     try{
-
-        // return await Orders.findAll({
-        //     include: [
-        //         {
-        //             model: user ,as:"user"
-        //         },
-        //     ],
-        //     where: {
-        //         IsDeleted:0
-        //     }
-        // })
-
         let data = { 
             include: [
                 {
@@ -116,7 +92,7 @@ const editOrders = async (id,status) => {
             errorObj.message = "Orders not found";
         }
         if(errorObj.message) throw errorObj
-        orders = await Orders.update({status:status}, {
+        orders = await Orders.update({status:status,payment_status:"Paid"}, {
             where: { id : id }
         });
         // console.log("orders = "+orders);

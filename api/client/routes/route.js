@@ -43,6 +43,9 @@ router.put('/client/editProfile',auth,Authenticate.editProfile);
 //change Password
 router.put('/client/changePassword',auth,Authenticate.changePassword);
 
+//change Password
+router.get('/client/sendOTP',auth,Order.sendOTP);
+
 //forget Password
 router.post('/client/forgetPassword',Authenticate.forgetPassword);
 

@@ -153,9 +153,7 @@ const edit_DeleteProduct_Category = async (id) => {
         let newdel2 = del.thumbnailImage.split("/o/")[1];
         let cdel2 = newdel2.split("?")[0];
 
-        console.log(cdel+" <=> "+ cdel2);
-
-        var credPath = path.join(__dirname, '..', '..', 'public', 'flipzon-345e3e86f7d9.json');
+        var credPath = path.join(__dirname, '..', '..', '..','flipzon-key.json');
         storage = await new Storage({
             projectId: "flipzon-4cf32",
             keyFilename: credPath,

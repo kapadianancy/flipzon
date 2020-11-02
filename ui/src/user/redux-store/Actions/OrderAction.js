@@ -47,10 +47,10 @@ export const viewCart = () => {
     };
 };
 
-export const placeOrder = (oid) => {
+export const placeOrder = (oid,status) => {
     return async dispatch => {
         const token = localStorage.getItem("token");
-        await axiosInstance.put('/client/confirmOrder/'+oid,{},{
+        await axiosInstance.put('/client/confirmOrder/'+oid,status,{
             headers: {
                 authorization: 'Bearer ' + token
             }
@@ -62,6 +62,27 @@ export const placeOrder = (oid) => {
         }).catch(error => {
             dispatch({
                 type:types.PLACE_ORDER_FAILED,
+                error: error.message
+            });
+        })
+    };
+};
+
+
+export const sendOTP = () => {
+    return async dispatch => {
+        const token = localStorage.getItem("token");
+        await axiosInstance.get('/client/sendOTP/',{
+            headers: {
+                authorization: 'Bearer ' + token
+            }
+        }).then(response => {
+            dispatch({
+                type: types.SEND_OTP,
+                otp:response.data
+            });
+        }).catch(error => {
+            dispatch({
                 error: error.message
             });
         })

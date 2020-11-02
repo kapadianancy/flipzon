@@ -5,7 +5,8 @@ let storage,bucket;
 
 module.exports = async (req,res,next) => {
     if(req.files) {
-        var credPath = path.join(__dirname, '..', '..', 'flipzon-345e3e86f7d9.json');
+        var credPath = path.join(__dirname, '..', '..', '..','flipzon-key.json');
+        console.log(credPath);
         storage = await new Storage({
             projectId: "flipzon-4cf32",
             keyFilename: credPath,

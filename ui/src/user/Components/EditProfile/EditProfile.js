@@ -205,7 +205,7 @@ class EditProfile extends Component {
 
                                     <Button type="submit" style={style.cardBtn}
                                         onClick={this.btn_edit_click.bind(this)}
-                                        color="primary">Edit</Button>
+                                        color="primary">Save Changes</Button>
 
 
                                 </Form>

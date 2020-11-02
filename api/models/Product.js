@@ -22,6 +22,7 @@ const Product =db.sequelize.define("Product", {
             type:DataTypes.TEXT,
             allowNull:false
         },
+        thumbnail: DataTypes.TEXT,
         stock:
         {
             type:DataTypes.INTEGER,

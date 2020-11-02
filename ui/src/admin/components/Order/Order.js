@@ -1,11 +1,12 @@
-import React , {Component,useRef } from 'react';
+import React , {Component } from 'react';
+
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 import { connect } from 'react-redux'
 import Modal from 'react-bootstrap/Modal'
 import Alert from 'react-bootstrap/Alert'
+
 import { fetchOrdersDetails,updateOrders,fetchOrders,fetchOrderBill } from '../../store/actions/OrderAction'
-// import { Link } from 'react-router-dom';
 import { FaPrint,FaRegEye } from "react-icons/fa";
 import PrintOrder from '../../containers/PrintOrder';
 class Order extends Component{
@@ -22,7 +23,7 @@ class Order extends Component{
 
     updateHandler = async (id,status) => {
         await this.props.updateOrders(id,status);
-        await this.props.fetchOrders(1,5);
+        // await this.props.fetchOrders(1,5);  
 	};
 	handleHide = (id) => {
 		this.setState({ show: false });
@@ -74,9 +75,6 @@ class Order extends Component{
     printOrders = async (id) => {
         await this.props.fetchOrderBill(id);
         this.setState({print:true})
-        // let ordersBill =await this.props.orderBill;
-        // console.log(ordersBill)
-        // return <PrintOrder ordersBill={ordersBill}/>
     }
     renderProductOrder = (orders, active) => {
             return orders.map((orders, i) => 
@@ -88,13 +86,13 @@ class Order extends Component{
                     <td>{orders.user.contact}</td>
                     <td>{orders.totalPrice}</td>
                     <td>{new Date(orders.orderDate).toLocaleDateString()}</td>
+                    <td>{orders.mode}</td>
                     {
                         orders.status === "Delivered" ? <td><Alert variant="success"> {orders.status} </Alert></td> :
                         orders.status === "Canceled" ? <td><Alert variant="danger"> {orders.status} </Alert></td> : 
                     <td><Alert variant="info"> <Alert.Link onClick={() => this.updateHandler(orders.id,"Delivered")}>{orders.status}</Alert.Link></Alert></td>
                     }
                     <td><Button variant="outline-primary" onClick={() => this.handleShow(orders.id)}><FaRegEye/></Button></td>
-                    {/* <td><Button variant="info" as={Link} to={"/admin/printorder/"+orders.id}>Print Bill</Button></td> */}
                     <td><Button variant="info" onClick={()=>this.printOrders(orders.id)}><FaPrint/></Button></td>
                 </tr>
             )
@@ -144,19 +142,20 @@ class Order extends Component{
         <thead>
             <tr>
                 <th>#</th>
-                <th>UserName <span onClick={e => this.onSortNumber(e, 'userId','a')}>&#8593;</span><span onClick={e => this.onSortNumber(e, 'userId','b')}>&#8595;</span> </th>
-                <th>Address <span onClick={e => this.onSortNumber(e, 'userId','a')}>&#8593;</span><span onClick={e => this.onSortNumber(e, 'userId','b')}>&#8595;</span> </th>
-                <th>Email <span onClick={e => this.onSortNumber(e, 'userId','a')}>&#8593;</span><span onClick={e => this.onSortNumber(e, 'userId','b')}>&#8595;</span></th>
-                <th>Contact <span onClick={e => this.onSortNumber(e, 'userId','a')}>&#8593;</span><span onClick={e => this.onSortNumber(e, 'userId','b')}>&#8595;</span></th>
-                <th>TotalAmount <span onClick={e => this.onSortNumber(e, 'totalPrice','a')}>&#8593;</span><span onClick={e => this.onSortNumber(e, 'totalPrice','b')}>&#8595;</span></th>
-                <th>OrderDate <span onClick={e => this.onSortDate(e, 'orderDate','a')}>&#8593;</span><span onClick={e => this.onSortDate(e, 'orderDate','b')}>&#8595;</span></th>
-                <th>Status <span onClick={e => this.onSortString(e, 'status','a')}>&#8593;</span><span onClick={e => this.onSortString(e, 'status','b')}>&#8595;</span></th>
+                <th>Name <span style={{cursor: "pointer"}} onClick={e => this.onSortNumber(e, 'userId','a')}>&#8593;</span><span style={{cursor: "pointer"}} onClick={e => this.onSortNumber(e, 'userId','b')}>&#8595;</span> </th>
+                <th>Address <span style={{cursor: "pointer"}} onClick={e => this.onSortNumber(e, 'userId','a')}>&#8593;</span><span style={{cursor: "pointer"}} onClick={e => this.onSortNumber(e, 'userId','b')}>&#8595;</span> </th>
+                <th>Email <span style={{cursor: "pointer"}} onClick={e => this.onSortNumber(e, 'userId','a')}>&#8593;</span><span style={{cursor: "pointer"}} onClick={e => this.onSortNumber(e, 'userId','b')}>&#8595;</span></th>
+                <th>Contact <span style={{cursor: "pointer"}} onClick={e => this.onSortNumber(e, 'userId','a')}>&#8593;</span><span style={{cursor: "pointer"}} onClick={e => this.onSortNumber(e, 'userId','b')}>&#8595;</span></th>
+                <th>Total <span style={{cursor: "pointer"}} onClick={e => this.onSortNumber(e, 'totalPrice','a')}>&#8593;</span><span style={{cursor: "pointer"}} onClick={e => this.onSortNumber(e, 'totalPrice','b')}>&#8595;</span></th>
+                <th>OrderDate <span style={{cursor: "pointer"}} onClick={e => this.onSortDate(e, 'orderDate','a')}>&#8593;</span><span style={{cursor: "pointer"}} onClick={e => this.onSortDate(e, 'orderDate','b')}>&#8595;</span></th>
+                <th>PaymentMode <span style={{cursor: "pointer"}} onClick={e => this.onSortString(e, 'mode','a')}>&#8593;</span><span style={{cursor: "pointer"}} onClick={e => this.onSortString(e, 'mode','b')}>&#8595;</span></th>
+                <th>Status <span style={{cursor: "pointer"}} onClick={e => this.onSortString(e, 'status','a')}>&#8593;</span><span style={{cursor: "pointer"}} onClick={e => this.onSortString(e, 'status','b')}>&#8595;</span></th>
                 <th>Order</th>
                 <th>Bill</th>
             </tr>
         </thead>
         <tbody>
-        { (this.props.orders) ? this.renderProductOrder(this.props.orders, this.props.active) : ""}     
+        { (this.props.orders.length>0) ? this.renderProductOrder(this.props.orders, this.props.active) : ""}     
         </tbody>
         </Table>    
             <Modal show={this.state.show}
@@ -174,7 +173,7 @@ class Order extends Component{
                     </Table>
                 </Modal.Body>
             </Modal>
-            {(this.props.orderBill)?<PrintOrder ordersBill={this.props.orderBill} print={this.state.print}/>:""}
+            {(this.props.orderBill.length>0)?<PrintOrder ordersBill={this.props.orderBill} print={this.state.print}/>:""}
         </>
     }
 }

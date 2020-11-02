@@ -21,7 +21,7 @@ class Signup extends Component {
     }
 
     async btn_sign_click(e) {
-        e.preventDefault();       
+        e.preventDefault();
 
         if (this.validate()) {
 
@@ -35,14 +35,13 @@ class Signup extends Component {
             }
             await this.props.signup(CurrentUser);
             //console.log(this.props.error);
-            if(this.props.error == "")
-            {
+            if (this.props.error == "") {
                 this.props.history.push('/');
             }
-            else{
-                this.props.history.push('/error/'+this.props.error);
+            else {
+                this.props.history.push('/error/' + this.props.error);
             }
-            
+
         }
     }
 
@@ -113,7 +112,7 @@ class Signup extends Component {
     }
 
     render() {
-       
+
         const style = {
             cardBtn: {
                 backgroundColor: "#fb641b",
@@ -129,15 +128,20 @@ class Signup extends Component {
                 fontWeight: 'bold',
                 fontFamily: 'Times New Roman',
                 fontSize: '30px'
+            },
+            labelTitle: {
+                fontWeight: 'bold',
+                fontFamily: 'Times New Roman',
+                fontSize: '20px'
             }
 
         };
         return (
 
-            
+
 
             <>
-            {/* {this.props.error!=""?this.props.history.replace('/error/'+this.props.error):null} */}
+                {/* {this.props.error!=""?this.props.history.replace('/error/'+this.props.error):null} */}
                 <Row style={{ justifyContent: 'center', marginTop: "10px" }}>
                     <Col sm="8">
                         <Card className="shadow p-3 mb-5 bg-white rounded">
@@ -145,30 +149,31 @@ class Signup extends Component {
                                 <CardTitle style={style.cardTitle}>Sign Up</CardTitle>
 
                                 <Form>
-                                    <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-
-                                        <Label for="username" className="mr-sm-2">Username</Label>
-                                        <div className="text-danger">{this.state.errors.username}</div>
-                                        <Input type="text" name="username" id="username"
-                                            required="true"
-                                            value={this.state.username}
+                                    <FormGroup>
+                                        <Label style={style.labelTitle} for="email">Email</Label>
+                                        <div className="text-danger">{this.state.errors.email}</div>
+                                        <Input type="email" name="email" id="email"
+                                            value={this.state.email}
                                             onChange={this.handleChange.bind(this)}
-                                            placeholder="Enter Your Username" />
+                                            placeholder="abc@gmail.com" />
                                     </FormGroup>
+
                                     <Row form>
                                         <Col md={6}>
-                                            <FormGroup>
-                                                <Label for="email">Email</Label>
-                                                <div className="text-danger">{this.state.errors.email}</div>
-                                                <Input type="email" name="email" id="email"
-                                                    value={this.state.email}
+                                            <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+
+                                                <Label for="username" style={style.labelTitle} className="mr-sm-2">Username</Label>
+                                                <div className="text-danger">{this.state.errors.username}</div>
+                                                <Input type="text" name="username" id="username"
+                                                    required="true"
+                                                    value={this.state.username}
                                                     onChange={this.handleChange.bind(this)}
-                                                    placeholder="abc@gmail.com" />
+                                                    placeholder="Enter Your Username" />
                                             </FormGroup>
                                         </Col>
                                         <Col md={6}>
                                             <FormGroup>
-                                                <Label for="password">Password</Label>
+                                                <Label style={style.labelTitle} for="password">Password</Label>
                                                 <div className="text-danger">{this.state.errors.password}</div>
                                                 <Input type="password" name="password" id="password"
                                                     value={this.state.password}
@@ -179,7 +184,7 @@ class Signup extends Component {
                                     </Row>
 
                                     <FormGroup>
-                                        <Label for="address">Address</Label>
+                                        <Label for="address" style={style.labelTitle}>Address</Label>
                                         <div className="text-danger">{this.state.errors.address}</div>
                                         <Input type="textarea" name="address" id="address"
                                             value={this.state.address}
@@ -187,7 +192,7 @@ class Signup extends Component {
                                             placeholder="Enter Your Address" />
                                     </FormGroup>
                                     <FormGroup>
-                                        <Label for="contact">Contact</Label>
+                                        <Label for="contact" style={style.labelTitle}>Contact</Label>
                                         <div className="text-danger">{this.state.errors.contact}</div>
                                         <Input type="number" name="contact" id="contact"
                                             value={this.state.contact}
@@ -219,14 +224,14 @@ const mapStateToProp = (state) => {
     return {
         user: state.User.user,
         token: state.User.token,
-        error : state.User.error
+        error: state.User.error
     }
 }
 
 const mapStateToActions = (dispatch) => {
     return {
         signup: (CurrentUser) => dispatch(actions.signup(CurrentUser)),
-        login:(user)=>dispatch(actions.login(user))
+        login: (user) => dispatch(actions.login(user))
     }
 }
 

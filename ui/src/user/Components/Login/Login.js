@@ -68,6 +68,11 @@ class Login extends Component {
         fontFamily: "Times New Roman",
         fontSize: "30px",
       },
+      labelTitle: {
+        fontWeight: 'bold',
+        fontFamily: 'Times New Roman',
+        fontSize: '20px'
+    }
     };
     return (
       <>
@@ -79,7 +84,7 @@ class Login extends Component {
                 <h4 className="text-danger">{this.state.error}</h4>
                 <Form>
                   <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                    <Label for="username" className="mr-sm-2">
+                    <Label for="username" className="mr-sm-2" style={style.labelTitle}>
                       Username
                     </Label>
                     <Input
@@ -93,7 +98,7 @@ class Login extends Component {
                     />
                   </FormGroup>
                   <FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-                    <Label for="password" className="mr-sm-2">
+                    <Label for="password" className="mr-sm-2" style={style.labelTitle}>
                       Password
                     </Label>
                     <Input

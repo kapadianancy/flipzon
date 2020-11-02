@@ -4,7 +4,7 @@ import PrintOrderList from '../components/Order/PrintOrderList';
 import { useReactToPrint } from 'react-to-print'
 const PrintOrder = (props) => {
     useEffect(()=>{
-        if(props.ordersBill.length>0 && props.print === true)
+        if(props.ordersBill.length>0)
         {
             handlePrint();
         } 
@@ -15,7 +15,7 @@ const PrintOrder = (props) => {
     });
     return(
         <>
-            { props.ordersBill && <PrintOrderList printBlockRef={printBlockRef} orderBill={props.ordersBill}/>  }
+            { props.ordersBill.length>0 && <PrintOrderList printBlockRef={printBlockRef} orderBill={props.ordersBill}/>  }
         </>
     )
 }

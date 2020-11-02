@@ -99,7 +99,8 @@ export const updateOrders = (id,status,put) => {
         }).then(response => {
             dispatch({
                 type:types.UPDATE_ORDERS_SUCCESS,
-                orders_id:id
+                orders_id:id,
+                orders:response.data
             });
         }).catch(error => {
             dispatch({

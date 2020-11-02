@@ -13,6 +13,7 @@ const Product_image = db.sequelize.define('Product_image', {
             type:DataTypes.TEXT,
             allowNull:false
         },
+        thumbnail: DataTypes.TEXT,
         productId:
         {
             type:DataTypes.INTEGER

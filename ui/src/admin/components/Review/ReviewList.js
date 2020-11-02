@@ -78,11 +78,11 @@ class ReviewList extends Component {
         <thead>
             <tr>
                 <th>#</th>
-                <th>Review <span onClick={e => this.onSortString(e, 'review','a')}>&#8593;</span><span onClick={e => this.onSortString(e, 'review','b')}>&#8595;</span></th>
-                <th>Product <span onClick={e => this.onSortNumber(e, 'productId','a')}>&#8593;</span><span onClick={e => this.onSortNumber(e, 'productId','b')}>&#8595;</span></th>
-                <th>UserName <span onClick={e => this.onSortNumber(e, 'userId','a')}>&#8593;</span><span onClick={e => this.onSortNumber(e, 'userId','b')}>&#8595;</span></th>
-                <th>Rate <span onClick={e => this.onSortNumber(e, 'rating','a')}>&#8593;</span><span onClick={e => this.onSortNumber(e, 'rating','b')}>&#8595;</span></th>
-                <th>Date <span onClick={e => this.onSortDate(e, 'updatedAt','a')}>&#8593;</span><span onClick={e => this.onSortDate(e, 'updatedAt','b')}>&#8595;</span></th>
+                <th>Review <span style={{cursor: "pointer"}} onClick={e => this.onSortString(e, 'review','a')}>&#8593;</span><span style={{cursor: "pointer"}} onClick={e => this.onSortString(e, 'review','b')}>&#8595;</span></th>
+                <th>Product <span style={{cursor: "pointer"}} onClick={e => this.onSortNumber(e, 'productId','a')}>&#8593;</span><span style={{cursor: "pointer"}} onClick={e => this.onSortNumber(e, 'productId','b')}>&#8595;</span></th>
+                <th>UserName <span style={{cursor: "pointer"}} onClick={e => this.onSortNumber(e, 'userId','a')}>&#8593;</span><span style={{cursor: "pointer"}} onClick={e => this.onSortNumber(e, 'userId','b')}>&#8595;</span></th>
+                <th>Rate <span style={{cursor: "pointer"}} onClick={e => this.onSortNumber(e, 'rating','a')}>&#8593;</span><span style={{cursor: "pointer"}} onClick={e => this.onSortNumber(e, 'rating','b')}>&#8595;</span></th>
+                <th>Date <span style={{cursor: "pointer"}} onClick={e => this.onSortDate(e, 'updatedAt','a')}>&#8593;</span><span style={{cursor: "pointer"}} onClick={e => this.onSortDate(e, 'updatedAt','b')}>&#8595;</span></th>
                 <th>Delete</th>
             </tr>
         </thead>

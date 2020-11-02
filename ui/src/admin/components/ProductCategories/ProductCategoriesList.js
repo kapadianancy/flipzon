@@ -90,7 +90,7 @@ class ProductCategoriesList extends Component{
                 <td><FormLabel onClick={() => this.handleShowCategories(product_categories.id,product_categories.name)}>{product_categories.name}</FormLabel></td>
                 {/* <td><img src={"http://localhost:8080"+((product_categories.thumbnailImage))} alt="no image" onClick={() => this.handleImage(product_categories.image) }/></td> */}
                 <td><img src={product_categories.thumbnailImage} alt="no image" onClick={() => this.handleImage(product_categories.image) }/></td>
-                <td><Button onClick={() => this.updateHandler(product_categories.id)} as={Link} to={`/admin/ProductCategoriesEdit/${product_categories.id}`}><FaEdit/></Button></td>
+                <td><Button variant="outline-info" onClick={() => this.updateHandler(product_categories.id)} as={Link} to={`/admin/ProductCategoriesEdit/${product_categories.id}`}><FaEdit/></Button></td>
                 <td><Button variant="danger" onClick={() => this.handleShow(product_categories.id)}><FaTrashAlt/></Button></td>
                 {/* <td><Button variant="info" onClick={() => this.handleShow1(product_categories.id)}>Add</Button></td>
                 <td><Button variant="danger" onClick={() => this.handleRemoveOffer(product_categories.id)}>Remove</Button></td>  */}
@@ -143,12 +143,11 @@ class ProductCategoriesList extends Component{
         const {errors} = this.state;
         const { photoIndex, isOpen } = this.state;
         return <> 
-        {/* <input type="text" placeholder="Enter Search Here..." className={"form-control"} onKeyUp={(event) => this.setState({searchValue: event.target.value})}/>  */}
         <Table responsive striped bordered hover size="sm">
         <thead>
             <tr>
                 <th>#</th>
-                <th>Category Name <span onClick={e => this.onSortAcending(e, 'name')}>&#8593;</span><span onClick={e => this.onSortDecending(e, 'name')}>&#8595;</span></th>
+                <th>Category Name <span style={{cursor: "pointer"}} onClick={e => this.onSortAcending(e, 'name')}>&#8593;</span><span style={{cursor: "pointer"}} onClick={e => this.onSortDecending(e, 'name')}>&#8595;</span></th>
                 <th>Image</th>
                 <th>Edit</th>
                 <th>Delete</th>

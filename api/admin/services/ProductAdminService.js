@@ -1,11 +1,10 @@
-const fs = require("fs");
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
-const $or = Op.or;
 const Product = require("../../models/Product");
 const Category = require("../../models/Product_category");
 const ProductImages = require("../../models/Product_image");
 const Specification = require("../../models/Specification");
+const deleteBucketFile = require("../utils/deleteBucketFile");
 
 const fetchProducts = async (page, limit) => {
     let options = {
@@ -123,13 +122,16 @@ const addProduct = async (data, images) => {
             isInOffer: data.isInOffer === "true" ? true : false,
             discount: data.isInOffer === "true" ? data.discount : 0,
             videoLink: data.videoLink ? data.videoLink : "",
+            thumbnail: data.thumbnail
         });
         product = product.get({ row: true })
 
         // handle product images
         if(images.length > 0) {
-            let imageData = images.map( image => ({ image: "/images/"+image.filename, productId: product.id }) );
-            images = await ProductImages.bulkCreate(imageData);
+            // let imageData = images.map( image => ({ image: "/images/"+image.filename, productId: product.id }) );
+            // images = await createThumbnail(images, product.id);
+            images = images.map( img => ({ image: img[0], productId: product.id, thumbnail: img[1] }));
+            images = await ProductImages.bulkCreate(images);
             images = images.map( el => el.get({row: true}));
         } else images = [];
 
@@ -148,6 +150,7 @@ const addProduct = async (data, images) => {
         
         return product;
     } catch(error) {
+        console.log(error);
         throw error;
     }
 }
@@ -168,8 +171,10 @@ const editProduct = async (id, data, images) => {
         });
 
         // handle images
-        if(images.length > 0) {
-            let imageData = images.map( image => ({ image: "/images/"+image.filename, productId: id }) );
+        if(images) {
+            // let imageData = images.map( image => ({ image: "/images/"+image.filename, productId: id }) );
+            // let imageData = await createThumbnail(images, id);
+            let imageData = images.map( img => ({ image: img[0], productId: id, thumbnail: img[1] }));
             images = await ProductImages.bulkCreate(imageData);
         } else images = []
 
@@ -183,6 +188,7 @@ const editProduct = async (id, data, images) => {
             message: "Product Updated"
         }
     } catch (error) {
+        console.log(error.message);
         throw error;
     }
 }
@@ -201,8 +207,19 @@ const deleteProduct = async (id) => {
             errorObj.message = "Product not found";
         }
         if(errorObj.message) throw errorObj
-        // const exist = fs.existsSync("./.."+product.main_image);
-        // console.log(exist);
+        var image = await ProductImages.findAll({
+            where: {
+                productId: id,
+                isDeleted: false
+            }
+        });
+        Promise.all( 
+            image.reduce( (arr, img) => {
+                arr.push(deleteBucketFile(img.dataValues.thumbnail));
+                arr.push(deleteBucketFile(img.dataValues.image));
+                return arr;
+            }, [])
+        )
         await Product.update({
             "isDeleted": true
         }, {
@@ -210,6 +227,7 @@ const deleteProduct = async (id) => {
         });
         return product;
     } catch (error) {
+        console.log(error);
         throw error;
     }
 }
@@ -227,14 +245,21 @@ const deleteProductImage = async (ids) => {
             errorObj.message = "Image not found";
         }
         if(errorObj.message) throw errorObj
-        await ProductImages.update({
-            "isDeleted": true
-        }, {
+        // console.log(image[0].dataValues.image);
+        await Promise.all( 
+            image.reduce( (arr, img) => {
+                arr.push(deleteBucketFile(img.dataValues.thumbnail));
+                arr.push(deleteBucketFile(img.dataValues.image));
+                return arr;
+            }, [])
+        )
+
+        await ProductImages.destroy({
             where: { id: ids }
         });
         return { message: "Image Deleted" };
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         throw error;
     }
 }
@@ -255,7 +280,29 @@ const addSpecifications = async (productId, data, deleteBefore) => {
         console.log("error while adding specifications ", error.message);
         throw error;
     }
-} 
+}
+const createThumbnail = async (images, productId) => {
+    var imageData = [];
+    let thumbnail, img, name, image, webPath;
+    let uniqueSuffix;
+
+    for(let key in images) {
+        image = images[key];
+        uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+        name = "public/thumbnails/"+uniqueSuffix+'.webp';
+        webPath = "/thumbnails/"+uniqueSuffix+'.webp';
+        try {
+            img = await Jimp.read(image.destination+"/"+image.filename);
+            thumbnail = await img.resize(100, 100).quality(90).grayscale().write(name)
+            imageData.push({
+                image: "/images/"+image.filename, productId, thumbnail: webPath
+            });
+        } catch(error) {
+            console.error(error.message);
+        }
+    }
+    return imageData;
+}
 module.exports = {
     fetchProducts,
     searchProducts,

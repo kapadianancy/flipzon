@@ -1,12 +1,20 @@
 import React, { Component } from "react";
-
 import { connect } from "react-redux";
 import { Form, Card, Button } from "react-bootstrap";
 import { withRouter } from "react-router-dom";
+import Modal from 'react-bootstrap/Modal';
+import Cards from "react-credit-cards";
+import 'react-credit-cards/es/styles-compiled.css';
 
 import * as actions from "../../redux-store/Actions/OrderAction";
 import * as paction from "../../redux-store/Actions/ProductAction";
 import * as uactions from "../../redux-store/Actions/UserAction";
+import {
+  formatCreditCardNumber,
+  formatCVC,
+  formatExpirationDate
+} from './utils'
+import './ViewBill.css'
 
 class viewBill extends Component {
   state = {
@@ -16,7 +24,54 @@ class viewBill extends Component {
     address: "",
     contact: "",
     disbale: true,
-    visibility:"hidden"
+    visibility: "hidden",
+    show: false,
+    number: "",
+    name: "",
+    expiry: "",
+    cvc: "",
+    issuer: "",
+    focused: ""
+  };
+
+
+
+  handleCallback = ({ issuer }, isValid) => {
+    if (isValid) {
+      this.setState({ issuer });
+    }
+  };
+
+  handleInputFocus = ({ target }) => {
+    this.setState({
+      focused: target.name
+    });
+  };
+
+  handleInputChange = ({ target }) => {
+    if (target.name === "number") {
+      target.value = formatCreditCardNumber(target.value);
+    } else if (target.name === "expiry") {
+      target.value = formatExpirationDate(target.value);
+    } else if (target.name === "cvc") {
+      target.value = formatCVC(target.value);
+    }
+
+    this.setState({ [target.name]: target.value });
+  };
+
+  handleSubmit =async(e) => {
+    e.preventDefault();
+   
+    this.setState({
+      ...this.state,
+      show: false,
+      disbale: true
+    })
+    await this.props.sendOTP();
+    this.props.history.push('/otp');
+
+
   };
 
   async componentDidMount() {
@@ -32,57 +87,74 @@ class viewBill extends Component {
   }
 
   placeOrder = async () => {
-    await this.props.placeOrder(this.props.orderItems[0].orderId);
-    var ask = window.confirm("Your Order Is Placed . check Your email for confirmation");
-    if (ask) {
-      this.props.history.push('/');
+    const status={
+      "mode":"COD",
+      "payment_status":"Pending"
     }
+    await this.props.placeOrder(this.props.orderItems[0].orderId,status);
+
+    this.props.history.push('/success');
+
   };
 
-  payment=()=>
-  {
-      this.setState({
-          ...this.state,
-          visibility:"visible"
-      })
+  payment = () => {
+    this.setState({
+      ...this.state,
+      visibility: "visible"
+    })
   }
 
-  radiochange=(event)=>
-  {
-      if(event.target.value=="COD")
-      {
-          this.setState({
-              ...this.state,
-              disbale:false
-          })
-      }
+
+
+  radiochange = (event) => {
+    if (event.target.value == "COD") {
+      this.setState({
+        ...this.state,
+        disbale: false
+      })
+    }
+    else {
+      this.setState({
+        ...this.state,
+        show: true,
+        disbale: true
+      })
+    }
+  }
+
+  handleClose = () => {
+    this.setState({
+      show: false
+    })
   }
 
   render() {
     let rows = [];
     let total_price = 0;
-    
+
 
     this.props.orderItems.map(async (row) => {
       total_price += row.quantity * row.price;
-      
+
       rows.push(
         <>
-            <table style={{ width: "100%", padding: "5px" }}>
-            
+          <table style={{ width: "100%", padding: "5px" }}>
+
             <tr>
               <td>{row.name}</td>
               <td>qty-{row.quantity}</td>
               <td>{row.quantity * row.price}</td>
             </tr>
-          
-          <hr />
+
+            <hr />
           </table>
         </>
       );
-      
+
 
       return rows;
+
+      
     });
 
     return (
@@ -160,7 +232,7 @@ class viewBill extends Component {
           </Card.Body>
         </Card>
 
-        <div style={{paddingBottom:"20px"}}>
+        <div style={{ paddingBottom: "20px" }}>
           <Card
             style={{
               visibility: this.state.visibility,
@@ -173,21 +245,91 @@ class viewBill extends Component {
             <Card.Body>
               <Card.Title>Select Payment Mathod</Card.Title>
               <Form>
-                  <div style={{textAlign: "-webkit-left"}}>
-               <input type="radio" value="COD" name="payment" onChange={this.radiochange}/> COD
-               <br/>
-               <input type="radio" value="Card" name="payment"/> Credit/Debit card
-               <br/>
-               <input type="radio" value="Net" name="payment"/> Net Banking
-               <br/>
-               <input type="radio" value="upi" name="payment"/> UPI
-               <br/>
-               <input type="radio" value="wallet" name="payment"/> Wallet
+                <div style={{ textAlign: "-webkit-left" }}>
+                  <input type="radio" value="COD" name="payment" onChange={this.radiochange} /> COD
+               <br />
+                  <input type="radio" value="Card" name="payment" onChange={this.radiochange} /> Credit/Debit card
+
                </div>
               </Form>
             </Card.Body>
           </Card>
         </div>
+       
+        <Modal show={this.state.show} onHide={this.handleClose}
+          backdrop="static"
+          keyboard={false} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Card Details</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <div className="App-payment">
+              <Cards
+                number={this.state.number}
+                name={this.state.name}
+                expiry={this.state.expiry}
+                cvc={this.state.cvc}
+                focused={this.state.focused}
+                callback={this.handleCallback}
+              />
+              <form onSubmit={this.handleSubmit}>
+                <div className="form-group">
+                  <input
+                    type="tel"
+                    name="number"
+                    className="form-control"
+                    placeholder="Card Number"
+                    required
+                    onChange={this.handleInputChange}
+                    onFocus={this.handleInputFocus}
+                  />
+                  <small>E.g.: 49..., 51..., 36..., 37...</small>
+                </div>
+                <div className="form-group">
+                  <input
+                    type="text"
+                    name="name"
+                    className="form-control"
+                    placeholder="Name"
+                    required
+                    onChange={this.handleInputChange}
+                    onFocus={this.handleInputFocus}
+                  />
+                </div>
+                <div className="row">
+                  <div className="col-6">
+                    <input
+                      type="tel"
+                      name="expiry"
+                      className="form-control"
+                      placeholder="Valid Thru"
+                      pattern="\d\d/\d\d"
+                      required
+                      onChange={this.handleInputChange}
+                      onFocus={this.handleInputFocus}
+                    />
+                  </div>
+                  <div className="col-6">
+                    <input
+                      type="tel"
+                      name="cvc"
+                      className="form-control"
+                      placeholder="CVC"
+                      pattern="\d{3,4}"
+                      required
+                      onChange={this.handleInputChange}
+                      onFocus={this.handleInputFocus}
+                    />
+                  </div>
+                </div>
+                <div className="form-actions">
+                  <button className="btn btn-primary btn-block">PAY</button>
+                </div>
+              </form>
+            </div>
+          </Modal.Body>
+
+        </Modal>
       </>
     );
   }
@@ -199,13 +341,15 @@ const mapStateToProps = (state) => {
     product: state.Product.products,
     error: state.Order.error,
     user: state.User.user,
+    otp:state.Order.otp
   };
 };
 const mapStateToAction = (dispatch) => {
   return {
+    sendOTP:()=>dispatch(actions.sendOTP()),
     viewCart: () => dispatch(actions.viewCart()),
     getProduct: (pid) => dispatch(paction.productDetails(pid)),
-    placeOrder: (oid) => dispatch(actions.placeOrder(oid)),
+    placeOrder: (oid,status) => dispatch(actions.placeOrder(oid,status)),
     getSingleUser: () => dispatch(uactions.getSingleUser()),
   };
 };

@@ -3,19 +3,15 @@ var multer  = require('multer');
 const auth = require("../middlewares/auth");
 const validator = require("../utils/Validator");
 const { validationResult } = require('express-validator');
-const ProductAdminService = require("../services/ProductAdminService");
+const upload = require("../middlewares/upload");
 
-var storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, 'public/images/')
+var multer  = require('multer');
+const uploader = multer({
+    storage: multer.memoryStorage(),
+    limits: {
+        fileSize: 5 * 1024 * 1024, // keep images size < 5 MB
     },
-    filename: function (req, file, cb) {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-      cb(null, file.fieldname + '-' + uniqueSuffix+'.png')
-    }
-});
-var upload = multer({ storage: storage });
-var cpUpload = upload.fields([{ name: 'image', maxCount: 1 }, { name: 'images', maxCount: 10 }])
+}).fields([{ name: 'image', maxCount: 1 }, { name: 'images', maxCount: 10 }]);
 
 module.exports = (app) => {
     // i/p: query [ page, limit ]
@@ -49,36 +45,36 @@ module.exports = (app) => {
         }
     })
 
-    app.post("/admin/products", auth, cpUpload, validator.createUser, async (req, res, next) => {
+    app.post("/admin/products", auth, uploader, upload, validator.createUser, async (req, res, next) => {
         const ctx = validationResult(req);
         if(ctx.errors.length > 0) {
             return next({ statusCode: 400, message: ctx });
         }
-        
         if(req.body.specifications) {
             req.body.specifications = JSON.parse(req.body.specifications);
         }
-        if(!req.files.image) {
+        if(!req.images.image) {
             return next({
                 statusCode: 400,
                 message: "Product Image is required"
             })
         }
+        
         req.body = {
             ...req.body,
-            main_image: "/images/"+req.files.image[0].filename,
+            main_image: req.images.image[0],
+            thumbnail: req.images.image[1]
         }
-        // main_image: "/"+req.files.image[0].destination+req.files.image[0].filename,
         try {
-            var images = req.files.images && req.files.images.length > 0 ? req.files.images : [];
-            let product = await productService.addProduct(req.body, images);
+            // var images = req.files.images && req.files.images.length > 0 ? req.files.images : [];
+            let product = await productService.addProduct(req.body, req.images.images);
             res.send(product);
         } catch(error) {
             next(error);
         }
     })
     
-    app.put("/admin/products/:id", auth, cpUpload, validator.editUser, async (req, res, next) => {
+    app.put("/admin/products/:id", auth, validator.editUser, uploader, upload, async (req, res, next) => {
         const ctx = validationResult(req);
         if(ctx.errors.length > 0) {
             return next({ statusCode: 400, message: ctx });
@@ -90,12 +86,13 @@ module.exports = (app) => {
         if(req.files.image) {
             req.body = {
                 ...req.body,
-                main_image: "/images/"+req.files.image[0].filename
+                main_image: req.images.image[0],
+                thumbnail: req.images.image[1]
             }
         }
         try {
-            var images = req.files.images && req.files.images.length > 0 ? req.files.images : [];
-            let response = await productService.editProduct(req.params.id, req.body, images);
+            // var images = req.files.images && req.files.images.length > 0 ? req.files.images : [];
+            let response = await productService.editProduct(req.params.id, req.body, req.images.images);
             res.send(response);
         } catch (error) {
             next(error);
@@ -111,6 +108,7 @@ module.exports = (app) => {
         }
     })
 
+    // to delete product images
     app.post("/admin/products/images", auth, async (req, res, next) => {
         try {
             if(!req.body.ids || req.body.ids.length == 0) {
@@ -134,7 +132,7 @@ module.exports = (app) => {
 
     app.get("/admin/outOfStock", auth, async (req,res,next) => {
         try {
-            let products = await ProductAdminService.fetchOutOfStockProducts(req.query.limit, req.query.ascending);
+            let products = await productService.fetchOutOfStockProducts(req.query.limit, req.query.ascending);
             res.send(products);
         } catch (error) {
             next(error);

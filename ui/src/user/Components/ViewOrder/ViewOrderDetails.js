@@ -62,7 +62,7 @@ class ViewOrderDetails extends Component {
 
             rows.push(
                 <tr>
-                    <td><img src={`http://localhost:8080${row.main_image}`} height="50px" width="50px" /></td>
+                    <td><img src={row.main_image} height="50px" width="50px" /></td>
                     <td>{row.name}</td>
                     <td>{row.price}</td>
                     <td>{row.quantity}</td>
