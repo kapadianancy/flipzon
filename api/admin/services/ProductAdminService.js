@@ -4,7 +4,7 @@ const Product = require("../../models/Product");
 const Category = require("../../models/Product_category");
 const ProductImages = require("../../models/Product_image");
 const Specification = require("../../models/Specification");
-const Jimp = require("jimp");
+const deleteBucketFile = require("../utils/deleteBucketFile");
 
 const fetchProducts = async (page, limit) => {
     let options = {
@@ -129,7 +129,8 @@ const addProduct = async (data, images) => {
         // handle product images
         if(images.length > 0) {
             // let imageData = images.map( image => ({ image: "/images/"+image.filename, productId: product.id }) );
-            images = await createThumbnail(images, product.id);
+            // images = await createThumbnail(images, product.id);
+            images = images.map( img => ({ image: img[0], productId: product.id, thumbnail: img[1] }));
             images = await ProductImages.bulkCreate(images);
             images = images.map( el => el.get({row: true}));
         } else images = [];
@@ -170,9 +171,10 @@ const editProduct = async (id, data, images) => {
         });
 
         // handle images
-        if(images.length > 0) {
+        if(images) {
             // let imageData = images.map( image => ({ image: "/images/"+image.filename, productId: id }) );
-            let imageData = await createThumbnail(images, id);
+            // let imageData = await createThumbnail(images, id);
+            let imageData = images.map( img => ({ image: img[0], productId: id, thumbnail: img[1] }));
             images = await ProductImages.bulkCreate(imageData);
         } else images = []
 
@@ -186,6 +188,7 @@ const editProduct = async (id, data, images) => {
             message: "Product Updated"
         }
     } catch (error) {
+        console.log(error.message);
         throw error;
     }
 }
@@ -204,8 +207,19 @@ const deleteProduct = async (id) => {
             errorObj.message = "Product not found";
         }
         if(errorObj.message) throw errorObj
-        // const exist = fs.existsSync("./.."+product.main_image);
-        // console.log(exist);
+        var image = await ProductImages.findAll({
+            where: {
+                productId: id,
+                isDeleted: false
+            }
+        });
+        Promise.all( 
+            image.reduce( (arr, img) => {
+                arr.push(deleteBucketFile(img.dataValues.thumbnail));
+                arr.push(deleteBucketFile(img.dataValues.image));
+                return arr;
+            }, [])
+        )
         await Product.update({
             "isDeleted": true
         }, {
@@ -213,6 +227,7 @@ const deleteProduct = async (id) => {
         });
         return product;
     } catch (error) {
+        console.log(error);
         throw error;
     }
 }
@@ -230,14 +245,21 @@ const deleteProductImage = async (ids) => {
             errorObj.message = "Image not found";
         }
         if(errorObj.message) throw errorObj
-        await ProductImages.update({
-            "isDeleted": true
-        }, {
+        // console.log(image[0].dataValues.image);
+        await Promise.all( 
+            image.reduce( (arr, img) => {
+                arr.push(deleteBucketFile(img.dataValues.thumbnail));
+                arr.push(deleteBucketFile(img.dataValues.image));
+                return arr;
+            }, [])
+        )
+
+        await ProductImages.destroy({
             where: { id: ids }
         });
         return { message: "Image Deleted" };
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         throw error;
     }
 }

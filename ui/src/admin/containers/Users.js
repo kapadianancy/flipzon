@@ -17,7 +17,7 @@ const Users = (props) => {
     const [perPage, setPerPage] = useState(5);
     const [active, setActive] = useState(1);
     const [modalOpen, setModalOpen] = useState(false);
-    const [showMode, setShowMode] = useState(1);
+    const [showMode, setShowMode] = useState(2);
     const { fetchUsers } = props
     useEffect( () => {
         fetchUsers(active, perPage, showMode);
@@ -68,10 +68,10 @@ const Users = (props) => {
                 <div className={classes.Title}>
                     Users List
                 </div>
-                <ToggleButtonGroup type="radio" onChange={ (val) => setShowMode(val)} name="showMode" defaultValue={showMode}>
+                {/* <ToggleButtonGroup type="radio" onChange={ (val) => setShowMode(val)} name="showMode" defaultValue={showMode}>
                     <ToggleButton variant="outline-dark" value={1}>Admin</ToggleButton>
                     <ToggleButton variant="outline-dark" value={2}>Users</ToggleButton>
-                </ToggleButtonGroup>
+                </ToggleButtonGroup> */}
             </Card.Header>
             <Card.Body> {data} </Card.Body>
             <Card.Footer className={classes.Footer}>
